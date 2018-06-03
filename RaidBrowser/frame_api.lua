@@ -1,13 +1,15 @@
 local folder, addon = ...
 raid_browser = raid_browser or addon;
 
+local function printf(...) DEFAULT_CHAT_FRAME:AddMessage('|cffff6600[RaidBrowser]: '..format(...)) end
+
 local function clear_highlights()
    for i=1, NUM_LFR_LIST_BUTTONS do
       _G["LFRBrowseFrameListButton"..i]:UnlockHighlight();
    end   
 end
 
-function raid_browser.gui.set_list_data(button, index)
+local function set_list_data(button, index)
    local offset = FauxScrollFrame_GetOffset(LFRBrowseFrameListScrollFrame);
    
    button.index = index;
@@ -73,7 +75,7 @@ function raid_browser.gui.set_list_data(button, index)
    button.partyIcon:SetTexture("Interface\\LFGFrame\\LFGRole");
 end
 
-function raid_browser.gui.update_buttons()
+local function update_buttons()
    local playerName = UnitName("player");
    local selectedName = LFRBrowseFrame.selectedName;
    
@@ -86,7 +88,7 @@ function raid_browser.gui.update_buttons()
    end
 end
 
-function raid_browser.clear_list()
+local function clear_list()
    for i = 1, NUM_LFR_LIST_BUTTONS do
       local button = _G["LFRBrowseFrameListButton"..i];
       button:Hide();
@@ -96,7 +98,7 @@ end
 
 function raid_browser.gui.update_list()
    LFRBrowseFrameRefreshButton.timeUntilNextRefresh = LFR_BROWSE_AUTO_REFRESH_TIME;
-   
+      
    local function tablelength(T)
       local count = 0
       for _ in pairs(T) do count = count + 1 end
@@ -109,7 +111,7 @@ function raid_browser.gui.update_list()
    
    local offset = FauxScrollFrame_GetOffset(LFRBrowseFrameListScrollFrame);
    
-   raid_browser.clear_list();
+   clear_list();
    
    for i=1, NUM_LFR_LIST_BUTTONS do
       local button = _G["LFRBrowseFrameListButton"..i];
@@ -118,7 +120,6 @@ function raid_browser.gui.update_list()
          button:Show();
       else
          button:Hide();
-         clear_highlights();
       end
    end
    
@@ -132,10 +133,11 @@ function raid_browser.gui.update_list()
          button:UnlockHighlight();
       end
       
-      LFRBrowse_UpdateButtonStates();
+      update_buttons();
    end
 end
+
 -- Setup LFR browser hooks
-LFRBrowse_UpdateButtonStates = raid_browser.gui.update_buttons
+LFRBrowse_UpdateButtonStates = update_buttons
 LFRBrowseFrameList_Update = raid_browser.gui.update_list
-LFRBrowseFrameListButton_SetData = raid_browser.gui.set_list_data
+LFRBrowseFrameListButton_SetData = set_list_data

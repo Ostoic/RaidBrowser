@@ -1,6 +1,15 @@
 local folder, addon = ...
 raid_browser = raid_browser or addon;
 
+local function printf(...) DEFAULT_CHAT_FRAME:AddMessage('|cffff6600[RaidBrowser]: '..format(...)) end
+
+local function script_error(type, err)
+   local name, line, msg = err:match('%[string (".-")%]:(%d+): (.*)')
+   printf( '%s error%s:\n %s', type,
+          name and format(' in %s at line %d', name, line, msg) or '',
+          err )
+end
+
 local timers = {}
 
 function raid_browser.set_timer( interval, callback, recur, ...)
@@ -34,11 +43,12 @@ local function OnUpdate(self, elapsed)
                t.update = 0
             else
                timers[t] = nil
-               if not success then Hack.ScriptError('timer callback', rv) end
+               if not success then script_error('timer callback', rv) end
             end
          end
       end
       totalElapsed = 0
    end
 end
+
 CreateFrame('Frame'):SetScript('OnUpdate', OnUpdate)

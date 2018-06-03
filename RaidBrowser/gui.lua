@@ -1,5 +1,5 @@
-local folder, file = ...
-raid_browser = raid_browser or file;
+local folder, addon = ...
+raid_browser = raid_browser or addon;
 raid_browser.gui = raid_browser.gui or {}
 
 local search_button = LFRQueueFrameFindGroupButton

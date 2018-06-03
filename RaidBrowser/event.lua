@@ -4,6 +4,15 @@ raid_browser = raid_browser or addon;
 local registry = {}
 local frame = CreateFrame('Frame')
 
+local function printf(...) DEFAULT_CHAT_FRAME:AddMessage('|cffff6600[RaidBrowser]: '..format(...)) end
+
+local function script_error(type, err)
+   local name, line, msg = err:match('%[string (".-")%]:(%d+): (.*)')
+   printf( '%s error%s:\n %s', type,
+          name and format(' in %s at line %d', name, line, msg) or '',
+          err )
+end
+
 local function UnregisterOrphanedEvent(event)
    if not next(registry[event]) then
       registry[event] = nil
@@ -17,9 +26,10 @@ local function OnEvent(...)
       local success, rv = pcall(listener[1], listener[2], select(2,...))
       if rv then
          registry[event][listener] = nil
-         if not success then Hack.ScriptError('event callback', rv) end
+         if not success then script_error('event callback', rv) end
       end
    end        
+   
    UnregisterOrphanedEvent(event)
 end
 
