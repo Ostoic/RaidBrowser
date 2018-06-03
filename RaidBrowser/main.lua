@@ -30,7 +30,7 @@ raid_browser.roles = {
    ranged_dps = "rdps",
    melee_dps = "mdps",
    dps = 'dps',
-   healer = "he[a]?l[er|ers]?",
+   healer = "he[a]?l[er|ers]*",
    tank = "tank[s]?",
 }
 
