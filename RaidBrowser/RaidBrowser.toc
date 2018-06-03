@@ -1,0 +1,17 @@
+## Interface: 30300
+## Title: Raid Browser
+## Version: r1
+## Notes: A raid browser designed to parse text from LFM chat channels.
+## Author: Horsebreed
+## SavedVariables: 
+## OptionalDeps: LibStub, Ace3
+
+#@no-lib-strip@
+embeds.xml
+#@end-no-lib-strip@
+
+event.lua
+timer.lua
+main.lua
+gui.lua
+frame_api.lua
