@@ -111,7 +111,6 @@ function raid_browser.raid_info(message)
          found_lfm = true
       end
    end
-   if not found_lfm then 
 
    if not found_lfm then
       return nil
