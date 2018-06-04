@@ -12,14 +12,27 @@ local raid_list_column = LFRBrowseFrameColumnHeader3
 gs_list_column:SetText('GS')
 raid_list_column:SetText('Raid')
 
+local function get_active_spec()
+	local index = 1;
+	local _, _, points = GetTalentTabInfo(index);
+	for i = 2, 3 do
+		local _, _, p = GetTalentTabInfo(i);
+		if (p > points) then
+			index = i;
+		end
+	end
+	
+	return GetTalentTabInfo(index)
+end
+
 local function ask_for_invite()
-   local message = 'inv ';
-   local class = UnitClass("player");
-   local spec = GetTalentTabInfo(GetActiveTalentGroup())
-   local gs = GearScore_GetScore(UnitName('player'), 'player');
-   
-   message =  message .. gs .. 'gs ' .. spec .. ' ' .. class
-   SendChatMessage(message, 'WHISPER', nil, LFRBrowseFrame.selectedName);
+	local message = 'inv ';
+	local class = UnitClass("player");
+	local gs = GearScore_GetScore(UnitName('player'), 'player');
+	local spec = get_active_spec();
+
+	message =  message .. gs .. 'gs ' .. spec .. ' ' .. class
+	SendChatMessage(message, 'WHISPER', nil, LFRBrowseFrame.selectedName);
 end
 
 local function clear_highlights()

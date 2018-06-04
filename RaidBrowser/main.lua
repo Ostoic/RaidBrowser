@@ -4,60 +4,161 @@ raid_browser = raid_browser or addon;
 -- Register addon
 LibStub("AceAddon-3.0"):NewAddon(raid_browser, folder, "AceConsole-3.0", "AceSerializer-3.0", "AceHook-3.0", "AceEvent-3.0")
 
-local function printf(...) DEFAULT_CHAT_FRAME:AddMessage('|cffff6600[RaidBrowser]: '..format(...)) end
+local function printf(...) DEFAULT_CHAT_FRAME:AddMessage('|cff0061ff[RaidBrowser]: '..format(...)) end
 
 local raid_list = {
-   icc10rep = {
-		'icc[%s]*10[%s]*rep[%s]*',
-		'rep[%s]*icc[%s]*10',
+	-- Note: The order of each raid is deliberate.
+	-- Heroic raids are checked first, since NM raids will have the default 'icc10' pattern. 
+	-- Be careful about changing the order of the raids below
+	{
+		name = 'icc10rep',
+		patterns = {
+			'icc[%s]*10[%s]*rep[%s]*',
+			'rep[%s]*icc[%s]*10',
+		}
 	},
 
-   icc25rep = {
-		'icc[%s]*25[%s]*rep[%s]*',
-		'rep[%s]*icc[%s]*25',
+	{
+		name = 'icc25rep',
+		patterns = {
+			'icc[%s]*25[%s]*rep[%s]*',
+			'rep[%s]*icc[%s]*25',
+		}
+	},
+	
+	{
+		name = 'icc10hc',
+		patterns = {
+			'icc[%s]*10[%s]*hc?',
+			'hc?[%s]*icc[%s]*10',
+			'icc[%s]*hc?[%s]*10',
+			'10[%s]*icc[%s]*hc?',
+		}
 	},
 
-   icc10hc = {
-		'icc[%s]*10[%s]*hc?',
-		'hc?[%s]*icc[%s]*10',
-		'icc[%s]*hc?[%s]*10',
-		'10[%s]*icc[%s]*hc?',
+	{
+		name = 'icc25hc',
+		patterns = {
+			'icc[%s]*25[%s]*hc?',
+			'hc?[%s]*icc[%s]*25',
+			'icc[%s]*hc?[%s]*25',
+			'25[%s]*icc[%s]*hc?'
+		}
 	},
 
-	icc25hc = {
-		'icc[%s]*25[%s]*hc?',
-		'hc?[%s]*icc[%s]*25',
-		'icc[%s]*hc?[%s]*25',
-		'25[%s]*icc[%s]*hc?'
+	{
+		name = 'icc10nm',
+		patterns = {
+			'icc[%s]*10[%s]*nm?',
+			'nm?[%s]*icc[%s]*10',
+			'icc[%s]*nm?[%s]*10',
+			'10[%s]*icc[%s]*nm?',
+			'icc[%s]*10',
+		}
 	},
 
-   icc10nm = {
-		'icc[%s]*10[%s]*nm?',
-		'nm?[%s]*icc[%s]*10',
-		'icc[%s]*nm?[%s]*10',
-		'10[%s]*icc[%s]*nm?',
-		'icc[%s]*10',
+	{
+		name = 'icc25nm',
+		patterns = {
+			'icc[%s]*25[%s]*nm?',
+			'nm?[%s]*icc[%s]*25',
+			'icc[%s]*nm?[%s]*25',
+			'25[%s]*icc[%s]*nm?',
+			'icc[%s]*25',
+		}
 	},
 
-   icc25nm = {
-		'icc[%s]*25[%s]*nm?',
-		'nm?[%s]*icc[%s]*25',
-		'icc[%s]*nm?[%s]*25',
-		'25[%s]*icc[%s]*nm?',
-		'icc[%s]*25',
+	{
+		name = 'toc10hc',
+		patterns = {
+			'toc[%s]*10[%s]*hc?',
+			'hc?[%s]*toc[%s]*10',
+			'toc[%s]*hc?[%s]*10',
+			'10[%s]*toc[%s]*hc?',
+		}
 	},
 
-   toc10 = {"toc[%s]*10"},
-   toc25 = {"toc[%s]*25"},
-   voa10 = {"voa[%s]*10"},
-   voa25 = {"voa[%s]*25"},
-   rs10 = {'rs[%s]*10'},
-   rs25 = {'rs[%s]*25'},
+	{
+		name = 'toc25hc',
+		patterns = {
+			'toc[%s]*25[%s]*hc?',
+			'hc?[%s]*toc[%s]*25',
+			'toc[%s]*hc?[%s]*25',
+			'25[%s]*toc[%s]*hc?',
+		}
+	},
 
-   ulduar10 = {
-		'uld[%s]*10',
-		'ulduar[%s]*10',
-   },
+	{
+		name = 'toc10nm',
+		patterns = {
+			'toc[%s]*10[%s]*nm?',
+			'nm?[%s]*toc[%s]*10',
+			'toc[%s]*nm?[%s]*10',
+			'10[%s]*toc[%s]*nm?',
+			'toc[%s]*10',
+		}
+	},
+
+	{
+		name = 'toc25nm',
+		patterns = {
+			'toc[%s]*25[%s]*nm?',
+			'nm?[%s]*toc[%s]*25',
+			'toc[%s]*nm?[%s]*25',
+			'25[%s]*toc[%s]*nm?',
+			'toc[%s]*25',
+		}
+	},
+	
+	{
+		name = 'voa10',
+		patterns = {"voa[%s]*10"},
+	},
+	
+	{
+		name = 'voa25',
+		patterns = {"voa[%s]*25"},
+	},
+	
+	{
+		name = 'rs10',
+		patterns = {'rs[%s]*10'},
+	},
+		
+	{
+		name = 'rs25',
+		patterns = {'rs[%s]*25'},
+	},
+	
+	{
+		name = 'ulduar10',
+		patterns = {
+			'uld[%s]*10',
+			'ulduar[%s]*10',
+		},
+	},
+	
+	{
+		name = 'ulduar25',
+		patterns = {
+			'uld[%s]*25',
+			'ulduar[%s]*25',
+		}
+	},
+	
+	{
+		name = 'os10',
+		patterns = {
+			'os[%s]*10',
+		},
+	},
+	
+	{
+		name = 'os25',
+		patterns = {
+			'os[%s]*25',
+		},
+	},
 }
 
 local raid_roles = {
@@ -65,7 +166,7 @@ local raid_roles = {
    melee_dps = "mdps",
    dps = 'dps',
    healer = "he[a]?l[er|ers]*",
-   tank = "tank[s]?",
+   tank = "t[a]?nk[s]?",
 }
 
 local gearscore_patterns = {
@@ -79,8 +180,11 @@ local gearscore_patterns = {
 local lfm_patterns = {
    'lf[0-9]*m',
    'looking[%s]*for[%s]*all',
-   'looking[%s]*for[%s]*[0-9]*[%s]*more',
-   'lf[%s]*.*for',
+   'looking[%s]*for[%s]*[0-9]*[%s]*more',		-- looking for 9 more
+   'lf[%s]*.*for',								-- LF () for 
+   'lf[%s]*[0-9]*[%s]*he[a]?l[er|ers]*',		-- LF healer
+   'lf[%s]*[0-9]*[%s]*t[a]?nk[s]?',				-- LF 5 tanks
+   'lf[%s]*[0-9]*[%s]*[mr]?dps',				-- LF 9 DPS
    'lf[%s]*all',
    'need',
    'need[%s]*all',
@@ -101,36 +205,45 @@ local function refresh_active_raids()
    end
 end
 
+local function remove_achievements(message)
+	return string.gsub(message, '|c.*|r', '');
+end
+
 function raid_browser.raid_info(message)
-   message = string.lower(message)
+	message = string.lower(message)
+	message = remove_achievements(message);
 
-   local found_lfm = false;
-   -- Search for LFM announcement in the message
-   for _, pattern in pairs(lfm_patterns) do
-      if string.find(message, pattern) then
-         found_lfm = true
-      end
-   end
+	local found_lfm = false;
+	-- Search for LFM announcement in the message
+	for _, pattern in pairs(lfm_patterns) do
+		if string.find(message, pattern) then
+			found_lfm = true
+		end
+	end
 
-   if not found_lfm then
-      return nil
-   end
+	if not found_lfm then
+		return nil
+	end
 
-   -- Get the raid from the message
-   local raid = nil;
-   for r, pattern_list in pairs(raid_list) do
-	  for _, pattern in ipairs(pattern_list) do
-        local result = string.find(message, pattern);
+	-- Get the raid from the message
+	local raid = nil;
+	for _, r in ipairs(raid_list) do
+		for _, pattern in ipairs(r['patterns']) do
+			local result = string.find(message, pattern);
 
-		  -- If a raid was found then save it and continue.
-		  if result then
-			 raid = r
+			-- If a raid was found then save it and continue.
+			if result then
+				raid = r['name'];
 
-			 message = string.gsub(message, pattern, '')
-			 -- Remove the substring from the message
-			 break
-		  end
-	  end
+				-- Remove the substring from the message
+				message = string.gsub(message, pattern, '')
+				break
+			end
+		end
+	  
+		if raid then 
+			break;
+		end
    end
 
    -- Get any roles that are needed
@@ -152,7 +265,7 @@ function raid_browser.raid_info(message)
       roles = {'dps', 'tank', 'healer'}
    end
 
-   local gs = nil;
+   local gs = ' ';
 
    -- Search for a gearscore requirement.
    for _, pattern in pairs(gearscore_patterns) do
@@ -161,12 +274,9 @@ function raid_browser.raid_info(message)
 	  -- If a gs requirement was found, then save it and continue.
       if gs_start and gs_end then
          gs = string.sub(message, gs_start, gs_end)
+		 gs = string.gsub(gs, '[%s]*', ''); -- Trim whitespace
          break
-      end
-   end
-
-   if not gs then
-      gs = 'N/A'
+	  end
    end
 
    return raid, roles, gs

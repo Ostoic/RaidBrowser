@@ -1,7 +1,7 @@
 local folder, addon = ...
 raid_browser = raid_browser or addon;
 
-local function printf(...) DEFAULT_CHAT_FRAME:AddMessage('|cffff6600[RaidBrowser]: '..format(...)) end
+local function printf(...) DEFAULT_CHAT_FRAME:AddMessage('|cff0061ff[RaidBrowser]: '..format(...)) end
 
 local function clear_highlights()
    for i=1, NUM_LFR_LIST_BUTTONS do
