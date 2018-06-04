@@ -6,10 +6,6 @@
 ## SavedVariables: 
 ## OptionalDeps: LibStub, Ace3
 
-#@no-lib-strip@
-embeds.xml
-#@end-no-lib-strip@
-
 event.lua
 timer.lua
 main.lua
