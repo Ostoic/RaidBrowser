@@ -2,6 +2,8 @@ local folder, addon = ...
 raid_browser = raid_browser or addon;
 raid_browser.gui = raid_browser.gui or {}
 
+local function printf(...) DEFAULT_CHAT_FRAME:AddMessage('|cff0061ff[RaidBrowser]: '..format(...)) end
+
 local search_button = LFRQueueFrameFindGroupButton
 local join_button = LFRBrowseFrameInviteButton
 local refresh_button = LFRBrowseFrameRefreshButton
@@ -45,8 +47,9 @@ join_button:SetText('Join')
 join_button:SetScript('OnClick', ask_for_invite)
 
 for i=1, NUM_LFR_LIST_BUTTONS do
-   _G["LFRBrowseFrameListButton"..i]:SetScript("OnDoubleClick", ask_for_invite)
-   _G["LFRBrowseFrameListButton"..i]:SetScript("OnClick", 
+   local button = _G["LFRBrowseFrameListButton"..i];
+   button:SetScript("OnDoubleClick", ask_for_invite)
+   button:SetScript("OnClick", 
       function(self) 
          LFRBrowseFrame.selectedName  = self.unitName;
          clear_highlights();
@@ -54,8 +57,26 @@ for i=1, NUM_LFR_LIST_BUTTONS do
          LFRBrowse_UpdateButtonStates();
       end
    );
+   
+   button:SetScript('OnEnter', 
+      function(self)
+         GameTooltip:SetOwner(self, 'ANCHOR_RIGHT');
+         
+         local message = self.message;
+         local seconds = time() - self.time;
+         local last_sent = string.format('Last sent: %d seconds ago', seconds);
+         GameTooltip:AddLine(message, 1, 1, 1, true);
+         GameTooltip:AddLine(last_sent);
+         GameTooltip:Show();
+      end
+   )
+   
+   button:SetScript('OnLeave', 
+      function(self)
+         GameTooltip:Hide();
+      end
+   )
 end
-
 LFRBrowseFrameRaidDropDown:Hide()
 
 search_button:SetText('Find Raid')

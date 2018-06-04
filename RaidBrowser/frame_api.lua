@@ -27,7 +27,8 @@ local function set_list_data(button, index)
          raid = raid_info[1];
          roles = raid_info[2];
          gs = raid_info[3];
-         button.message = raid_info[4];
+		 button.time = raid_info[4];
+         button.message = raid_info[5];
          break;
       end
       
