@@ -13,132 +13,132 @@ local raid_list = {
 	{
 		name = 'icc10rep',
 		patterns = {
-			 'icc[%s]*10[%s]*rep',
-			 'rep[%s]*icc[%s]*10',
-			 'icc[%s]*rep',
+			 'icc[%s-]*10[%s-]*rep',
+			 'rep[%s]*icc[%s-]*10',
+			 'icc[%s-]*rep',
 		}
 	},
 
 	{
 		name = 'icc25rep',
 		patterns = {
-			'icc[%s]*25[%s]*rep[%s]*',
-			'rep[%s]*icc[%s]*25',
+			'icc[%s-]*25[%s-]*rep[%s-]*',
+			'rep[%s-]*icc[%s-]*25',
 		}
 	},
 	
 	{
 		name = 'icc10hc',
 		patterns = {
-			'icc[%s]*10[%s]*%(?hc?%)?',
-			'%(?hc?%)?[%s]*icc[%s]*10',
-			'icc[%s]*%(?hc?%)?[%s]*10',
-			'10[%s]*icc[%s]*%(?hc?%)?',
+			'icc[%s-]*10[%s-]*%(?hc?%)?',
+			'%(?hc?%)?[%s-]*icc[%s-]*10',
+			'icc[%s-]*%(?hc?%)?[%s-]*10',
+			'10[%s-]*icc[%s-]*%(?hc?%)?',
 		}
 	},
 
 	{
 		name = 'icc25hc',
 		patterns = {
-			'icc[%s]*25[%s]*%(?hc?%)?',
-			'%(?hc?%)?[%s]*icc[%s]*25',
-			'icc[%s]*%(?hc?%)?[%s]*25',
-			'25[%s]*icc[%s]*%(?hc?%)?'
+			'icc[%s-]*25[%s-]*%(?hc?%)?',
+			'%(?hc?%)?[%s-]*icc[%s-]*25',
+			'icc[%s-]*%(?hc?%)?[%s-]*25',
+			'25[%s-]*icc[%s-]*%(?hc?%)?'
 		}
 	},
 
 	{
 		name = 'icc10nm',
 		patterns = {
-			'icc[%s]*10[%s]*%(?nm?%)?',
-			'%(?nm?%)?[%s]*icc[%s]*10',
-			'icc[%s]*%(?nm?%)?[%s]*10',
-			'10[%s]*icc[%s]*%(?nm?%)?',
-			'icc[%s]*10',
+			'icc[%s-]*10[%s-]*%(?nm?%)?',
+			'%(?nm?%)?[%s-]*icc[%s-]*10',
+			'icc[%s-]*%(?nm?%)?[%s-]*10',
+			'10[%s-]*icc[%s-]*%(?nm?%)?',
+			'icc[%s-]*10',
 		}
 	},
 
 	{
 		name = 'icc25nm',
 		patterns = {
-			'icc[%s]*25[%s]*%(?nm?%)?',
-			'%(?nm?%)?[%s]*icc[%s]*25',
-			'icc[%s]*%(?nm?%)?[%s]*25',
-			'25[%s]*icc[%s]*%(?nm?%)?',
-			'icc[%s]*25',
+			'icc[%s-]*25[%s-]*%(?nm?%)?',
+			'%(?nm?%)?[%s-]*icc[%s-]*25',
+			'icc[%s-]*%(?nm?%)?[%s-]*25',
+			'25[%s-]*icc[%s-]*%(?nm?%)?',
+			'icc[%s-]*25',
 		}
 	},
 
 	{
 		name = 'toc10hc',
 		patterns = {
-			'toc[%s]*10[%s]*%(?hc?%)?',
-			'%(?hc?%)?[%s]*toc[%s]*10',
-			'toc[%s]*%(?hc?%)?[%s]*10',
-			'10[%s]*toc[%s]*%(?hc?%)?',
+			'toc[%s-]*10[%s-]*%(?hc?%)?',
+			'%(?hc?%)?[%s-]*toc[%s-]*10',
+			'toc[%s-]*%(?hc?%)?[%s-]*10',
+			'10[%s-]*toc[%s-]*%(?hc?%)?',
 		}
 	},
 
 	{
 		name = 'toc25hc',
 		patterns = {
-			'toc[%s]*25[%s]*%(?hc?%)?',
-			'%(?hc?%)?[%s]*toc[%s]*25',
-			'toc[%s]*%(?hc?%)?[%s]*25',
-			'25[%s]*toc[%s]*%(?hc?%)?',
+			'toc[%s-]*25[%s-]*%(?hc?%)?',
+			'%(?hc?%)?[%s-]*toc[%s-]*25',
+			'toc[%s-]*%(?hc?%)?[%s-]*25',
+			'25[%s-]*toc[%s-]*%(?hc?%)?',
 		}
 	},
 
 	{
 		name = 'toc10nm',
 		patterns = {
-			'toc[%s]*10[%s]*%(?nm?%)?',
-			'%(?nm?%)?[%s]*toc[%s]*10',
-			'toc[%s]*%(?nm?%)?[%s]*10',
-			'10[%s]*toc[%s]*%(?nm?%)?',
-			'toc[%s]*10',
+			'toc[%s-]*10[%s-]*%(?nm?%)?',
+			'%(?nm?%)?[%s-]*toc[%s-]*10',
+			'toc[%s-]*%(?nm?%)?[%s-]*10',
+			'10[%s-]*toc[%s-]*%(?nm?%)?',
+			'toc[%s-]*10',
 		}
 	},
 
 	{
 		name = 'toc25nm',
 		patterns = {
-			'toc[%s]*25[%s]*%(?nm?%)?',
-			'%(?nm?%)?[%s]*toc[%s]*25',
-			'toc[%s]*%(?nm?%)?[%s]*25',
-			'25[%s]*toc[%s]*%(?nm?%)?',
-			'toc[%s]*25',
+			'toc[%s-]*25[%s-]*%(?nm?%)?',
+			'%(?nm?%)?[%s-]*toc[%s-]*25',
+			'toc[%s-]*%(?nm?%)?[%s-]*25',
+			'25[%s-]*toc[%s-]*%(?nm?%)?',
+			'toc[%s-]*25',
 		}
 	},
 	
 	{
 	   name = 'rs10hc',
 	   patterns = {
-		  'rs[%s]*10[%s]*%(?hc?%)?',
-		  '%(?hc?%)?[%s]*rs[%s]*10',
-		  'rs[%s]*%(?hc?%)?[%s]*10',
-		  '10[%s]*rs[%s]*%(?hc?%)?',
+		  'rs[%s-]*10[%s-]*%(?hc?%)?',
+		  '%(?hc?%)?[%s-]*rs[%s-]*10',
+		  'rs[%s-]*%(?hc?%)?[%s-]*10',
+		  '10[%s-]*rs[%s-]*%(?hc?%)?',
 	   }
 	},
 
 	{
 	   name = 'rs25hc',
 	   patterns = {
-		  'rs[%s]*25[%s]*%(?hc?%)?',
-		  '%(?hc?%)?[%s]*rs[%s]*25',
-		  'rs[%s]*%(?hc?%)?[%s]*25',
-		  '25[%s]*rs[%s]*%(?hc?%)?',
+		  'rs[%s-]*25[%s-]*%(?hc?%)?',
+		  '%(?hc?%)?[%s-]*rs[%s-]*25',
+		  'rs[%s-]*%(?hc?%)?[%s-]*25',
+		  '25[%s-]*rs[%s-]*%(?hc?%)?',
 	   }
 	},
 
 	{
 	   name = 'rs10nm',
 	   patterns = {
-		  'rs[%s]*10[%s]*%(?nm?%)?',
-		  '%(?nm?%)?[%s]*rs[%s]*10',
-		  'rs[%s]*%(?nm?%)?[%s]*10',
-		  '10[%s]*rs[%s]*%(?nm?%)?',
-		  'rs[%s]*10',
+		  'rs[%s-]*10[%s-]*%(?nm?%)?',
+		  '%(?nm?%)?[%s-]*rs[%s-]*10',
+		  'rs[%s-]*%(?nm?%)?[%s-]*10',
+		  '10[%s-]*rs[%s-]*%(?nm?%)?',
+		  'rs[%s-]*10',
 	   }
 	},
 
@@ -146,61 +146,80 @@ local raid_list = {
 	{
 	   name = 'rs25nm',
 	   patterns = {
-		  'rs[%s]*25[%s]*%(?nm?%)?',
-		  '%(?nm?%)?[%s]*rs[%s]*25',
-		  'rs[%s]*%(?nm?%)?[%s]*25',
-		  '25[%s]*rs[%s]*%(?nm?%)?',
-		  'rs[%s]*25',
+		  'rs[%s-]*25[%s-]*%(?nm?%)?',
+		  '%(?nm?%)?[%s-]*rs[%s-]*25',
+		  'rs[%s-]*%(?nm?%)?[%s-]*25',
+		  '25[%s-]*rs[%s-]*%(?nm?%)?',
+		  'rs[%s-]*25',
 	   }
 	},
 	
 	{
 		name = 'voa10',
-		patterns = {"voa[%s]*10"},
+		patterns = {"voa[%s-]*10"},
 	},
 	
 	{
 		name = 'voa25',
-		patterns = {"voa[%s]*25"},
+		patterns = {"voa[%s-]*25"},
 	},
 		
 	{
 		name = 'ulduar10',
 		patterns = {
-			'uld[%s]*10',
-			'ulduar[%s]*10',
+			'uld[%s-]*10',
+			'ulduar[%s-]*10',
 		},
 	},
 	
 	{
 		name = 'ulduar25',
 		patterns = {
-			'uld[%s]*25',
-			'ulduar[%s]*25',
+			'uld[%s-]*25',
+			'ulduar[%s-]*25',
 		}
 	},
 	
 	{
 		name = 'os10',
 		patterns = {
-			'os[%s]*10',
+			'os[%s-]*10',
 		},
 	},
 	
 	{
 		name = 'os25',
 		patterns = {
-			'os[%s]*25',
+			'os[%s-]*25',
 		},
 	},
 }
 
-local raid_roles = {
-   ranged_dps = "[0-9]*[%s]*rdps",
-   melee_dps = "[0-9]*[%s]*mdps",
-   dps = '[0-9]*[%s]*dps',
-   healer = "[0-9]*[%s]*he[a]?l[er|ers]*",
-   tank = "[0-9]*[%s]*t[a]?nk[s]?",
+local role_patterns = {
+	ranged_dps = {
+		"[0-9]*[%s]*rdps",
+	},
+	
+	melee_dps = {
+		'[0-9]*[%s]*mdps',
+		'[0-9]*[%s]*rogue',
+	},
+	
+	dps = {
+		'[0-9]*[%s]*dps',
+	},
+	
+	healer = {
+		'[0-9]*[%s]*he[a]?l[er|ers]*',
+		'[0-9]*[%s]*rdudu',
+		'[0-9]*[%s]*rdruid',
+		'[0-9]*[%s]*rshamm?y?',
+		'[0-9]*[%s]*disc[%s]*',
+	},
+	
+	tank = {
+		'[0-9]*[%s]*t[a]?nk[s]?',
+	},
 }
 
 local gearscore_patterns = {
@@ -219,6 +238,9 @@ local lfm_patterns = {
    'lf[%s]*[0-9]*[%s]*he[a]?l[er|ers]*',		-- LF healer
    'lf[%s]*[0-9]*[%s]*t[a]?nk[s]?',				-- LF 5 tanks
    'lf[%s]*[0-9]*[%s]*[mr]?dps',				-- LF 9 DPS
+   'seek[%s]*[0-9]*[%s]*he[a]?l[er|ers]*',		-- seek healer
+   'seek[%s]*[0-9]*[%s]*t[a]?nk[s]?',			-- seek 5 tanks
+   'seek[%s]*[0-9]*[%s]*[mr]?dps',				-- seek 9 DPS
    'lf[%s]*all',
    'need',
    'need[%s]*all',
@@ -287,49 +309,52 @@ function raid_browser.raid_info(message)
    end
 
    -- Get any roles that are needed
-   local roles = {};
-   for r, pattern in pairs(raid_roles) do
-      local result = string.find(message, pattern)
+	local roles = {};
+	for r, patterns in pairs(role_patterns) do
+		for _, pattern in ipairs(patterns) do
+			local result = string.find(message, pattern)
 
-	  -- If a raid was found then save it to our list of roles and continue.
-      if result then
-         table.insert(roles, r)
+			-- If a raid was found then save it to our list of roles and continue.
+			if result then
+				table.insert(roles, r)
 
-		 -- Remove the substring from the message
-         message = string.gsub(message, pattern, '')
-      end
-   end
+				-- Remove the substring from the message
+				message = string.gsub(message, pattern, '')
+				break;
+			end
+		end
+	end
 
-   -- If there is only an LFM message, then it is assumed that all roles are needed
-   if #roles == 0 then
-      roles = {'dps', 'tank', 'healer'}
-   end
+	-- If there is only an LFM message, then it is assumed that all roles are needed
+	if #roles == 0 then
+		roles = {'dps', 'tank', 'healer'}
+	end
 
-   local gs = ' ';
+	local gs = ' ';
 
    -- Search for a gearscore requirement.
-   for _, pattern in pairs(gearscore_patterns) do
-      local gs_start, gs_end = string.find(message, pattern)
+	for _, pattern in pairs(gearscore_patterns) do
+		local gs_start, gs_end = string.find(message, pattern)
 
-	  -- If a gs requirement was found, then save it and continue.
-      if gs_start and gs_end then
-         gs = string.sub(message, gs_start, gs_end)
-		 gs = string.gsub(gs, '[%s]*%+?', ''); -- Trim whitespace
-		 gs = string.gsub(gs, 'k', '')
-		 gs = string.gsub(gs, ',', '.');
-		 gs = tonumber(gs);
-		 
-		 -- Convert ex: 5800 into 5.8 for display
-		 if gs > 1000 then
-		    gs = gs/1000;
-		 end
+		-- If a gs requirement was found, then save it and continue.
+		if gs_start and gs_end then
+			gs = string.sub(message, gs_start, gs_end)
+			gs = string.gsub(gs, '[%s]*%+?', ''); -- Trim whitespace
+			gs = string.gsub(gs, 'k', '')
+			gs = string.gsub(gs, ',', '.');
+			gs = tonumber(gs);
 
-		 gs = string.format('%.1f', gs);
-         break
-	  end
-   end
+			-- Convert ex: 5800 into 5.8 for display
+			if gs > 1000 then
+				gs = gs/1000;
+			end
 
-   return raid, roles, gs
+			gs = string.format('%.1f', gs);
+			break
+		end
+	end
+
+	return raid, roles, gs
 end
 
 local function event_handler(self, event, message, sender)
