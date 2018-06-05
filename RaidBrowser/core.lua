@@ -1,8 +1,5 @@
-local folder, addon = ...
-raid_browser = raid_browser or addon;
-
 -- Register addon
-LibStub("AceAddon-3.0"):NewAddon(raid_browser, folder, "AceConsole-3.0", "AceSerializer-3.0", "AceHook-3.0", "AceEvent-3.0")
+raid_browser = LibStub("AceAddon-3.0"):NewAddon("RaidBrowser", "AceConsole-3.0", "AceHook-3.0", "AceEvent-3.0")
 
 local function printf(...) DEFAULT_CHAT_FRAME:AddMessage('|cff0061ff[RaidBrowser]: '..format(...)) end
 
@@ -112,46 +109,46 @@ local raid_list = {
 	},
 	
 	{
-	   name = 'rs10hc',
-	   patterns = {
-		  'rs[%s-]*10[%s-]*%(?hc?%)?',
-		  '%(?hc?%)?[%s-]*rs[%s-]*10',
-		  'rs[%s-]*%(?hc?%)?[%s-]*10',
-		  '10[%s-]*rs[%s-]*%(?hc?%)?',
-	   }
+		name = 'rs10hc',
+		patterns = {
+			'rs[%s-]*10[%s-]*%(?hc?%)?',
+			'%(?hc?%)?[%s-]*rs[%s-]*10',
+			'rs[%s-]*%(?hc?%)?[%s-]*10',
+			'10[%s-]*rs[%s-]*%(?hc?%)?',
+		}
 	},
 
 	{
-	   name = 'rs25hc',
-	   patterns = {
-		  'rs[%s-]*25[%s-]*%(?hc?%)?',
-		  '%(?hc?%)?[%s-]*rs[%s-]*25',
-		  'rs[%s-]*%(?hc?%)?[%s-]*25',
-		  '25[%s-]*rs[%s-]*%(?hc?%)?',
-	   }
+		name = 'rs25hc',
+		patterns = {
+			'rs[%s-]*25[%s-]*%(?hc?%)?',
+			'%(?hc?%)?[%s-]*rs[%s-]*25',
+			'rs[%s-]*%(?hc?%)?[%s-]*25',
+			'25[%s-]*rs[%s-]*%(?hc?%)?',
+		}
 	},
 
 	{
-	   name = 'rs10nm',
-	   patterns = {
-		  'rs[%s-]*10[%s-]*%(?nm?%)?',
-		  '%(?nm?%)?[%s-]*rs[%s-]*10',
-		  'rs[%s-]*%(?nm?%)?[%s-]*10',
-		  '10[%s-]*rs[%s-]*%(?nm?%)?',
-		  'rs[%s-]*10',
-	   }
+		name = 'rs10nm',
+		patterns = {
+			'rs[%s-]*10[%s-]*%(?nm?%)?',
+			'%(?nm?%)?[%s-]*rs[%s-]*10',
+			'rs[%s-]*%(?nm?%)?[%s-]*10',
+			'10[%s-]*rs[%s-]*%(?nm?%)?',
+			'rs[%s-]*10',
+		}
 	},
 
 
 	{
-	   name = 'rs25nm',
-	   patterns = {
-		  'rs[%s-]*25[%s-]*%(?nm?%)?',
-		  '%(?nm?%)?[%s-]*rs[%s-]*25',
-		  'rs[%s-]*%(?nm?%)?[%s-]*25',
-		  '25[%s-]*rs[%s-]*%(?nm?%)?',
-		  'rs[%s-]*25',
-	   }
+		name = 'rs25nm',
+		patterns = {
+			'rs[%s-]*25[%s-]*%(?nm?%)?',
+			'%(?nm?%)?[%s-]*rs[%s-]*25',
+			'rs[%s-]*%(?nm?%)?[%s-]*25',
+			'25[%s-]*rs[%s-]*%(?nm?%)?',
+			'rs[%s-]*25',
+		}
 	},
 	
 	{
@@ -193,6 +190,20 @@ local raid_list = {
 			'os[%s-]*25',
 		},
 	},
+	
+	{
+		name = 'naxx10',
+		patterns = {
+			'naxx?r?a?m?m?a?s?[%s-]*10',
+		},
+	},
+	
+	{
+		name = 'naxx25',
+		patterns = {
+			'naxx?r?a?m?m?a?s?[%s-]*25',
+		},
+	},
 }
 
 local role_patterns = {
@@ -223,42 +234,37 @@ local role_patterns = {
 }
 
 local gearscore_patterns = {
-   '[1-6][.,][0-9]',
-   '[1-6][%s]*k[%s]*%+?',
-   '%+?[%s]*[1-6][%s]*k',
-   '[1-6][0-9][0-9][0-9]',
-   '[1-6]%+',
+	'[1-6][.,][0-9]',
+	'[1-6][%s]*k[%s]*%+?',
+	'%+?[%s]*[1-6][%s]*k',
+	'[1-6][0-9][0-9][0-9]',
+	'[1-6]%+',
 }
 
 local lfm_patterns = {
-   'lf[0-9]*m',
-   'looking[%s]*for[%s]*all',
-   'looking[%s]*for[%s]*[0-9]*[%s]*more',		-- looking for 9 more
-   'lf[%s]*.*for',								-- LF () for 
-   'lf[%s]*[0-9]*[%s]*he[a]?l[er|ers]*',		-- LF healer
-   'lf[%s]*[0-9]*[%s]*t[a]?nk[s]?',				-- LF 5 tanks
-   'lf[%s]*[0-9]*[%s]*[mr]?dps',				-- LF 9 DPS
-   'seek[%s]*[0-9]*[%s]*he[a]?l[er|ers]*',		-- seek healer
-   'seek[%s]*[0-9]*[%s]*t[a]?nk[s]?',			-- seek 5 tanks
-   'seek[%s]*[0-9]*[%s]*[mr]?dps',				-- seek 9 DPS
-   'lf[%s]*all',
-   'need',
-   'need[%s]*all',
+	'lf[0-9]*m',
+	'looking[%s]*for[%s]*all',
+	'looking[%s]*for[%s]*[0-9]*[%s]*more',		-- looking for 9 more
+	'lf[%s]*.*for',								-- LF () for 
+	'lf[%s]*[0-9]*[%s]*he[a]?l[er|ers]*',		-- LF healer
+	'lf[%s]*[0-9]*[%s]*t[a]?nk[s]?',				-- LF 5 tanks
+	'lf[%s]*[0-9]*[%s]*[mr]?dps',				-- LF 9 DPS
+	'seek[%s]*[0-9]*[%s]*he[a]?l[er|ers]*',		-- seek healer
+	'seek[%s]*[0-9]*[%s]*t[a]?nk[s]?',			-- seek 5 tanks
+	'seek[%s]*[0-9]*[%s]*[mr]?dps',				-- seek 9 DPS
+	'lf[%s]*all',
+	'need',
+	'need[%s]*all',
 }
 
--- Raids expire after 60 seconds
-raid_browser.expiry_time = 60;
-
-raid_browser.active_raids = {}
-
 local function refresh_active_raids()
-   for name, info in pairs(raid_browser.active_raids) do
-	  -- If the last message from the sender was too long ago, then
-	  -- remove his raid from active_raids.
-      if time() - info[4] > raid_browser.expiry_time then
-         raid_browser.active_raids[name] = nil;
-      end
-   end
+	for name, info in pairs(raid_browser.active_raids) do
+		-- If the last message from the sender was too long ago, then
+		-- remove his raid from active_raids.
+		if time() - info.time > raid_browser.expiry_time then
+			raid_browser.active_raids[name] = nil;
+		end
+	end
 end
 
 local function remove_achievements(message)
@@ -275,8 +281,8 @@ function raid_browser.raid_info(message)
 	message = remove_achievements(message);
 	
 
-	local found_lfm = false;
 	-- Search for LFM announcement in the message
+	local found_lfm = false;
 	for _, pattern in pairs(lfm_patterns) do
 		if string.find(message, pattern) then
 			found_lfm = true
@@ -302,13 +308,13 @@ function raid_browser.raid_info(message)
 				break
 			end
 		end
-	  
+		
 		if raid then 
 			break;
 		end
-   end
+	end
 
-   -- Get any roles that are needed
+	-- Get any roles that are needed
 	local roles = {};
 	for r, patterns in pairs(role_patterns) do
 		for _, pattern in ipairs(patterns) do
@@ -332,7 +338,7 @@ function raid_browser.raid_info(message)
 
 	local gs = ' ';
 
-   -- Search for a gearscore requirement.
+	-- Search for a gearscore requirement.
 	for _, pattern in pairs(gearscore_patterns) do
 		local gs_start, gs_end = string.find(message, pattern)
 
@@ -358,37 +364,48 @@ function raid_browser.raid_info(message)
 end
 
 local function event_handler(self, event, message, sender)
-   if event == "CHAT_MSG_CHANNEL" then
-      local raid, roles, gs = raid_browser.raid_info(message)
-      if raid and roles and gs then
-         local roles_string = nil;
+	if event == "CHAT_MSG_CHANNEL" then
+		local raid, roles, gs = raid_browser.raid_info(message)
+		if raid and roles and gs then
+			local roles_string = nil;
 
-         -- Build the LFR string
-         for _, role in pairs(roles) do
-            if not roles_string then
-               roles_string = role
-            else
-               roles_string = roles_string .. ', ' .. role
-            end
-         end
+			-- Build the LFR string
+			for _, role in pairs(roles) do
+				if not roles_string then
+					roles_string = role
+				else
+					roles_string = roles_string .. ', ' .. role
+				end
+			end
 
-         -- Put the sender in the table of active raids
-         raid_browser.active_raids[sender] = {raid, roles, gs, time(), message};
-         raid_browser.gui.update_list();
-      end
-   end
+			-- Put the sender in the table of active raids
+			raid_browser.active_raids[sender] = { 
+				raid = raid, 
+				roles = roles, 
+				gs = gs, 
+				time = time(), 
+				message = message
+			};
+			
+			raid_browser.gui.update_list();
+		end
+	end
 end
 
 function raid_browser:OnEnable()
-  printf("RaidBrowser loaded. Type /rb to toggle the raid browser.")
+	raid_browser:Print("loaded. Type /rb to toggle the raid browser.")
 
-  raid_browser.timer = raid_browser.set_timer(10, refresh_active_raids, true)
-  raid_browser.listener = raid_browser.add_event_listener("CHAT_MSG_CHANNEL",  event_handler )
+	-- LFM messages expire after 60 seconds
+	raid_browser.expiry_time = 60;
+
+	raid_browser.active_raids = {}
+	raid_browser.timer = raid_browser.set_timer(10, refresh_active_raids, true)
+	raid_browser.listener = raid_browser.add_event_listener("CHAT_MSG_CHANNEL",	event_handler )
 end
 
 function raid_browser:OnDisable()
-  raid_browser.remove_event_listener ("CHAT_MSG_CHANNEL", raid_browser.listener)
-  printf("RaidBrowser stopped")
-  
-  raid_browser.kill_timer(raid_browser.timer)
+	raid_browser.remove_event_listener ("CHAT_MSG_CHANNEL", raid_browser.listener)
+	raid_browser:Print("RaidBrowser stopped")
+	
+	raid_browser.kill_timer(raid_browser.timer)
 end

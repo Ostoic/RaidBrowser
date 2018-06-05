@@ -3,11 +3,13 @@
 ## Version: r1
 ## Notes: The addon searches for LFM messages sent in all chat channels and lists found raids in Blizzard's LFR raid browser, which is unused in patch 3.3.5a.
 ## Author: Horsebreed
-## SavedVariables: 
-## OptionalDeps: LibStub, Ace3
+## OptionalDeps: GearScoreLite
+## X-Embeds: Ace3
 
+embeds.xml
+
+core.lua
 event.lua
 timer.lua
-main.lua
+stats.lua
 gui.lua
-frame_api.lua
