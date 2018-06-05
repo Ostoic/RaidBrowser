@@ -19,6 +19,7 @@ As with any other addon, copy the RaidBrowser folder into your %WoW Root%/Interf
 
 # Todo
 - Detect the highest-achieved achievement for the given raid and link it for the associated join message to send to the raid host.
+- Further improve pattern matching for better detection of LFM messages.
 - Suggestions?? Open up an issue!
 
 # Remark
