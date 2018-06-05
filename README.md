@@ -15,3 +15,10 @@ LFR raid browser, which is unused in patch 3.3.5a.
 
 # Installation
 As with any other addon, copy the RaidBrowser folder into your %WoW Root%/Interface/AddOns directory. Nothing more is required.
+
+# Remark
+
+Be aware that since it is difficult to consider every possible LFM message that someone could think of, this addon may consider false 
+positives, or may omit valid LFM messages. For example, I recently saw someone hosting an icc 25 in which they wrote icc 25 as 
+ICC-25-man. If you encounter any such problems open up an issue describing the bug and how it the addon should behave in said context,
+if you're so inclined.
