@@ -16,7 +16,10 @@ LFR raid browser, which is unused in patch 3.3.5a.
 
 # Installation and Usage
 As with any other addon, copy the RaidBrowser folder into your %WoW Root%/Interface/AddOns directory. When ingame, type /rb to activate
-the raid browser UI. Alternatively, the interface can be accessed by opening the social menu -> Raid tab -> Open Raid Browser. 
+the raid browser UI. Alternatively, the interface can be accessed as follows:
+1. Open the social menu,
+2. Select the raid tab,
+3. Click "Raid Browser"
 
 # Todo
 - Detect the highest-achieved achievement for the given raid and link it for the associated join message to send to the raid host.
