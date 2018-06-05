@@ -22,7 +22,7 @@ the raid browser UI. Alternatively, the interface can be accessed as follows:
 3. Click "Raid Browser"
 
 # Todo
-- Detect the highest-achieved achievement for the given raid and link it for the associated join message to send to the raid host.
+- Add more raids and achievements. Icc, toc, naxx, rs, ulduar, and os are currently the only supported raids.
 - Further improve pattern matching for better detection of LFM messages.
 - Suggestions?? Open up an issue!
 
