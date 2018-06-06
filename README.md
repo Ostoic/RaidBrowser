@@ -12,7 +12,9 @@ LFR raid browser, which is unused in patch 3.3.5a.
 - Raid hosts that do not send a message after 1-2 minutes will have their entry expire in the raid browser. This ensures that the raid browser does not become cluttered.
 - Low memory usage: Since the UI and icons are already loaded ingame, not much extra memory is needed (30-60 KB).
 
-![alt text](https://i.imgur.com/lgnYIpN.png)
+
+![alt text](https://i.imgur.com/1hCayWJ.png)
+![alt text](https://i.imgur.com/rEx7HiX.png)
 
 # Installation and Usage
 As with any other addon, copy the RaidBrowser folder into your %WoW Root%/Interface/AddOns directory. When ingame, type /rb to activate
@@ -24,7 +26,6 @@ the raid browser UI. Alternatively, the interface can be accessed as follows:
 # Todo
 - Add more raids and achievements. Icc, toc, naxx, rs, ulduar, and os are currently the only supported raids.
 - Further improve pattern matching for better detection of LFM messages.
-- Color saved/locked raids red in the raid browser
 - Sort raid entries by gs/name/etc
 - Raid host tab where "Inv x gs [achieve]" messages are parsed similarly to how LFM messages are parsed. Can select raid to host, GS min req, achievement requirement, etc which will be formatted into an auto-barked message sent to the specified channel.
 - Suggestions?? Open up an issue!
