@@ -10,9 +10,9 @@ local raid_list_column = LFRBrowseFrameColumnHeader3
 gs_list_column:SetText('GS')
 raid_list_column:SetText('Raid')
 
-local function ask_for_invite()
-	local raid = raid_browser.active_raids[LFRBrowseFrame.selectedName].raid;
-	local message = raid_browser.stats.build_inv_string(raid);
+local function on_join()
+	local raid_name = raid_browser.lfm_messages[LFRBrowseFrame.selectedName].raid_info.name;
+	local message = raid_browser.stats.build_inv_string(raid_name);
 	SendChatMessage(message, 'WHISPER', nil, LFRBrowseFrame.selectedName);
 end
 
@@ -23,30 +23,78 @@ local function clear_highlights()
 end
 
 join_button:SetText('Join')
-join_button:SetScript('OnClick', ask_for_invite)
+join_button:SetScript('OnClick', on_join)
+
+local function format_count(value)
+   if value == 1 then
+      return ' ';
+   end
+   
+   return 's ' ;
+end
+
+local function format_seconds(seconds)
+   local seconds = tonumber(seconds)
+   
+   if seconds <= 0 then
+      return "00 seconds";
+   end
+   
+   local days_text = '';
+   local hours_text = '';
+   local mins_text = '';
+   local seconds_text = '';
+   
+   if seconds >= 86400 then
+      local days = math.floor(seconds / 86400);
+      days_text = days .. ' day' .. format_count(days);
+      seconds = seconds % 86400;
+   end
+   
+   if seconds >= 3600 then
+      local hours = math.floor(seconds / 3600) ;
+      hours_text = hours .. ' hr' .. format_count(hours);
+      seconds = seconds % 3600;
+   end
+   
+   if seconds >= 60 then 
+      local minutes = math.floor(seconds / 60) ;
+      minutes_text = minutes .. ' min' .. format_count(minutes);
+   end
+   
+   return days_text .. hours_text .. minutes_text;
+end
 
 -- Setup tooltip and LFR button entry functionality.
 for i = 1, NUM_LFR_LIST_BUTTONS do
 	local button = _G["LFRBrowseFrameListButton"..i];
-	button:SetScript("OnDoubleClick", ask_for_invite)
+	button:SetScript("OnDoubleClick", on_join)
 	button:SetScript("OnClick", 
-		function(self) 
-			LFRBrowseFrame.selectedName = self.unitName;
+		function(button) 
+			LFRBrowseFrame.selectedName = button.unitName;
 			clear_highlights();
-			self:LockHighlight();
+			button:LockHighlight();
 			LFRBrowse_UpdateButtonStates();
 		end
 	);
 	
 	button:SetScript('OnEnter', 
-		function(self)
-			GameTooltip:SetOwner(self, 'ANCHOR_RIGHT');
+		function(button)
+			GameTooltip:SetOwner(button, 'ANCHOR_RIGHT');
 			
-			local message = self.message;
-			local seconds = time() - self.time;
+			local seconds = time() - button.lfm_info.time;
 			local last_sent = string.format('Last sent: %d seconds ago', seconds);
-			GameTooltip:AddLine(message, 1, 1, 1, true);
+			GameTooltip:AddLine(button.lfm_info.message, 1, 1, 1, true);
 			GameTooltip:AddLine(last_sent);
+			
+			if button.raid_locked then
+				GameTooltip:AddLine('\nYou are |cffff0000saved|cffffd100 for ' .. button.raid_info.name);
+				local _, reset_time = raid_browser.stats.raid_lock_info(button.raid_info)
+				GameTooltip:AddLine('Lockout expires in ' .. format_seconds(reset_time));
+			else
+				GameTooltip:AddLine('\nYou are |cff00ff00not saved|cffffd100 for ' .. button.raid_info.name);
+			end
+			
 			GameTooltip:Show();
 		end
 	)
@@ -65,7 +113,7 @@ search_button:SetText('Find Raid')
 search_button:SetScript('OnClick', function() end)
 
 local function clear_highlights()
-	for i=1, NUM_LFR_LIST_BUTTONS do
+	for i = 1, NUM_LFR_LIST_BUTTONS do
 		_G["LFRBrowseFrameListButton"..i]:UnlockHighlight();
 	end	
 end
@@ -76,35 +124,30 @@ local function set_list_data(button, index)
 	button.index = index;
 	index = index - offset;
 
-	local name = nil;
-	local gs = nil;
-	local roles = nil;
-	local raid = nil;
-
 	local count = 1;
-	for n, raid_info in pairs(raid_browser.active_raids) do
+	local host_name = nil;
+	for n, lfm_info in pairs(raid_browser.lfm_messages) do
 		if count == index then
-			name = n;
-			raid = raid_info.raid;
-			roles = raid_info.roles;
-			gs = raid_info.gs;
-			button.time = raid_info.time;
-			button.message = raid_info.message;
+			host_name = n;
+			button.lfm_info = lfm_info;
+			button.raid_info = lfm_info.raid_info;
 			break;
 		end
 
 		count = count + 1;
 	end
 	
-	-- Update LFR selected name
-	button.unitName = name;
+	-- Update selected LFR raid host name
+	button.unitName = host_name;
 
-	-- Update button text with Name, GS, Raid, and role information
-	button.name:SetText(name); -- Name
-	button.level:SetText(gs); -- Previously level, now GS
+	-- Update button text with raid host name , GS, Raid, and role information
+	button.name:SetText(host_name);
+	button.level:SetText(button.lfm_info.gs); -- Previously level, now GS
 
-	button.class:SetText(raid); -- Raid
+	-- Raid name
+	button.class:SetText(button.raid_info.name); 
 
+	button.raid_locked = raid_browser.stats.raid_lock_info(button.raid_info);
 	button.type = "party";
 
 	button.partyIcon:Show();
@@ -112,7 +155,7 @@ local function set_list_data(button, index)
 	button.tankIcon:Hide();
 	button.healerIcon:Hide();
 	button.damageIcon:Hide();
-	for _, role in pairs(roles) do 
+	for _, role in pairs(button.lfm_info.roles) do 
 		if role == 'tank' then
 			button.tankIcon:Show()
 		end
@@ -130,8 +173,13 @@ local function set_list_data(button, index)
 	button.name:SetTextColor(NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b)
 	button.level:SetTextColor(HIGHLIGHT_FONT_COLOR.r, HIGHLIGHT_FONT_COLOR.g, HIGHLIGHT_FONT_COLOR.b);
 
-	button.class:SetTextColor(HIGHLIGHT_FONT_COLOR.r, HIGHLIGHT_FONT_COLOR.g, HIGHLIGHT_FONT_COLOR.b);
-
+	-- If the raid is saved, then color the raid text in the list as red
+	if button.raid_locked then
+		button.class:SetTextColor(1, 0, 0);
+	else
+		button.class:SetTextColor(0, 1, 0);
+	end;
+	
 	button.tankIcon:SetTexture("Interface\\LFGFrame\\LFGRole");
 	button.healerIcon:SetTexture("Interface\\LFGFrame\\LFGRole");
 	button.damageIcon:SetTexture("Interface\\LFGFrame\\LFGRole");
@@ -163,7 +211,7 @@ end
 function raid_browser.gui.update_list()
 	LFRBrowseFrameRefreshButton.timeUntilNextRefresh = LFR_BROWSE_AUTO_REFRESH_TIME;
 	  
-	local numResults = table_length(raid_browser.active_raids)
+	local numResults = table_length(raid_browser.lfm_messages)
 
 	FauxScrollFrame_Update(LFRBrowseFrameListScrollFrame, numResults, NUM_LFR_LIST_BUTTONS, 16);
 

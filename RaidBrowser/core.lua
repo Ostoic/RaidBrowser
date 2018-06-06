@@ -1,7 +1,5 @@
 -- Register addon
-raid_browser = LibStub("AceAddon-3.0"):NewAddon("RaidBrowser", "AceConsole-3.0", "AceHook-3.0", "AceEvent-3.0")
-
-local function printf(...) DEFAULT_CHAT_FRAME:AddMessage('|cff0061ff[RaidBrowser]: '..format(...)) end
+raid_browser = LibStub("AceAddon-3.0"):NewAddon("RaidBrowser", "AceConsole-3.0")
 
 local raid_list = {
 	-- Note: The order of each raid is deliberate.
@@ -9,6 +7,8 @@ local raid_list = {
 	-- Be careful about changing the order of the raids below
 	{
 		name = 'icc10rep',
+		instance_name = 'Icecrown Citadel',
+		size = 10,
 		patterns = {
 			 'icc[%s-]*10[%s-]*rep',
 			 'rep[%s]*icc[%s-]*10',
@@ -18,6 +18,8 @@ local raid_list = {
 
 	{
 		name = 'icc25rep',
+		instance_name = 'Icecrown Citadel',
+		size = 25,
 		patterns = {
 			'icc[%s-]*25[%s-]*rep[%s-]*',
 			'rep[%s-]*icc[%s-]*25',
@@ -26,6 +28,8 @@ local raid_list = {
 	
 	{
 		name = 'icc10hc',
+		instance_name = 'Icecrown Citadel',
+		size = 10,
 		patterns = {
 			'icc[%s-]*10[%s-]*%(?hc?%)?',
 			'%(?hc?%)?[%s-]*icc[%s-]*10',
@@ -36,6 +40,8 @@ local raid_list = {
 
 	{
 		name = 'icc25hc',
+		instance_name = 'Icecrown Citadel',
+		size = 25,
 		patterns = {
 			'icc[%s-]*25[%s-]*%(?hc?%)?',
 			'%(?hc?%)?[%s-]*icc[%s-]*25',
@@ -46,6 +52,8 @@ local raid_list = {
 
 	{
 		name = 'icc10nm',
+		instance_name = 'Icecrown Citadel',
+		size = 10,
 		patterns = {
 			'icc[%s-]*10[%s-]*%(?nm?%)?',
 			'%(?nm?%)?[%s-]*icc[%s-]*10',
@@ -57,6 +65,8 @@ local raid_list = {
 
 	{
 		name = 'icc25nm',
+		instance_name = 'Icecrown Citadel',
+		size = 25,
 		patterns = {
 			'icc[%s-]*25[%s-]*%(?nm?%)?',
 			'%(?nm?%)?[%s-]*icc[%s-]*25',
@@ -68,6 +78,8 @@ local raid_list = {
 
 	{
 		name = 'toc10hc',
+		instance_name = 'Trial of the Crusader',
+		size = 10,
 		patterns = {
 			'toc[%s-]*10[%s-]*%(?hc?%)?',
 			'%(?hc?%)?[%s-]*toc[%s-]*10',
@@ -78,6 +90,8 @@ local raid_list = {
 
 	{
 		name = 'toc25hc',
+		instance_name = 'Trial of the Crusader',
+		size = 25,
 		patterns = {
 			'toc[%s-]*25[%s-]*%(?hc?%)?',
 			'%(?hc?%)?[%s-]*toc[%s-]*25',
@@ -88,6 +102,8 @@ local raid_list = {
 
 	{
 		name = 'toc10nm',
+		instance_name = 'Trial of the Crusader',
+		size = 10,
 		patterns = {
 			'toc[%s-]*10[%s-]*%(?nm?%)?',
 			'%(?nm?%)?[%s-]*toc[%s-]*10',
@@ -99,6 +115,8 @@ local raid_list = {
 
 	{
 		name = 'toc25nm',
+		instance_name = 'Trial of the Crusader',
+		size = 25,
 		patterns = {
 			'toc[%s-]*25[%s-]*%(?nm?%)?',
 			'%(?nm?%)?[%s-]*toc[%s-]*25',
@@ -110,6 +128,8 @@ local raid_list = {
 	
 	{
 		name = 'rs10hc',
+		instance_name = 'The Ruby Sanctum',
+		size = 10,
 		patterns = {
 			'rs[%s-]*10[%s-]*%(?hc?%)?',
 			'%(?hc?%)?[%s-]*rs[%s-]*10',
@@ -120,6 +140,8 @@ local raid_list = {
 
 	{
 		name = 'rs25hc',
+		instance_name = 'The Ruby Sanctum',
+		size = 25,
 		patterns = {
 			'rs[%s-]*25[%s-]*%(?hc?%)?',
 			'%(?hc?%)?[%s-]*rs[%s-]*25',
@@ -130,6 +152,8 @@ local raid_list = {
 
 	{
 		name = 'rs10nm',
+		instance_name = 'The Ruby Sanctum',
+		size = 10,
 		patterns = {
 			'rs[%s-]*10[%s-]*%(?nm?%)?',
 			'%(?nm?%)?[%s-]*rs[%s-]*10',
@@ -139,9 +163,10 @@ local raid_list = {
 		}
 	},
 
-
 	{
 		name = 'rs25nm',
+		instance_name = 'The Ruby Sanctum',
+		size = 25,
 		patterns = {
 			'rs[%s-]*25[%s-]*%(?nm?%)?',
 			'%(?nm?%)?[%s-]*rs[%s-]*25',
@@ -153,16 +178,22 @@ local raid_list = {
 	
 	{
 		name = 'voa10',
+		instance_name = 'Vault of Archavon',
+		size = 10,
 		patterns = {"voa[%s-]*10"},
 	},
 	
 	{
 		name = 'voa25',
+		instance_name = 'Vault of Archavon',
+		size = 25,
 		patterns = {"voa[%s-]*25"},
 	},
 		
 	{
 		name = 'ulduar10',
+		instance_name = 'Ulduar',
+		size = 10,
 		patterns = {
 			'uld[%s-]*10',
 			'ulduar[%s-]*10',
@@ -171,6 +202,8 @@ local raid_list = {
 	
 	{
 		name = 'ulduar25',
+		instance_name = 'Ulduar',
+		size = 25,
 		patterns = {
 			'uld[%s-]*25',
 			'ulduar[%s-]*25',
@@ -179,6 +212,8 @@ local raid_list = {
 	
 	{
 		name = 'os10',
+		instance_name = 'The Obsidian Sanctum',
+		size = 10,
 		patterns = {
 			'os[%s-]*10',
 		},
@@ -186,6 +221,8 @@ local raid_list = {
 	
 	{
 		name = 'os25',
+		instance_name = 'The Obsidian Sanctum',
+		size = 25,
 		patterns = {
 			'os[%s-]*25',
 		},
@@ -193,6 +230,8 @@ local raid_list = {
 	
 	{
 		name = 'naxx10',
+		instance_name = 'Naxxramas',
+		size = 10,
 		patterns = {
 			'naxx?r?a?m?m?a?s?[%s-]*10',
 		},
@@ -200,8 +239,28 @@ local raid_list = {
 	
 	{
 		name = 'naxx25',
+		instance_name = 'Naxxramas',
+		size = 25,
 		patterns = {
 			'naxx?r?a?m?m?a?s?[%s-]*25',
+		},
+	},
+	
+	{
+		name = 'onyxia25',
+		instance_name = 'Onyxia\'s Lair',
+		size = 25,
+		patterns = {
+			'onyx?i?a?[%s-]*25'
+		},
+	},
+	
+	{
+		name = 'onyxia10',
+		instance_name = 'Onyxia\'s Lair',
+		size = 10,
+		patterns = {
+			'onyx?i?a?[%s-]*10'
 		},
 	},
 }
@@ -209,6 +268,7 @@ local raid_list = {
 local role_patterns = {
 	ranged_dps = {
 		"[0-9]*[%s]*rdps",
+		'[0-9]*[%s]*hunte?r?s?',
 	},
 	
 	melee_dps = {
@@ -226,10 +286,12 @@ local role_patterns = {
 		'[0-9]*[%s]*rdruid',
 		'[0-9]*[%s]*rshamm?y?',
 		'[0-9]*[%s]*disc[%s]*',
+		'[0-9]*[%s]*hpala',
 	},
 	
 	tank = {
 		'[0-9]*[%s]*t[a]?nk[s]?',
+		'[0-9]*[%s]*bears?',
 	},
 }
 
@@ -257,18 +319,32 @@ local lfm_patterns = {
 	'need[%s]*all',
 }
 
-local function refresh_active_raids()
-	for name, info in pairs(raid_browser.active_raids) do
+local function refresh_lfm_messages()
+	for name, info in pairs(raid_browser.lfm_messages) do
 		-- If the last message from the sender was too long ago, then
-		-- remove his raid from active_raids.
+		-- remove his raid from lfm_messages.
 		if time() - info.time > raid_browser.expiry_time then
-			raid_browser.active_raids[name] = nil;
+			raid_browser.lfm_messages[name] = nil;
 		end
 	end
 end
 
-local function remove_achievements(message)
+local function remove_achievement_text(message)
 	return string.gsub(message, '|c.*|r', '');
+end
+
+local function format_gs_string(gs)
+	local formatted = string.gsub(gs, '[%s]*%+?', ''); -- Trim whitespace
+	formatted  = string.gsub(formatted , 'k', '')
+	formatted  = string.gsub(formatted , ',', '.');
+	formatted  = tonumber(formatted);
+
+	-- Convert ex: 5800 into 5.8 for display
+	if formatted  > 1000 then
+		formatted  = formatted /1000;
+	end
+
+	return string.format('%.1f', formatted );
 end
 
 function raid_browser.raid_info(message)
@@ -278,9 +354,9 @@ function raid_browser.raid_info(message)
 	if string.find(message, 'recruit') or string.find(message, 'recruiting') then
 		return;
 	end
-	message = remove_achievements(message);
 	
-
+	message = remove_achievement_text(message);
+	
 	-- Search for LFM announcement in the message
 	local found_lfm = false;
 	for _, pattern in pairs(lfm_patterns) do
@@ -293,15 +369,15 @@ function raid_browser.raid_info(message)
 		return nil
 	end
 
-	-- Get the raid from the message
-	local raid = nil;
+	-- Get the raid_info from the message
+	local raid_info = nil;
 	for _, r in ipairs(raid_list) do
-		for _, pattern in ipairs(r['patterns']) do
+		for _, pattern in ipairs(r.patterns) do
 			local result = string.find(message, pattern);
 
 			-- If a raid was found then save it and continue.
 			if result then
-				raid = r['name'];
+				raid_info = r;
 
 				-- Remove the substring from the message
 				message = string.gsub(message, pattern, '')
@@ -309,7 +385,7 @@ function raid_browser.raid_info(message)
 			end
 		end
 		
-		if raid then 
+		if raid_info then 
 			break;
 		end
 	end
@@ -344,43 +420,21 @@ function raid_browser.raid_info(message)
 
 		-- If a gs requirement was found, then save it and continue.
 		if gs_start and gs_end then
-			gs = string.sub(message, gs_start, gs_end)
-			gs = string.gsub(gs, '[%s]*%+?', ''); -- Trim whitespace
-			gs = string.gsub(gs, 'k', '')
-			gs = string.gsub(gs, ',', '.');
-			gs = tonumber(gs);
-
-			-- Convert ex: 5800 into 5.8 for display
-			if gs > 1000 then
-				gs = gs/1000;
-			end
-
-			gs = string.format('%.1f', gs);
+			gs = format_gs_string(string.sub(message, gs_start, gs_end))
 			break
 		end
 	end
 
-	return raid, roles, gs
+	return raid_info, roles, gs
 end
 
 local function event_handler(self, event, message, sender)
 	if event == "CHAT_MSG_CHANNEL" then
-		local raid, roles, gs = raid_browser.raid_info(message)
-		if raid and roles and gs then
-			local roles_string = nil;
-
-			-- Build the LFR string
-			for _, role in pairs(roles) do
-				if not roles_string then
-					roles_string = role
-				else
-					roles_string = roles_string .. ', ' .. role
-				end
-			end
-
+		local raid_info, roles, gs = raid_browser.raid_info(message)
+		if raid_info and roles and gs then
 			-- Put the sender in the table of active raids
-			raid_browser.active_raids[sender] = { 
-				raid = raid, 
+			raid_browser.lfm_messages[sender] = { 
+				raid_info = raid_info, 
 				roles = roles, 
 				gs = gs, 
 				time = time(), 
@@ -398,8 +452,8 @@ function raid_browser:OnEnable()
 	-- LFM messages expire after 60 seconds
 	raid_browser.expiry_time = 60;
 
-	raid_browser.active_raids = {}
-	raid_browser.timer = raid_browser.set_timer(10, refresh_active_raids, true)
+	raid_browser.lfm_messages = {}
+	raid_browser.timer = raid_browser.set_timer(10, refresh_lfm_messages, true)
 	raid_browser.listener = raid_browser.add_event_listener("CHAT_MSG_CHANNEL",	event_handler )
 end
 

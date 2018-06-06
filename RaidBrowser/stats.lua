@@ -85,31 +85,23 @@ local function get_active_spec()
 	return GetTalentTabInfo(index)
 end
 
-local raid_dictionary = {
-	icc10nm = 'icc',
-	icc25nm = 'icc',
-	icc10hc = 'icc',
-	icc25hc = 'icc',
-	icc = 'icc',
+function raid_browser.stats.raid_lock_info(raid_info)
+	if not raid_info then 
+		return false; 
+	end
 	
-	toc10nm = 'toc',
-	toc25nm = 'toc',
-	toc10hc = 'toc',
-	toc25hc = 'toc',
-	toc = 'toc',
+	for i = 1, GetNumSavedInstances() do
+		local name, _, reset, _, _, _, _, _, size = GetSavedInstanceInfo(i);
+		
+		if name == raid_info.instance_name and size == raid_info.size then
+			return true, reset;
+		end
+	end
 	
-	rs10nm = 'rs',
-	rs25nm = 'rs',
-	rs10hc = 'rs',
-	rs25hc = 'rs',
-	rs = 'rs',
-	
-	naxx10 = 'naxx',
-	naxx25 = 'naxx',
-	naxx = 'naxx',
-};
+	return false, nil;
+end
 
-function raid_browser.stats.build_inv_string(raid)
+function raid_browser.stats.build_inv_string(raid_name)
 	local message = 'inv ';
 	local class = UnitClass("player");
 	
@@ -124,11 +116,11 @@ function raid_browser.stats.build_inv_string(raid)
 	local spec = get_active_spec();
 	message = message .. gs .. spec .. ' ' .. class;
 	
-	-- Remove difficulty and raid size from the string
-	raid = raid_dictionary[raid];
+	-- Remove difficulty and raid_name size from the string
+	raid_name = string.gsub(raid_name, '[1|2][0|5](%w+)', '');
 	
-	-- Find the best possible achievement for the given raid.
-	local achieve_id = find_best_achievement(raid);
+	-- Find the best possible achievement for the given raid_name.
+	local achieve_id = find_best_achievement(raid_name);
 		if achieve_id then
 		message = message .. ' ' .. GetAchievementLink(achieve_id);
 	end
