@@ -32,6 +32,4 @@ the raid browser UI. Alternatively, the interface can be accessed as follows:
 # Remark
 
 Be aware that since it is difficult to consider every possible LFM message that someone could think of, this addon may consider false 
-positives, or may omit valid LFM messages. For example, I recently saw someone hosting an icc 25 in which they wrote icc 25 as 
-ICC-25-man. If you encounter any such problems open up an issue describing the bug and how it the addon should behave in said context,
-if you're so inclined.
+positives, or may omit valid LFM messages. As an example, some guild recruitment messages may be listed in the raid browser, since a lot of the language used in these messages is similar to LFM messages. On the other hand, a raid host may use unexcepted words or grammar in his LFM message.
