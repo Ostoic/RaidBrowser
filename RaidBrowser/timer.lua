@@ -49,5 +49,3 @@ local function OnUpdate(self, elapsed)
 end
 
 CreateFrame('Frame'):SetScript('OnUpdate', OnUpdate)
-
-printf('timer.lua end');
