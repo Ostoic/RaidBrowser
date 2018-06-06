@@ -274,6 +274,7 @@ local role_patterns = {
 	melee_dps = {
 		'[0-9]*[%s]*mdps',
 		'[0-9]*[%s]*rogue',
+		'[0-9]*[%s]*ret[%s]*pal[a|l]?[dy]i?n?',
 	},
 	
 	dps = {
@@ -285,7 +286,6 @@ local role_patterns = {
 		'[0-9]*[%s]*rdudu',
 		'[0-9]*[%s]*rdruid',
 		'[0-9]*[%s]*rshamm?y?',
-		'[0-9]*[%s]*disc[%s]*',
 		'[0-9]*[%s]*hpala',
 	},
 	
@@ -317,7 +317,18 @@ local lfm_patterns = {
 	'lf[%s]*all',
 	'need',
 	'need[%s]*all',
+	'whispe?r?[%s]*me',
+	'/w[%s]*m?e?',
 }
+
+local guild_recruitment_patterns = {
+	'recrui?ti?ng',
+	'recrui?t',
+	'autorecruit',
+	'raid[%s]*time',
+	'active[%s]*raiders?',
+	'is[%s]*a[%s]*[%a]*[%s]*[pvep][pvep][pvep][%s]*guild',
+};
 
 local function refresh_lfm_messages()
 	for name, info in pairs(raid_browser.lfm_messages) do
@@ -347,11 +358,21 @@ local function format_gs_string(gs)
 	return string.format('%.1f', formatted );
 end
 
+local function is_guild_recruitment(message)
+	for _, pattern in ipairs(guild_recruitment_patterns) do
+		if string.find(message, pattern) then
+			return true;
+		end
+	end
+	
+	return false;
+end
+
 function raid_browser.raid_info(message)
 	message = string.lower(message)
 	
 	-- Stop if it's a guild recruit message
-	if string.find(message, 'recruit') or string.find(message, 'recruiting') then
+	if is_guild_recruitment(message) then
 		return;
 	end
 	
