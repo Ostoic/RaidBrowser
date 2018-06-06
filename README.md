@@ -26,6 +26,7 @@ the raid browser UI. Alternatively, the interface can be accessed as follows:
 - Further improve pattern matching for better detection of LFM messages.
 - Color saved/locked raids red in the raid browser
 - Sort raid entries by gs/name/etc
+- Raid host tab where "Inv x gs [achieve]" messages are parsed similarly to how LFM messages are parsed
 - Suggestions?? Open up an issue!
 
 # Remark
