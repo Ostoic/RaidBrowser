@@ -24,6 +24,8 @@ the raid browser UI. Alternatively, the interface can be accessed as follows:
 # Todo
 - Add more raids and achievements. Icc, toc, naxx, rs, ulduar, and os are currently the only supported raids.
 - Further improve pattern matching for better detection of LFM messages.
+- Color saved/locked raids red in the raid browser
+- Sort raid entries by gs/name/etc
 - Suggestions?? Open up an issue!
 
 # Remark
