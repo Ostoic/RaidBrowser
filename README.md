@@ -28,7 +28,8 @@ the raid browser UI. Alternatively, the interface can be accessed as follows:
 - Further improve pattern matching for better detection of LFM messages.
 - Sort raid entries by gs/name/etc
 - Raid host tab where "Inv x gs [achieve]" messages are parsed similarly to how LFM messages are parsed. Can select raid to host, GS min req, achievement requirement, etc which will be formatted into an auto-barked message sent to the specified channel.
-- Suggestions?? Open up an issue or send me a message ingame/discord.
+- If you run into any bugs, such as incorrect information being reported by the addon, send me a screenshot/copy of the original message and the incorrect information the addon displayed.
+- Suggestions?? Open up an issue or send me a message ingame/in discord.
 
 # Remark
 
