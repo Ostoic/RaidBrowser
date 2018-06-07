@@ -233,7 +233,7 @@ function raid_browser.gui.update_list()
 	for i = 1, NUM_LFR_LIST_BUTTONS do
 		local button = _G["LFRBrowseFrameListButton"..i];
 		if ( i <= numResults ) then
-			LFRBrowseFrameListButton_SetData(button, i + offset);
+			insert_lfm_button(button, i + offset);
 			button:Show();
 		else
 			button:Hide();
@@ -258,4 +258,4 @@ end
 -- Setup LFR browser hooks
 LFRBrowse_UpdateButtonStates = update_buttons
 LFRBrowseFrameList_Update = raid_browser.gui.update_list
-LFRBrowseFrameListButton_SetData = set_list_data
+LFRBrowseFrameListButton_SetData = insert_lfm_button
