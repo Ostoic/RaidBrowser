@@ -240,7 +240,7 @@ local raid_list = {
 			'onyx?i?a?[%s-_,.]*10'
 		},
 	},
-  
+	
 	{
 		name = 'karazhan',
 		instance_name = 'Karazhan',
