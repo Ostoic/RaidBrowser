@@ -14,18 +14,18 @@ end
 -- Raid patterns template for a raid with 2 difficulties and 2 sizes
 local raid_patterns_template = {
 	hc = {
-		'<raid>[%s-_]*<size>[%s-_]*m?a?n?[%s-_]*%(?hc?%)?',
-		'%(?hc?%)?[%s-_]*<raid>[%s-_]*<size>',
-		'<raid>[%s-_]*%(?hc?%)?[%s-_]*<size>',
-		'<size>[%s-_]*m?a?n?[%s-_]*<raid>[%s-_]*%(?hc?%)?',
+		'<raid>[%s-_,.]*<size>[%s-_,.]*m?a?n?[%s-_,.]*%(?hc?%)?',
+		'%(?hc?%)?[%s-_,.]*<raid>[%s-_,.]*<size>',
+		'<raid>[%s-_,.]*%(?hc?%)?[%s-_,.]*<size>',
+		--'<size>[%s-_,.]*m?a?n?[%s-_,.]*<raid>[%s-_,.]*%(?hc?%)?',
 	},
 	
 	nm = {
-		'<raid>[%s-_]*<size>[%s-_]*m?a?n?[%s-_]*%(?hc?%)?',
-		'%(?hc?%)?[%s-_]*<raid>[%s-_]*<size>',
-		'<raid>[%s-_]*%(?hc?%)?[%s-_]*<size>',
-		'<size>[%s-_]*m?a?n?[%s-_]*<raid>[%s-_]*%(?hc?%)?',
-		'<raid>[%s-_]*<size>',
+		'<raid>[%s-_,.]*<size>[%s-_,.]*m?a?n?[%s-_,.]*%(?hc?%)?',
+		'%(?hc?%)?[%s-_,.]*<raid>[%s-_,.]*<size>',
+		'<raid>[%s-_,.]*%(?hc?%)?[%s-_,.]*<size>',
+		--'<size>[%s-_,.]*m?a?n?[%s-_,.]*<raid>[%s-_,.]*%(?hc?%)?',
+		'<raid>[%s-_,.]*<size>',
 	}
 };
 
@@ -55,8 +55,8 @@ local raid_list = {
 		instance_name = 'Icecrown Citadel',
 		size = 25,
 		patterns = {
-			'icc[%s-_]*25[%s-_]*m?a?n?[%s-_]*rep[%s-_]*',
-			'icc[%s-_]*rep[%s-_]*25[%s-_]*m?a?n?',
+			'icc[%s-_,.]*25[%s-_,.]*m?a?n?[%s-_,.]*rep[%s-_,.]*',
+			'icc[%s-_,.]*rep[%s-_,.]*25[%s-_,.]*m?a?n?',
 		}
 	},
 	
@@ -65,9 +65,9 @@ local raid_list = {
 		instance_name = 'Icecrown Citadel',
 		size = 10,
 		patterns = {
-			'icc[%s-_]*10[%s-_]*m?a?n?[%s-_]*rep[%s-_]*',
-			'icc[%s-_]*rep[%s-_]*10',
-			 'icc[%s-_]*rep',
+			'icc[%s-_,.]*10[%s-_,.]*m?a?n?[%s-_,.]*rep[%s-_,.]*',
+			'icc[%s-_,.]*rep[%s-_,.]*10',
+			 'icc[%s-_,.]*rep',
 		}
 	},
 	
@@ -159,14 +159,14 @@ local raid_list = {
 		name = 'voa10',
 		instance_name = 'Vault of Archavon',
 		size = 10,
-		patterns = {"voa[%s-_]*10"},
+		patterns = {"voa[%s-_,.]*10"},
 	},
 	
 	{
 		name = 'voa25',
 		instance_name = 'Vault of Archavon',
 		size = 25,
-		patterns = {"voa[%s-_]*25"},
+		patterns = {"voa[%s-_,.]*25"},
 	},
 		
 	{
@@ -174,7 +174,7 @@ local raid_list = {
 		instance_name = 'Ulduar',
 		size = 10,
 		patterns = {
-			'uldu?a?r?[%s-_]*10',
+			'uldu?a?r?[%s-_,.]*10',
 		},
 	},
 	
@@ -183,7 +183,7 @@ local raid_list = {
 		instance_name = 'Ulduar',
 		size = 25,
 		patterns = {
-			'uldu?a?r?[%s-_]*25',
+			'uldu?a?r?[%s-_,.]*25',
 		}
 	},
 	
@@ -192,7 +192,7 @@ local raid_list = {
 		instance_name = 'The Obsidian Sanctum',
 		size = 10,
 		patterns = {
-			'os[%s-_]*10',
+			'os[%s-_,.]*10',
 		},
 	},
 	
@@ -201,7 +201,7 @@ local raid_list = {
 		instance_name = 'The Obsidian Sanctum',
 		size = 25,
 		patterns = {
-			'os[%s-_]*25',
+			'os[%s-_,.]*25',
 		},
 	},
 	
@@ -210,7 +210,7 @@ local raid_list = {
 		instance_name = 'Naxxramas',
 		size = 10,
 		patterns = {
-			'naxx?r?a?m?m?a?s?[%s-_]*10',
+			'naxx?r?a?m?m?a?s?[%s-_,.]*10',
 		},
 	},
 	
@@ -219,7 +219,7 @@ local raid_list = {
 		instance_name = 'Naxxramas',
 		size = 25,
 		patterns = {
-			'naxx?r?a?m?m?a?s?[%s-_]*25',
+			'naxx?r?a?m?m?a?s?[%s-_,.]*25',
 		},
 	},
 	
@@ -228,7 +228,7 @@ local raid_list = {
 		instance_name = 'Onyxia\'s Lair',
 		size = 25,
 		patterns = {
-			'onyx?i?a?[%s-_]*25'
+			'onyx?i?a?[%s-_,.]*25'
 		},
 	},
 	
@@ -237,55 +237,75 @@ local raid_list = {
 		instance_name = 'Onyxia\'s Lair',
 		size = 10,
 		patterns = {
-			'onyx?i?a?[%s-_]*10'
+			'onyx?i?a?[%s-_,.]*10'
 		},
 	},
-	
+  
 	{
 		name = 'karazhan',
 		instance_name = 'Karazhan',
 		size = 10,
 		patterns = {
-			'karaz?h?a?n?[%s-_]*1?0?', -- karazhan 
+			'karaz?h?a?n?[%s-_,.]*1?0?', -- karazhan 
 		},
-	}
+	},
+	
+	{
+		name = 'molten core',
+		instance_name = 'Molten Core',
+		size = 25,
+		patterns = {
+			'molten[%s]*core',
+			'[%s-_,.]+mt[%s-_,.]*25[%s-_,.]+',
+		},
+	},
+	
+	{
+		name = 'black temple',
+		instance_name = 'The Black Temple',
+		size = 25,
+		patterns = {
+			'black[%s]*temple',
+			'[%s-_,.]+bt[%s-_,.]*25[%s-_,.]+',
+		},
+	},
 }
 
 local role_patterns = {
 	ranged_dps = {
-		"[0-9]*[%s]*rdps",
-		'[0-9]*[%s]*w?a?r?lock',
-		'[0-9]*[%s]*spri?e?st',
-		'[0-9]*[%s]*elem?e?n?t?a?l?',
-		'[0-9]*[%s]*mage',
-		'[0-9]*[%s]*hunte?r?s?',
+		"[0-9]*[%s-_,.]*rdps",
+		'[0-9]*[%s-_,.]*w?a?r?lock',
+		'[0-9]*[%s-_,.]*spri?e?st',
+		'[0-9]*[%s-_,.]*elem?e?n?t?a?l?',
+		'[0-9]*[%s-_,.]*mage',
+		'[0-9]*[%s-_,.]*hunte?r?s?',
 	},
 	
 	melee_dps = {
-		'[0-9]*[%s]*mdps',
-		'[0-9]*[%s]*rogue',
-		'[0-9]*[%s]*kitt?y?',
-		'[0-9]*[%s]*feral',
-		'[0-9]*[%s]*ret[%s]*pal[a|l]?[dy]i?n?',
+		'[0-9]*[%s-_,.]*mdps',
+		'[0-9]*[%s-_,.]*rogue',
+		'[0-9]*[%s-_,.]*kitt?y?',
+		'[0-9]*[%s-_,.]*feral',
+		'[0-9]*[%s-_,.]*ret[%s-_,.]*pal[al]?[dy]i?n?',
 	},
 	
 	dps = {
-		'[0-9]*[%s]*dps',
+		'[0-9]*[%s-_,.]*dps',
 	},
 	
 	healer = {
-		'[0-9]*[%s]*he[a]?l[er|ers]*', -- LF healer
-		'[0-9]*[%s]*rd[ru][ud][iu]d?', -- LF rdruid/rdudu
-		'[0-9]*[%s]*tree', 			   -- LF tree
-		'[0-9]*[%s]*re?s?t?o?[%s]*shamm?y?', -- LF rsham
+		'[0-9]*[%s-_,.]*he[a]?l[er|ers]*', -- LF healer
+		'[0-9]*[%s-_,.]*rd[ru][ud][iu]d?', -- LF rdruid/rdudu
+		'[0-9]*[%s-_,.]*tree', 			   -- LF tree
+		'[0-9]*[%s-_,.]*re?s?t?o?[%s-_,.]*shamm?y?', -- LF rsham
 		-- disc priest
-		'[0-9]*[%s]*hpala',			   -- LF hpala
+		'[0-9]*[%s-_,.]*hpala',			   -- LF hpala
 	},
 	
 	tank = {
-		'[0-9]*[%s]*t[a]?nk[s]?',
-		'[0-9]*[mo]t',				-- Need MT/OT
-		'[0-9]*[%s]*bears?',
+		'[0-9]*[%s-_,.]*t[a]?nk[s]?',
+		'[%s-_,.]+[mo]t[%s-_,.]+',				-- Need MT/OT
+		'[0-9]*[%s-_,.]*bears?',
 	},
 }
 
@@ -411,7 +431,7 @@ function raid_browser.raid_info(message)
 			break;
 		end
 	end
-
+	
 	-- Get any roles that are needed
 	local roles = {};
 	for r, patterns in pairs(role_patterns) do
@@ -424,7 +444,6 @@ function raid_browser.raid_info(message)
 
 				-- Remove the substring from the message
 				message = string.gsub(message, pattern, '')
-				break;
 			end
 		end
 	end
