@@ -1,12 +1,13 @@
 # RaidBrowser
 A Raid Browser/Finder Addon for World of Warcraft 3.3.5a
 
-The addon searches for LFM messages sent in all chat channels and lists found raids in Blizzard's 
+RaidBrowser searches for LFM messages sent in all chat channels and lists found raids in Blizzard's 
 LFR raid browser, which is unused in patch 3.3.5a. 
 
 # Features
 
 - Easily find raids hosted by other players by searching for "LFM barks" in global/trade/any chat channels. Raids are listed along with the required roles, and the minimum gearscore requirement, if any were mentioned in the message.
+- Identifies saved raids by coloring their name as red for locked raids, and green for unsaved raids.
 - Join / Double click: After clicking on an entry in the raid browser, send a formatted message to the raid host with your GS, class, spec, and highest achievement obtained for that raid.
 - Tooltip Hover: Hovering your mouse over an entry in the raid browser shows the original chat message, as well as how long it's been since the message was sent.
 - Raid hosts that do not send a message after 1-2 minutes will have their entry expire in the raid browser. This ensures that the raid browser does not become cluttered.
