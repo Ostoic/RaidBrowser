@@ -1,5 +1,5 @@
 # RaidBrowser
-A Raid Browser Addon for World of Warcraft 3.3.5a
+A Raid Browser/Finder Addon for World of Warcraft 3.3.5a
 
 The addon searches for LFM messages sent in all chat channels and lists found raids in Blizzard's 
 LFR raid browser, which is unused in patch 3.3.5a. 
