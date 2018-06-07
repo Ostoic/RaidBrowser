@@ -244,9 +244,9 @@ local raid_list = {
 	{
 		name = 'karazhan',
 		instance_name = 'Karazhan',
-		size = 25,
+		size = 10,
 		patterns = {
-			'karaz?h?a?n?[%s-_]*[12]?[05]?', -- karazhan 
+			'karaz?h?a?n?[%s-_]*1?0?', -- karazhan 
 		},
 	}
 }
@@ -449,8 +449,6 @@ function raid_browser.raid_info(message)
 
 	return raid_info, roles, gs
 end
-
-local function table_contains = tContains;
 
 local function event_handler(self, event, message, sender)
 	if event == "CHAT_MSG_CHANNEL" then
