@@ -4,6 +4,7 @@ local search_button = LFRQueueFrameFindGroupButton
 local join_button = LFRBrowseFrameInviteButton
 local refresh_button = LFRBrowseFrameRefreshButton
 
+local name_column = LFRBrowseFrameColumnHeader1
 local gs_list_column = LFRBrowseFrameColumnHeader2
 local raid_list_column = LFRBrowseFrameColumnHeader3
 
@@ -118,24 +119,15 @@ local function clear_highlights()
 	end	
 end
 
-local function set_list_data(button, index)
-	local offset = FauxScrollFrame_GetOffset(LFRBrowseFrameListScrollFrame);
 
+-- Assignment operator for LFR buttons
+local function assign_lfr_button(button, host_name, lfm_info, index)
+	local offset = FauxScrollFrame_GetOffset(LFRBrowseFrameListScrollFrame);
 	button.index = index;
 	index = index - offset;
 
-	local count = 1;
-	local host_name = nil;
-	for n, lfm_info in pairs(raid_browser.lfm_messages) do
-		if count == index then
-			host_name = n;
-			button.lfm_info = lfm_info;
-			button.raid_info = lfm_info.raid_info;
-			break;
-		end
-
-		count = count + 1;
-	end
+	button.lfm_info = lfm_info;
+	button.raid_info = lfm_info.raid_info;
 	
 	-- Update selected LFR raid host name
 	button.unitName = host_name;
@@ -155,6 +147,8 @@ local function set_list_data(button, index)
 	button.tankIcon:Hide();
 	button.healerIcon:Hide();
 	button.damageIcon:Hide();
+	
+	-- Get all the roles from the lfm info table
 	for _, role in pairs(button.lfm_info.roles) do 
 		if role == 'tank' then
 			button.tankIcon:Show()
@@ -180,10 +174,26 @@ local function set_list_data(button, index)
 		button.class:SetTextColor(0, 1, 0);
 	end;
 	
+	-- Set up the corresponding textures for the roles columns
 	button.tankIcon:SetTexture("Interface\\LFGFrame\\LFGRole");
 	button.healerIcon:SetTexture("Interface\\LFGFrame\\LFGRole");
 	button.damageIcon:SetTexture("Interface\\LFGFrame\\LFGRole");
 	button.partyIcon:SetTexture("Interface\\LFGFrame\\LFGRole");
+end
+
+local function insert_lfm_button(button, index)
+	local host_name = nil;
+	local count = 1;
+	
+	for n, lfm_info in pairs(raid_browser.lfm_messages) do
+		if count == index then
+			assign_lfr_button(button, n, lfm_info, index);
+			break;
+		end
+
+		count = count + 1;
+	end
+	
 end
 
 local function update_buttons()
