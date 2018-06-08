@@ -35,3 +35,10 @@ the raid browser UI. Alternatively, the interface can be accessed as follows:
 
 Be aware that since it is difficult to consider every possible LFM message that someone could think of, this addon may consider false 
 positives, or may omit valid LFM messages. As an example, some guild recruitment messages may be listed in the raid browser, since a lot of the language used in these messages is similar to LFM messages. On the other hand, a raid host may use unexcepted words or grammar in his LFM message.
+
+# Acknowledgements
+Thanks to the following people for feature ideas and bug reports:
+- Adidi
+- Swenson
+
+
