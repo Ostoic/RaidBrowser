@@ -240,7 +240,7 @@ local raid_list = {
 			'onyx?i?a?[%s-_,.]*10'
 		},
 	},
-  
+	
 	{
 		name = 'karazhan',
 		instance_name = 'Karazhan',
@@ -278,6 +278,7 @@ local role_patterns = {
 		'[0-9]*[%s-_,.]*spri?e?st',
 		'[0-9]*[%s-_,.]*elem?e?n?t?a?l?',
 		'[0-9]*[%s-_,.]*mage',
+		'[0-9]*[%s-_,.]*boomy?k?i?n?',
 		'[0-9]*[%s-_,.]*hunte?r?s?',
 	},
 	
