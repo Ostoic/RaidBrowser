@@ -11,21 +11,23 @@ local function table_copy(t)
 	return copy;
 end
 
+local sep = '[%s-_,.]';
+
 -- Raid patterns template for a raid with 2 difficulties and 2 sizes
 local raid_patterns_template = {
 	hc = {
-		'<raid>[%s-_,.]*<size>[%s-_,.]*m?a?n?[%s-_,.]*%(?hc?%)?',
-		'%(?hc?%)?[%s-_,.]*<raid>[%s-_,.]*<size>',
-		'<raid>[%s-_,.]*%(?hc?%)?[%s-_,.]*<size>',
-		--'<size>[%s-_,.]*m?a?n?[%s-_,.]*<raid>[%s-_,.]*%(?hc?%)?',
+		'<raid>' .. sep .. '*<size>' .. sep .. '*m?a?n?' .. sep .. '*%(?hc?%)?',
+		'%(?hc?%)?' .. sep .. '*<raid>' .. sep .. '*<size>',
+		'<raid>' .. sep .. '*%(?hc?%)?' .. sep .. '*<size>',
+		--'<size>'..sep..'+m?a?n?'..sep..'*<raid>[%s-_,.]*%(?hc?%)?',
 	},
 	
 	nm = {
-		'<raid>[%s-_,.]*<size>[%s-_,.]*m?a?n?[%s-_,.]*%(?hc?%)?',
-		'%(?hc?%)?[%s-_,.]*<raid>[%s-_,.]*<size>',
-		'<raid>[%s-_,.]*%(?hc?%)?[%s-_,.]*<size>',
-		--'<size>[%s-_,.]*m?a?n?[%s-_,.]*<raid>[%s-_,.]*%(?hc?%)?',
-		'<raid>[%s-_,.]*<size>',
+		'<raid>' .. sep .. '*<size>' .. sep .. '*m?a?n?' .. sep .. '*%(?nm?%)?',
+		'%(?nm?%)?' .. sep .. '*<raid>' .. sep .. '*<size>',
+		'<raid>' .. sep .. '*%(?nm?%)?' .. sep .. '*<size>',
+		--'<size>'..sep..'+m?a?n?'..sep..'*<raid>[%s-_,.]*%(?nm?%)?',
+		'<raid>' .. sep .. '*<size>',
 	}
 };
 
@@ -35,6 +37,12 @@ local function create_raid_patterns(raid_name_pattern, size, difficulty)
 	end
 	
 	local patterns = table_copy(raid_patterns_template[difficulty]);
+	
+	if size == 10 then
+		size = '1[0o]';
+	elseif size == 40 then
+		size = '4[0p]';
+	end
 	
 	-- Replace placeholders with the specified raid info
 	for i, pattern in ipairs(patterns) do
@@ -269,6 +277,26 @@ local raid_list = {
 			'[%s-_,.]+bt[%s-_,.]*25[%s-_,.]+',
 		},
 	},
+	
+	{
+		name = 'aq40',
+		instance_name = 'Temple of Ahn\'Qiraj',
+		size = 40,
+		patterns = {
+			'temple?'..sep..'*of?'..sep..'*ahn\'?'..sep..'*qiraj',
+			sep..'+aq[%s-_,.]*40'..sep..'+',
+		},
+	},
+	
+	{
+		name = 'aq20',
+		instance_name = 'Ruins of Ahn\'Qiraj',
+		size = 10,
+		patterns = {
+			'ruins?'..sep..'*ahn\'?'..sep..'*qiraj',
+			sep..'+aq[%s-_,.]*10'..sep..'+',
+		},
+	},
 }
 
 local role_patterns = {
@@ -304,13 +332,15 @@ local role_patterns = {
 	},
 	
 	tank = {
-		'[0-9]*[%s-_,.]*t[a]?nk[s]?',
+		'[0-9]*[%s-_,.]*t[a]?nk[s]?',	-- NEED TANKS
+		'[0-9]*[%s-_,.]*tn?[a]?k[s]?',  -- Need TNAK
 		'[%s-_,.]+[mo]t[%s-_,.]+',				-- Need MT/OT
 		'[0-9]*[%s-_,.]*bears?',
 	},
 }
 
 local gearscore_patterns = {
+	'[1-6]'..sep..'*k[0-9]+',
 	'[1-6][.,][0-9]',
 	'[1-6][%s]*k[%s]*%+?',
 	'%+?[%s]*[1-6][%s]*k',
@@ -339,11 +369,16 @@ local lfm_patterns = {
 local guild_recruitment_patterns = {
 	'recrui?ti?ng',
 	'recrui?t',
+	'we[%s]*raid',
+	'[<({-][%a]+[-})>][%s]*is[%s]*a?', -- (<GuildName> is a) pve guild looking for
+	'[0-9][0-9][pa]m[%s]*st', -- we raid (12pm set)
 	'autorecruit',
 	'raid[%s]*time',
 	'active[%s]*raiders?',
 	'is[%s]*a[%s]*[%a]*[%s]*[pvep][pvep][pvep][%s]*guild',
 };
+
+
 
 local function refresh_lfm_messages()
 	for name, info in pairs(raid_browser.lfm_messages) do
@@ -360,14 +395,18 @@ local function remove_achievement_text(message)
 end
 
 local function format_gs_string(gs)
-	local formatted = string.gsub(gs, '[%s]*%+?', ''); -- Trim whitespace
+	local formatted = string.gsub(gs, sep..'*%+?', ''); -- Trim whitespace
 	formatted  = string.gsub(formatted , 'k', '')
-	formatted  = string.gsub(formatted , ',', '.');
+	formatted  = string.gsub(formatted , sep, '.');
 	formatted  = tonumber(formatted);
 
 	-- Convert ex: 5800 into 5.8 for display
 	if formatted  > 1000 then
 		formatted  = formatted /1000;
+		
+	-- Convert 57.0 into 5.7
+	elseif formatted > 10 then
+		formatted = formatted / 10;
 	end
 
 	return string.format('%.1f', formatted );
@@ -397,8 +436,6 @@ function raid_browser.raid_info(message)
 	if is_guild_recruitment(message) then
 		return;
 	end
-	
-	message = remove_achievement_text(message);
 		
 	-- Search for LFM announcement in the message
 	local found_lfm = false;
@@ -432,6 +469,8 @@ function raid_browser.raid_info(message)
 			break;
 		end
 	end
+	
+	message = remove_achievement_text(message);
 	
 	-- Get any roles that are needed
 	local roles = {};
