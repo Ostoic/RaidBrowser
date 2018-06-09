@@ -111,28 +111,28 @@ local raid_list = {
 		name = 'toc10hc',
 		instance_name = 'Trial of the Crusader',
 		size = 10,
-		patterns = create_raid_patterns('toc', 10, 'hc'),
+		patterns = create_raid_patterns('tog?c', 10, 'hc'),
 	},
 
 	{
 		name = 'toc25hc',
 		instance_name = 'Trial of the Crusader',
 		size = 25,
-		patterns = create_raid_patterns('toc', 25, 'hc'),
+		patterns = create_raid_patterns('tog?c', 25, 'hc'),
 	},
 
 	{
 		name = 'toc10nm',
 		instance_name = 'Trial of the Crusader',
 		size = 10,
-		patterns = create_raid_patterns('toc', 10, 'nm'),
+		patterns = create_raid_patterns('tog?c', 10, 'nm'),
 	},
 
 	{
 		name = 'toc25nm',
 		instance_name = 'Trial of the Crusader',
 		size = 25,
-		patterns = create_raid_patterns('toc', 25, 'nm'),
+		patterns = create_raid_patterns('tog?c', 25, 'nm'),
 	},
 	
 	{
@@ -201,6 +201,7 @@ local raid_list = {
 		size = 10,
 		patterns = {
 			'os[%s-_,.]*10',
+			'sartharion must die!',
 		},
 	},
 	
@@ -263,8 +264,8 @@ local raid_list = {
 		instance_name = 'Molten Core',
 		size = 25,
 		patterns = {
-			'molten[%s]*core',
-			'[%s-_,.]+mt[%s-_,.]*25[%s-_,.]+',
+			'molte?n[%s]*core?',
+			'[%s-_,.%^]+mc'..sep..'*2?5?[%s-_,.$]+',
 		},
 	},
 	
@@ -280,21 +281,21 @@ local raid_list = {
 	
 	{
 		name = 'aq40',
-		instance_name = 'Temple of Ahn\'Qiraj',
+		instance_name = 'Ahn\'Qiraj Temple',
 		size = 40,
 		patterns = {
 			'temple?'..sep..'*of?'..sep..'*ahn\'?'..sep..'*qiraj',
-			sep..'+aq[%s-_,.]*40'..sep..'+',
+			sep..'*aq[%s-_,.]*40'..sep..'*',
 		},
 	},
 	
 	{
-		name = 'aq20',
+		name = 'aq10',
 		instance_name = 'Ruins of Ahn\'Qiraj',
-		size = 10,
+		size = 20,
 		patterns = {
-			'ruins?'..sep..'*ahn\'?'..sep..'*qiraj',
-			sep..'+aq[%s-_,.]*10'..sep..'+',
+			'ruins?'..sep..'*of?'..sep..'*ahn\'?'..sep..'*qiraj',
+			sep..'*aq[%s-_,.]*20'..sep..'*',
 		},
 	},
 }
@@ -327,7 +328,7 @@ local role_patterns = {
 		'[0-9]*[%s-_,.]*rd[ru][ud][iu]d?', -- LF rdruid/rdudu
 		'[0-9]*[%s-_,.]*tree', 			   -- LF tree
 		'[0-9]*[%s-_,.]*re?s?t?o?[%s-_,.]*shamm?y?', -- LF rsham
-		-- disc priest
+		'[0-9]*'..sep..'*di?s?c?'..sep..'*pri?e?st', -- disc priest
 		'[0-9]*[%s-_,.]*hpala',			   -- LF hpala
 	},
 	

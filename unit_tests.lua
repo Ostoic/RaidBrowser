@@ -111,9 +111,71 @@ local test_cases = {
 		roles = {'healer', 'tank', 'dps'},
 		gs = ' ',
 	},
+	
+	{
+		message = 'ICC10 nm/hc lf 5k7+ boe reserved link achiv// spec // 9/10 need 1 Dpriest',
+		should_fail = false,
+		raid = 'icc10nm',
+		roles = {'healer'},
+		gs = '5.7',
+	},
+	
+	{
+		message = 'need dps for MC old raid',
+		should_fail = false,
+		raid = 'molten core',
+		roles = {'dps'},
+		gs = ' ',
+	},
+	
+	{
+		message = 'LF tank for aq40 get your achieve',
+		should_fail = false,
+		raid = 'aq40',
+		roles = {'tank'},
+		gs = ' ',
+	},
+	
+	{
+		message = 'LFM [Temple of Ahn\'Qiraj] Achievement / Transmorg Run. Dark Edge Reserved. In progress.  Pst WIll summon. Pst. All welcome.',
+		should_fail = false,
+		raid = 'aq40',
+		roles = {'tank', 'dps', 'healer'},
+		gs = ' ',
+	},
+	
+	{
+		message = 'LFM [Ruins of Ahn\'Qiraj] Achievement / Transmorg Run. Dark Edge Reserved. In progress.  Pst WIll summon. Pst. All welcome.',
+		should_fail = false,
+		raid = 'aq10',
+		roles = {'tank', 'dps', 'healer'},
+		gs = ' ',
+	},
+	
+	{
+		message = ' NEED HEAL  TANK FOR TOC 10 5K++',
+		should_fail = false,
+		raid = 'toc10nm',
+		roles = {'tank', 'healer'},
+		gs = '5.0',
+	},
+	
+	{
+		message = ' NEED dpriest  TANK FOR TOGC 10 5K++',
+		should_fail = false,
+		raid = 'toc10nm',
+		roles = {'tank', 'healer'},
+		gs = '5.0',
+	},
+	
+	{
+		message = 'LFM TOC 5 NM FARM need heal  and go  /w me gs,spec (banner res) 3.5k + 4/5',
+		should_fail = true,
+		raid = 'toc5nm',
+		roles = {'healer'},
+		gs = '3.5',
+	},
 }
-
-
 
 local function array_contains(table, element)
 	for _, k in ipairs(table) do
