@@ -11,21 +11,23 @@ local function table_copy(t)
 	return copy;
 end
 
+local sep = '[%s-_,.]';
+
 -- Raid patterns template for a raid with 2 difficulties and 2 sizes
 local raid_patterns_template = {
 	hc = {
-		'<raid>[%s-_,.]*<size>[%s-_,.]*m?a?n?[%s-_,.]*%(?hc?%)?',
-		'%(?hc?%)?[%s-_,.]*<raid>[%s-_,.]*<size>',
-		'<raid>[%s-_,.]*%(?hc?%)?[%s-_,.]*<size>',
-		--'<size>[%s-_,.]*m?a?n?[%s-_,.]*<raid>[%s-_,.]*%(?hc?%)?',
+		'<raid>' .. sep .. '*<size>' .. sep .. '*m?a?n?' .. sep .. '*%(?hc?%)?',
+		'%(?hc?%)?' .. sep .. '*<raid>' .. sep .. '*<size>',
+		'<raid>' .. sep .. '*%(?hc?%)?' .. sep .. '*<size>',
+		--'<size>'..sep..'+m?a?n?'..sep..'*<raid>[%s-_,.]*%(?hc?%)?',
 	},
 	
 	nm = {
-		'<raid>[%s-_,.]*<size>[%s-_,.]*m?a?n?[%s-_,.]*%(?hc?%)?',
-		'%(?hc?%)?[%s-_,.]*<raid>[%s-_,.]*<size>',
-		'<raid>[%s-_,.]*%(?hc?%)?[%s-_,.]*<size>',
-		--'<size>[%s-_,.]*m?a?n?[%s-_,.]*<raid>[%s-_,.]*%(?hc?%)?',
-		'<raid>[%s-_,.]*<size>',
+		'<raid>' .. sep .. '*<size>' .. sep .. '*m?a?n?' .. sep .. '*%(?nm?%)?',
+		'%(?nm?%)?' .. sep .. '*<raid>' .. sep .. '*<size>',
+		'<raid>' .. sep .. '*%(?nm?%)?' .. sep .. '*<size>',
+		--'<size>'..sep..'+m?a?n?'..sep..'*<raid>[%s-_,.]*%(?nm?%)?',
+		'<raid>' .. sep .. '*<size>',
 	}
 };
 
@@ -35,6 +37,12 @@ local function create_raid_patterns(raid_name_pattern, size, difficulty)
 	end
 	
 	local patterns = table_copy(raid_patterns_template[difficulty]);
+	
+	if size == 10 then
+		size = '1[0o]';
+	elseif size == 40 then
+		size = '4[0p]';
+	end
 	
 	-- Replace placeholders with the specified raid info
 	for i, pattern in ipairs(patterns) do
@@ -103,28 +111,28 @@ local raid_list = {
 		name = 'toc10hc',
 		instance_name = 'Trial of the Crusader',
 		size = 10,
-		patterns = create_raid_patterns('toc', 10, 'hc'),
+		patterns = create_raid_patterns('tog?c', 10, 'hc'),
 	},
 
 	{
 		name = 'toc25hc',
 		instance_name = 'Trial of the Crusader',
 		size = 25,
-		patterns = create_raid_patterns('toc', 25, 'hc'),
+		patterns = create_raid_patterns('tog?c', 25, 'hc'),
 	},
 
 	{
 		name = 'toc10nm',
 		instance_name = 'Trial of the Crusader',
 		size = 10,
-		patterns = create_raid_patterns('toc', 10, 'nm'),
+		patterns = create_raid_patterns('tog?c', 10, 'nm'),
 	},
 
 	{
 		name = 'toc25nm',
 		instance_name = 'Trial of the Crusader',
 		size = 25,
-		patterns = create_raid_patterns('toc', 25, 'nm'),
+		patterns = create_raid_patterns('tog?c', 25, 'nm'),
 	},
 	
 	{
@@ -193,6 +201,7 @@ local raid_list = {
 		size = 10,
 		patterns = {
 			'os[%s-_,.]*10',
+			'sartharion must die!',
 		},
 	},
 	
@@ -255,8 +264,8 @@ local raid_list = {
 		instance_name = 'Molten Core',
 		size = 25,
 		patterns = {
-			'molten[%s]*core',
-			'[%s-_,.]+mt[%s-_,.]*25[%s-_,.]+',
+			'molte?n[%s]*core?',
+			'[%s-_,.%^]+mc'..sep..'*2?5?[%s-_,.$]+',
 		},
 	},
 	
@@ -267,6 +276,26 @@ local raid_list = {
 		patterns = {
 			'black[%s]*temple',
 			'[%s-_,.]+bt[%s-_,.]*25[%s-_,.]+',
+		},
+	},
+	
+	{
+		name = 'aq40',
+		instance_name = 'Ahn\'Qiraj Temple',
+		size = 40,
+		patterns = {
+			'temple?'..sep..'*of?'..sep..'*ahn\'?'..sep..'*qiraj',
+			sep..'*aq[%s-_,.]*40'..sep..'*',
+		},
+	},
+	
+	{
+		name = 'aq10',
+		instance_name = 'Ruins of Ahn\'Qiraj',
+		size = 20,
+		patterns = {
+			'ruins?'..sep..'*of?'..sep..'*ahn\'?'..sep..'*qiraj',
+			sep..'*aq[%s-_,.]*20'..sep..'*',
 		},
 	},
 }
@@ -299,18 +328,20 @@ local role_patterns = {
 		'[0-9]*[%s-_,.]*rd[ru][ud][iu]d?', -- LF rdruid/rdudu
 		'[0-9]*[%s-_,.]*tree', 			   -- LF tree
 		'[0-9]*[%s-_,.]*re?s?t?o?[%s-_,.]*shamm?y?', -- LF rsham
-		-- disc priest
+		'[0-9]*'..sep..'*di?s?c?'..sep..'*pri?e?st', -- disc priest
 		'[0-9]*[%s-_,.]*hpala',			   -- LF hpala
 	},
 	
 	tank = {
-		'[0-9]*[%s-_,.]*t[a]?nk[s]?',
+		'[0-9]*[%s-_,.]*t[a]?nk[s]?',	-- NEED TANKS
+		'[0-9]*[%s-_,.]*tn?[a]?k[s]?',  -- Need TNAK
 		'[%s-_,.]+[mo]t[%s-_,.]+',				-- Need MT/OT
 		'[0-9]*[%s-_,.]*bears?',
 	},
 }
 
 local gearscore_patterns = {
+	'[1-6]'..sep..'*k[0-9]+',
 	'[1-6][.,][0-9]',
 	'[1-6][%s]*k[%s]*%+?',
 	'%+?[%s]*[1-6][%s]*k',
@@ -339,11 +370,16 @@ local lfm_patterns = {
 local guild_recruitment_patterns = {
 	'recrui?ti?ng',
 	'recrui?t',
+	'we[%s]*raid',
+	'[<({-][%a]+[-})>][%s]*is[%s]*a?', -- (<GuildName> is a) pve guild looking for
+	'[0-9][0-9][pa]m[%s]*st', -- we raid (12pm set)
 	'autorecruit',
 	'raid[%s]*time',
 	'active[%s]*raiders?',
 	'is[%s]*a[%s]*[%a]*[%s]*[pvep][pvep][pvep][%s]*guild',
 };
+
+
 
 local function refresh_lfm_messages()
 	for name, info in pairs(raid_browser.lfm_messages) do
@@ -360,14 +396,18 @@ local function remove_achievement_text(message)
 end
 
 local function format_gs_string(gs)
-	local formatted = string.gsub(gs, '[%s]*%+?', ''); -- Trim whitespace
+	local formatted = string.gsub(gs, sep..'*%+?', ''); -- Trim whitespace
 	formatted  = string.gsub(formatted , 'k', '')
-	formatted  = string.gsub(formatted , ',', '.');
+	formatted  = string.gsub(formatted , sep, '.');
 	formatted  = tonumber(formatted);
 
 	-- Convert ex: 5800 into 5.8 for display
 	if formatted  > 1000 then
 		formatted  = formatted /1000;
+		
+	-- Convert 57.0 into 5.7
+	elseif formatted > 10 then
+		formatted = formatted / 10;
 	end
 
 	return string.format('%.1f', formatted );
@@ -397,8 +437,6 @@ function raid_browser.raid_info(message)
 	if is_guild_recruitment(message) then
 		return;
 	end
-	
-	message = remove_achievement_text(message);
 		
 	-- Search for LFM announcement in the message
 	local found_lfm = false;
@@ -432,6 +470,8 @@ function raid_browser.raid_info(message)
 			break;
 		end
 	end
+	
+	message = remove_achievement_text(message);
 	
 	-- Get any roles that are needed
 	local roles = {};

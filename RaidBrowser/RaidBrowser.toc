@@ -1,7 +1,7 @@
 ## Interface: 30300
 ## Title: Raid Browser
 ## Version: v1.1
-## Notes: The addon searches for LFM messages sent in all chat channels and lists found raids in Blizzard's LFR raid browser, which is unused in patch 3.3.5a.
+## Notes: A raid finder that parses chat channel text and displays any found raids in the raid browser LFR frame.
 ## Author: Horsebreed
 ## OptionalDeps: GearScoreLite
 ## X-Embeds: Ace3
