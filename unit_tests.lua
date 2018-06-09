@@ -183,7 +183,259 @@ local test_cases = {
 		roles = {'tank', 'healer'},
 		gs = ' ',
 	},
+	
+	{
+		message = 'Fresh RS10 NEED ALL /w Gearscore/Class/Achiv - Discord is a must  [The Twilight Destroyer (10 player)]',
+		should_fail = false,
+		raid = 'rs10nm',
+		roles = {'tank', 'dps', 'healer'},
+		gs = ' ',
+	},
+	
+	-- Ruby Sanctum name variation tests
+	{
+		message = 'LFM rs25 need all 5k1+',
+		should_fail = false,
+		raid = 'rs25nm',
+		roles = {'tank', 'dps', 'healer'},
+		gs = '5.1',
+	},
+	
+	{
+		message = 'LFM rs10 need all 5k1+',
+		should_fail = false,
+		raid = 'rs10nm',
+		roles = {'tank', 'dps', 'healer'},
+		gs = '5.1',
+	},
+	
+	{
+		message = 'LFM rs10n need all 5k1+',
+		should_fail = false,
+		raid = 'rs10nm',
+		roles = {'tank', 'dps', 'healer'},
+		gs = '5.1',
+	},
+	
+	{
+		message = 'LFM rs25n need all 5k1+',
+		should_fail = false,
+		raid = 'rs25nm',
+		roles = {'tank', 'dps', 'healer'},
+		gs = '5.1',
+	},
+	
+	{
+		message = 'LFM rs10nc need all 5k1+',
+		should_fail = false,
+		raid = 'rs10nm',
+		roles = {'tank', 'dps', 'healer'},
+		gs = '5.1',
+	},
+	
+	{
+		message = 'LFM rs25nc need all 5k1+',
+		should_fail = false,
+		raid = 'rs25nm',
+		roles = {'tank', 'dps', 'healer'},
+		gs = '5.1',
+	},
+	
+	{
+		message = 'LFM rs10h need all 5k1+',
+		should_fail = false,
+		raid = 'rs10hc',
+		roles = {'tank', 'dps', 'healer'},
+		gs = '5.1',
+	},
+	
+	{
+		message = 'LFM rs25h need all 5k1+',
+		should_fail = false,
+		raid = 'rs25hc',
+		roles = {'tank', 'dps', 'healer'},
+		gs = '5.1',
+	},
+	
+	{
+		message = 'LFM rs10hc need all 5k1+',
+		should_fail = false,
+		raid = 'rs10hc',
+		roles = {'tank', 'dps', 'healer'},
+		gs = '5.1',
+	},
+	
+	{
+		message = 'LFM rs25hc need all 5k1+',
+		should_fail = false,
+		raid = 'rs25hc',
+		roles = {'tank', 'dps', 'healer'},
+		gs = '5.1',
+	},
+	
+	-- ICC name variation tests
+	{
+		message = 'LFM icc25 need all 5k1+',
+		should_fail = false,
+		raid = 'icc25nm',
+		roles = {'tank', 'dps', 'healer'},
+		gs = '5.1',
+	},
+	
+	{
+		message = 'LFM icc10 need all 5k1+',
+		should_fail = false,
+		raid = 'icc10nm',
+		roles = {'tank', 'dps', 'healer'},
+		gs = '5.1',
+	},
+	
+	{
+		message = 'LFM icc10n need all 5k1+',
+		should_fail = false,
+		raid = 'icc10nm',
+		roles = {'tank', 'dps', 'healer'},
+		gs = '5.1',
+	},
+	
+	{
+		message = 'LFM icc25n need all 5k1+',
+		should_fail = false,
+		raid = 'icc25nm',
+		roles = {'tank', 'dps', 'healer'},
+		gs = '5.1',
+	},
+	
+	{
+		message = 'LFM icc10nc need all 5k1+',
+		should_fail = false,
+		raid = 'icc10nm',
+		roles = {'tank', 'dps', 'healer'},
+		gs = '5.1',
+	},
+	
+	{
+		message = 'LFM icc25nc need all 5k1+',
+		should_fail = false,
+		raid = 'icc25nm',
+		roles = {'tank', 'dps', 'healer'},
+		gs = '5.1',
+	},
+	
+	{
+		message = 'LFM icc10h need all 5k1+',
+		should_fail = false,
+		raid = 'icc10hc',
+		roles = {'tank', 'dps', 'healer'},
+		gs = '5.1',
+	},
+	
+	{
+		message = 'LFM icc25h need all 5k1+',
+		should_fail = false,
+		raid = 'icc25hc',
+		roles = {'tank', 'dps', 'healer'},
+		gs = '5.1',
+	},
+	
+	{
+		message = 'LFM icc10hc need all 5k1+',
+		should_fail = false,
+		raid = 'icc10hc',
+		roles = {'tank', 'dps', 'healer'},
+		gs = '5.1',
+	},
+	
+	{
+		message = 'LFM icc25hc need all 5k1+',
+		should_fail = false,
+		raid = 'icc25hc',
+		roles = {'tank', 'dps', 'healer'},
+		gs = '5.1',
+	},
+	
+	-- TOC name variation tests
+	{
+		message = 'LFM toc25 need all 5k1+',
+		should_fail = false,
+		raid = 'toc25nm',
+		roles = {'tank', 'dps', 'healer'},
+		gs = '5.1',
+	},
+	
+	{
+		message = 'LFM toc10 need all 5k1+',
+		should_fail = false,
+		raid = 'toc10nm',
+		roles = {'tank', 'dps', 'healer'},
+		gs = '5.1',
+	},
+	
+	{
+		message = 'LFM toc10n need all 5k1+',
+		should_fail = false,
+		raid = 'toc10nm',
+		roles = {'tank', 'dps', 'healer'},
+		gs = '5.1',
+	},
+	
+	{
+		message = 'LFM toc25n need all 5k1+',
+		should_fail = false,
+		raid = 'toc25nm',
+		roles = {'tank', 'dps', 'healer'},
+		gs = '5.1',
+	},
+	
+	{
+		message = 'LFM toc10nc need all 5k1+',
+		should_fail = false,
+		raid = 'toc10nm',
+		roles = {'tank', 'dps', 'healer'},
+		gs = '5.1',
+	},
+	
+	{
+		message = 'LFM toc25nc need all 5k1+',
+		should_fail = false,
+		raid = 'toc25nm',
+		roles = {'tank', 'dps', 'healer'},
+		gs = '5.1',
+	},
+	
+	{
+		message = 'LFM toc10h need all 5k1+',
+		should_fail = false,
+		raid = 'toc10hc',
+		roles = {'tank', 'dps', 'healer'},
+		gs = '5.1',
+	},
+	
+	{
+		message = 'LFM toc25h need all 5k1+',
+		should_fail = false,
+		raid = 'toc25hc',
+		roles = {'tank', 'dps', 'healer'},
+		gs = '5.1',
+	},
+	
+	{
+		message = 'LFM toc10hc need all 5k1+',
+		should_fail = false,
+		raid = 'toc10hc',
+		roles = {'tank', 'dps', 'healer'},
+		gs = '5.1',
+	},
+	
+	{
+		message = 'LFM toc25hc need all 5k1+',
+		should_fail = false,
+		raid = 'toc25hc',
+		roles = {'tank', 'dps', 'healer'},
+		gs = '5.1',
+	},
 } 
+
 
 local function array_contains(table, element)
 	for _, k in ipairs(table) do

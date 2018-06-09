@@ -17,14 +17,14 @@ local sep = '[%s-_,.]';
 local raid_patterns_template = {
 	hc = {
 		'<raid>' .. sep .. '*<size>' .. sep .. '*m?a?n?' .. sep .. '*%(?hc?%)?',
-		'%(?hc?%)?' .. sep .. '*<raid>' .. sep .. '*<size>',
+		sep..'+%(?hc?%)?' .. sep .. '*<raid>' .. sep .. '*<size>',
 		'<raid>' .. sep .. '*%(?hc?%)?' .. sep .. '*<size>',
 		--'<size>'..sep..'+m?a?n?'..sep..'*<raid>[%s-_,.]*%(?hc?%)?',
 	},
 	
 	nm = {
 		'<raid>' .. sep .. '*<size>' .. sep .. '*m?a?n?' .. sep .. '*%(?nm?%)?',
-		'%(?nm?%)?' .. sep .. '*<raid>' .. sep .. '*<size>',
+		sep..'+%(?nm?%)?' .. sep .. '*<raid>' .. sep .. '*<size>',
 		'<raid>' .. sep .. '*%(?nm?%)?' .. sep .. '*<size>',
 		--'<size>'..sep..'+m?a?n?'..sep..'*<raid>[%s-_,.]*%(?nm?%)?',
 		'<raid>' .. sep .. '*<size>',
