@@ -175,7 +175,15 @@ local test_cases = {
 		roles = {'healer'},
 		gs = '3.5',
 	},
-}
+	
+	{
+		message = 'Icc 10 HC- Looking for an OT, 1 Healer . Whisper your class.role and [The Frozen Throne (10 player)] for an [invite]. DISCORD REQUIRED.',
+		should_fail = false,
+		raid = 'icc10hc',
+		roles = {'tank', 'healer'},
+		gs = ' ',
+	},
+} 
 
 local function array_contains(table, element)
 	for _, k in ipairs(table) do

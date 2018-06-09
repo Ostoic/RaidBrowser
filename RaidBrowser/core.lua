@@ -352,6 +352,7 @@ local gearscore_patterns = {
 local lfm_patterns = {
 	'lf[0-9]*m',
 	'looking[%s]*for[%s]*all',
+	'looking'..sep..'*for'..sep..'*an?',
 	'looking[%s]*for[%s]*[0-9]*[%s]*more',		-- looking for 9 more
 	'lf[%s]*.*for',								-- LF <any characters> for 
 	'lf[%s]*[0-9]*[%s]*he[a]?l[er|ers]*',		-- LF healer
@@ -404,6 +405,10 @@ local function format_gs_string(gs)
 	-- Convert ex: 5800 into 5.8 for display
 	if formatted  > 1000 then
 		formatted  = formatted /1000;
+		
+	-- Convert 57.0 into 5.7
+	elseif formatted > 100 then
+		formatted = formatted / 100;
 		
 	-- Convert 57.0 into 5.7
 	elseif formatted > 10 then
