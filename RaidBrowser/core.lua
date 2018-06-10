@@ -262,10 +262,10 @@ local raid_list = {
 	{
 		name = 'molten core',
 		instance_name = 'Molten Core',
-		size = 25,
+		size = 40,
 		patterns = {
 			'molte?n[%s]*core?',
-			'[%s-_,.%^]+mc'..sep..'*2?5?[%s-_,.$]+',
+			'[%s-_,.%^]+mc'..sep..'*4?0?[%s-_,.$]+',
 		},
 	},
 	
