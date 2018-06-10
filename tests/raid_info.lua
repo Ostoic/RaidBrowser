@@ -191,8 +191,8 @@ local test_cases = {
 		roles = {'tank', 'dps', 'healer'},
 		gs = ' ',
 	},
-	
-	-- Ruby Sanctum name variation tests
+
+-- Ruby Sanctum name variation tests
 	{
 		message = 'LFM rs25 need all 5k1+',
 		should_fail = false,
@@ -273,7 +273,7 @@ local test_cases = {
 		gs = '5.1',
 	},
 	
-	-- ICC name variation tests
+-- ICC name variation tests
 	{
 		message = 'LFM icc25 need all 5k1+',
 		should_fail = false,
@@ -354,7 +354,7 @@ local test_cases = {
 		gs = '5.1',
 	},
 	
-	-- TOC name variation tests
+-- TOC name variation tests
 	{
 		message = 'LFM toc25 need all 5k1+',
 		should_fail = false,
@@ -434,7 +434,33 @@ local test_cases = {
 		roles = {'tank', 'dps', 'healer'},
 		gs = '5.1',
 	},
+
+-- More random tests	
+	{
+		message = 'ICC 10 nm wis me .....need all ..........gs up 5.5 ........and link me achive ..........{no B+P ress} ..... { com VH } ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++',
+		should_fail = false,
+		raid = 'icc10nm',
+		roles = {'tank', 'dps', 'healer'},
+		gs = '5.5',
+	},	
+	
+	{
+		message = 'Rs 25N >> Discord Req >> Need all +6k Gs  [The Twilight Destroyer (25 player)] STS Ress',
+		should_fail = false,
+		raid = 'rs25nm',
+		roles = {'tank', 'dps', 'healer'},
+		gs = '6.0',
+	},
+	
+	{
+		message = 'LFM ICC 25 nm need RPDS Fresh Run 5.6k+ FULL GEMS and ENCHANTS! (B+P res) /w best achi. Make sure you have TIME!',
+		should_fail = false,
+		raid = 'icc25nm',
+		roles = {'ranged_dps'},
+		gs = '5.6',
+	},
 } 
+
 
 
 local function array_contains(table, element)

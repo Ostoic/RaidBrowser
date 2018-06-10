@@ -302,7 +302,7 @@ local raid_list = {
 
 local role_patterns = {
 	ranged_dps = {
-		"[0-9]*[%s-_,.]*rdps",
+		"[0-9]*[%s-_,.]*r[dp][dp]s",
 		'[0-9]*[%s-_,.]*w?a?r?lock',
 		'[0-9]*[%s-_,.]*spri?e?st',
 		'[0-9]*[%s-_,.]*elem?e?n?t?a?l?',
@@ -312,11 +312,11 @@ local role_patterns = {
 	},
 	
 	melee_dps = {
-		'[0-9]*[%s-_,.]*mdps',
+		'[0-9]*[%s-_,.]*m[dp][dp]s',
 		'[0-9]*[%s-_,.]*rogue',
 		'[0-9]*[%s-_,.]*kitt?y?',
 		'[0-9]*[%s-_,.]*feral',
-		'[0-9]*[%s-_,.]*ret[%s-_,.]*pal[al]?[dy]i?n?',
+		'[0-9]*[%s-_,.]*ret[%s-_,.]*pal[al]?[dy]?i?n?',
 	},
 	
 	dps = {
@@ -337,6 +337,7 @@ local role_patterns = {
 		'[0-9]*[%s-_,.]*tn?[a]?k[s]?',  -- Need TNAK
 		'[%s-_,.]+[mo]t[%s-_,.]+',				-- Need MT/OT
 		'[0-9]*[%s-_,.]*bears?',
+		'[0-9]*'..sep..'*prot'..sep..'*pal[al]?[dy]?i?n?',
 	},
 }
 
