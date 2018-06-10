@@ -300,36 +300,34 @@ local raid_list = {
 	},
 }
 
-local role_patterns = {
-	ranged_dps = {
-		"[0-9]*[%s-_,.]*r[dp][dp]s",
-		'[0-9]*[%s-_,.]*w?a?r?lock',
-		'[0-9]*[%s-_,.]*spri?e?st',
-		'[0-9]*[%s-_,.]*elem?e?n?t?a?l?',
-		'[0-9]*[%s-_,.]*mage',
-		'[0-9]*[%s-_,.]*boomy?k?i?n?',
-		'[0-9]*[%s-_,.]*hunte?r?s?',
-	},
-	
-	melee_dps = {
+local role_patterns = {	
+	dps = {
+		'[0-9]*[%s-_,.]*dps',
+		
+		-- melee dps
 		'[0-9]*[%s-_,.]*m[dp][dp]s',
 		'[0-9]*[%s-_,.]*rogue',
 		'[0-9]*[%s-_,.]*kitt?y?',
 		'[0-9]*[%s-_,.]*feral',
 		'[0-9]*[%s-_,.]*ret[%s-_,.]*pal[al]?[dy]?i?n?',
-	},
-	
-	dps = {
-		'[0-9]*[%s-_,.]*dps',
+		
+		-- ranged dps
+		"[0-9]*[%s-_,.]*r[dp][dp]s",
+		'[0-9]*[%s-_,.]*w?a?r?lock',
+		'[0-9]*[%s-_,.]*spri?e?st',
+		'[0-9]*[%s-_,.]*elem?e?n?t?a?l?',
+		'[0-9]*[%s-_,.]*mage',
+		'[0-9]*[%s-_,.]*boo?mm?y?k?i?n?',
+		'[0-9]*[%s-_,.]*hunte?r?s?',
 	},
 	
 	healer = {
 		'[0-9]*[%s-_,.]*he[a]?l[er|ers]*', -- LF healer
-		'[0-9]*[%s-_,.]*rd[ru][ud][iu]d?', -- LF rdruid/rdudu
+		'[0-9]*[%s-_,.]*re?s?t?o?'..sep..'*d[ru][ud][iu]d?', -- LF rdruid/rdudu
 		'[0-9]*[%s-_,.]*tree', 			   -- LF tree
 		'[0-9]*[%s-_,.]*re?s?t?o?[%s-_,.]*shamm?y?', -- LF rsham
-		'[0-9]*'..sep..'*di?s?c?'..sep..'*pri?e?st', -- disc priest
-		'[0-9]*[%s-_,.]*hpala',			   -- LF hpala
+		'[0-9]*'..sep..'*di?s?c?o?'..sep..'*pri?e?st', -- disc priest
+		'[0-9]*[%s-_,.]*ho?l?l?y?'..sep..'*pala',	   -- LF hpala
 	},
 	
 	tank = {
@@ -434,6 +432,28 @@ local function remove_http_links(message)
 	local http_pattern = 'https?://*[%a]*.[%a]*.[%a]*/?[%a%-%%0-9_]*/?';
 	return string.gsub(message, http_pattern, '');
 end
+	
+local function find_roles(roles, message, pattern_table, role)
+	local found = false;
+	for _, pattern in ipairs(pattern_table[role]) do
+		local result = string.find(message, pattern)
+
+		-- If a raid was found then save it to our list of roles and continue.
+		if result then
+			found = true;
+			
+			-- Remove the substring from the message
+			message = string.gsub(message, pattern, '')
+		end
+	end
+	
+	if not found then
+		return roles, message;
+	end
+	
+	table.insert(roles, role);
+	return roles, message;
+end
 
 function raid_browser.raid_info(message)
 	message = string.lower(message)
@@ -481,19 +501,10 @@ function raid_browser.raid_info(message)
 	
 	-- Get any roles that are needed
 	local roles = {};
-	for r, patterns in pairs(role_patterns) do
-		for _, pattern in ipairs(patterns) do
-			local result = string.find(message, pattern)
-
-			-- If a raid was found then save it to our list of roles and continue.
-			if result then
-				table.insert(roles, r)
-
-				-- Remove the substring from the message
-				message = string.gsub(message, pattern, '')
-			end
-		end
-	end
+	
+	roles, message  = find_roles(roles, message, role_patterns, 'dps');
+	roles, message  = find_roles(roles, message, role_patterns, 'tank');
+	roles, message = find_roles(roles, message, role_patterns, 'healer');
 
 	-- If there is only an LFM message, then it is assumed that all roles are needed
 	if #roles == 0 then
