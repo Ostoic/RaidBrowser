@@ -484,6 +484,14 @@ local test_cases = {
 		gs = '5.6',
 	},
 	
+	{
+		message = 'ICC 25MAN LOOKING FOR 3 HEALERS AND 9 DPS 5.5K GS+ FOR FRASH ICC RUN B/E RES /W ME GS AND ACHIV AIM 7+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@',
+		should_fail = false,
+		raid = 'icc25nm',
+		roles = {'healer', 'dps'},
+		gs = '5.5',
+	},
+	
 	-- Idea: Convert raid/roles/gs into intermediate text such as <role> <class> <raid> <gs> so that the following could
 	-- be parsed as: <role> for <raid>/HC.. Gs Req <gs>... [The Frostwing Halls (10 player)]...9/10
 	-- This could be a more powerful technique for distinguishing between LFM messages and other messages
@@ -495,6 +503,7 @@ local test_cases = {
 		gs = '5.7',
 	},]]--
 } 
+
 
 
 

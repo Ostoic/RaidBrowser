@@ -2,38 +2,38 @@ raid_browser.stats = {};
 
 local raid_achievements = {
 	icc = {
-		4604, -- Storming the Citadel 25-man
 		4531, -- Storming the Citadel 10-man
-		4632, -- Storming the Citadel 25-man HC
+		4604, -- Storming the Citadel 25-man
 		4628, -- Storming the Citadel 10-man HC
-		4605, -- The Plagueworks 25-man
+		4632, -- Storming the Citadel 25-man HC
 		4528, -- The Plagueworks 10-man
-		4633, -- The Plagueworks 25-man HC
+		4605, -- The Plagueworks 25-man
 		4629, -- The Plagueworks 10-man HC
-		4606, -- The Crimson Hall 25-man
+		4633, -- The Plagueworks 25-man HC
 		4529, -- The Crimson Hall 10-man
-		4634, -- The Crimson Hall 25-man HC
+		4606, -- The Crimson Hall 25-man
 		4630, -- The Crimson Hall 10-man HC
-		4607, -- The Frostwing Halls 25-man
+		4634, -- The Crimson Hall 25-man HC
 		4527, -- The Frostwing Halls 10-man
-		4635, -- The Frostwing Halls 25-man HC
+		4607, -- The Frostwing Halls 25-man
 		4631, -- The Frostwing Halls 10-man HC
-		4597, -- The Frozen Throne (LK25 NM)
+		4635, -- The Frostwing Halls 25-man HC
 		4530, -- The Frozen Throne (LK10 NM)
-		4584, -- The Light of Dawn (LK25 HC)
+		4597, -- The Frozen Throne (LK25 NM)
 		4583, -- Bane of the Fallen King (LK10 HC)
+		4584, -- The Light of Dawn (LK25 HC)
 	},
 	
 	toc = {
-		3916, -- Call of the Crusade 25-man
 		3917, -- Call of the Crusade 10-man  
-		3812, -- Call of the Grand Crusade (25 HC)
+		3916, -- Call of the Crusade 25-man
 		3918, -- Call of the Grand Crusade (10 HC)
+		3812, -- Call of the Grand Crusade (25 HC)
 	},
 	
 	rs = {
-		4815, -- The Twilight Destroyer 25
 		4817, -- The Twilight Destroyer 10
+		4815, -- The Twilight Destroyer 25
 		4818, -- The Twilight Destroyer 10 HC
 		4816, -- The Twilight Destroyer 25 HC
 	},

@@ -290,7 +290,7 @@ local raid_list = {
 	},
 	
 	{
-		name = 'aq10',
+		name = 'aq20',
 		instance_name = 'Ruins of Ahn\'Qiraj',
 		size = 20,
 		patterns = {
@@ -350,20 +350,21 @@ local gearscore_patterns = {
 
 local lfm_patterns = {
 	'lf[0-9]*m',
-	'looking[%s]*for[%s]*all',
-	'looking'..sep..'*for'..sep..'*an?',
-	'looking[%s]*for[%s]*[0-9]*[%s]*more',		-- looking for 9 more
-	'lf[%s]*.*for',								-- LF <any characters> for 
-	'lf[%s]*[0-9]*[%s]*he[a]?l[er|ers]*',		-- LF healer
-	'lf[%s]*[0-9]*[%s]*t[a]?nk[s]?',			-- LF 5 tanks
-	'lf[%s]*[0-9]*[%s]*[mr]?dps',				-- LF 9 DPS
-	'seek[%s]*[0-9]*[%s]*he[a]?l[er|ers]*',		-- seek healer
-	'seek[%s]*[0-9]*[%s]*t[a]?nk[s]?',			-- seek 5 tanks
-	'seek[%s]*[0-9]*[%s]*[mr]?dps',				-- seek 9 DPS
-	'lf[%s]*all',
+	'lf'..sep..'*all',
 	'need',
-	'need[%s]*all',
-	'whispe?r?[%s]*me',
+	'need'..sep..'*all',
+	'seek'..sep..'*[0-9]*'..sep..'*he[a]?l[er|ers]*',		-- seek healer
+	'seek'..sep..'*[0-9]*'..sep..'*t[a]?nk[s]?',			-- seek 5 tanks
+	'seek'..sep..'*[0-9]*'..sep..'*[mr]?dps',				-- seek 9 DPS
+	'looking'..sep..'*for[%s]*all',
+	'looking'..sep..'*for'..sep..'*an?'..sep,
+	'looking'..sep..'*for'..sep..'*[0-9]*'..sep..'*more',		-- looking for 9 more
+	'lf'..sep..'*.*for',								-- LF <any characters> for 
+	'looking'..sep..'*for'..sep..'*.*'..sep..'for',		-- LF <any characters> for 
+	'lf'..sep..'*[0-9]*'..sep..'*he[a]?l[er|ers]*',		-- LF healer
+	'lf'..sep..'*[0-9]*'..sep..'*t[a]?nk[s]?',			-- LF 5 tanks
+	'lf'..sep..'*[0-9]*'..sep..'*[mr]?dps',				-- LF 9 DPS
+	'whispe?r?'..sep..'*me',
 	--'[%s]/w[%s]*[%a]+', -- Too greedy
 }
 
