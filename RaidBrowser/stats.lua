@@ -72,7 +72,7 @@ local function find_best_achievement(raid)
 	end
 end
 
-local function get_active_spec()
+function raid_browser.stats.active_spec_index()
 	local index = 1;
 	local _, _, points = GetTalentTabInfo(index);
 	for i = 2, 3 do
@@ -82,7 +82,20 @@ local function get_active_spec()
 		end
 	end
 	
-	return GetTalentTabInfo(index)
+	return index
+end
+
+function raid_browser.stats.active_spec()
+	local index = 1;
+	local _, _, points = GetTalentTabInfo(index);
+	for i = 2, 3 do
+		local _, _, p = GetTalentTabInfo(i);
+		if (p > points) then
+			index = i;
+		end
+	end
+	
+	return GetTalentTabInfo(raid_browser.stats.active_spec_index());
 end
 
 function raid_browser.stats.raid_lock_info(instance_name, size)
@@ -97,20 +110,51 @@ function raid_browser.stats.raid_lock_info(instance_name, size)
 	return false, nil;
 end
 
-function raid_browser.stats.build_inv_string(raid_name)
-	local message = 'inv ';
-	local class = UnitClass("player");
-	
-	local gs = '';
+function raid_browser.stats.get_active_raidset()
+	local spec = nil;
+	local gs = nil;
 	
 	-- Retrieve gearscore if GearScoreLite is installed
 	if GearScore_GetScore then 
 		gs = GearScore_GetScore(UnitName('player'), 'player');
-		gs = gs .. 'gs ';
 	end
 	
-	local spec = get_active_spec();
-	message = message .. gs .. spec .. ' ' .. class;
+	spec = raid_browser.stats.active_spec();
+	return spec, gs;
+end
+
+function raid_browser.stats.get_raidset(set)
+	return raid_browser_character_raidsets[set].spec, raid_browser_character_raidsets[set].gs;
+end
+
+function raid_browser.stats.current_raidset()
+	if raid_browser_character_current_raidset == 'active' then
+		return raid_browser.stats.get_active_raidset();
+	end
+	
+	return raid_browser.stats.get_raidset(raid_browser_character_current_raidset);
+end
+
+function raid_browser.stats.select_current_raidset(set)
+	raid_browser_character_current_raidset = set;
+end
+
+function raid_browser.stats.save_primary_raidset()
+	local spec, gs = raid_browser.stats.get_active_raidset();
+	raid_browser_character_raidsets['primary'] = {spec = spec, gs = gs};
+end
+
+function raid_browser.stats.save_secondary_raidset()
+	local spec, gs = raid_browser.stats.get_active_raidset();
+	raid_browser_character_raidsets['secondary'] = {spec = spec, gs = gs};
+end
+
+function raid_browser.stats.build_inv_string(raid_name)
+	local message = 'inv ';
+	local class = UnitClass("player");
+	
+	local spec, gs = raid_browser.stats.current_raidset();
+	message = message .. gs .. 'gs ' .. spec .. ' ' .. class;
 	
 	-- Remove difficulty and raid_name size from the string
 	raid_name = string.gsub(raid_name, '[1|2][0|5](%w+)', '');
@@ -123,16 +167,3 @@ function raid_browser.stats.build_inv_string(raid_name)
 	
 	return message;
 end
-
-
-
-
-
-
-
-
-
-
-
-
-

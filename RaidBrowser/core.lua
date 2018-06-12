@@ -549,6 +549,17 @@ end
 
 function raid_browser:OnEnable()
 	raid_browser:Print("loaded. Type /rb to toggle the raid browser.")
+	
+	if not raid_browser_character_current_raidset then
+		raid_browser_character_current_raidset = 'active';
+	end
+	
+	if not raid_browser_character_raidsets then
+		raid_browser_character_raidsets = {
+			primary = {},
+			secondary = {},
+		};
+	end
 
 	-- LFM messages expire after 60 seconds
 	raid_browser.expiry_time = 60;
