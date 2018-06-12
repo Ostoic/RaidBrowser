@@ -124,7 +124,9 @@ function raid_browser.stats.get_active_raidset()
 end
 
 function raid_browser.stats.get_raidset(set)
-	return raid_browser_character_raidsets[set].spec, raid_browser_character_raidsets[set].gs;
+	local raidset = raid_browser_character_raidsets[set];
+	if not raidset then return end;
+	return raidset.spec, raidset.gs;
 end
 
 function raid_browser.stats.current_raidset()

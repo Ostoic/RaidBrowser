@@ -69,8 +69,6 @@ local menu = {
 	},
 }
 
-raidset_frame_menu = menu;
-
 -- Get the menu option text
 local function get_option_text(option)
 	local spec = raid_browser.stats.get_raidset(option);

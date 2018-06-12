@@ -147,7 +147,7 @@ local test_cases = {
 	{
 		message = 'LFM [Ruins of Ahn\'Qiraj] Achievement / Transmorg Run. Dark Edge Reserved. In progress.  Pst WIll summon. Pst. All welcome.',
 		should_fail = false,
-		raid = 'aq10',
+		raid = 'aq20',
 		roles = {'tank', 'dps', 'healer'},
 		gs = ' ',
 	},
@@ -490,6 +490,14 @@ local test_cases = {
 		raid = 'icc25nm',
 		roles = {'healer', 'dps'},
 		gs = '5.5',
+	},
+	
+	{
+		message = 'TOC 25 man HC need 1 prot pala and 1 heal {  pala } and 2 mdps { rogue / feral } and 3 rdps { mage / shamy ele } min gs 6k /// nothing ress /// all item rolled /// must have time /// link achvi /// come VH for inspect // 20 /25',
+		should_fail = false,
+		raid = 'toc25hc',
+		roles = {'healer', 'tank', 'dps'},
+		gs = '6.0',
 	},
 	
 	-- Idea: Convert raid/roles/gs into intermediate text such as <role> <class> <raid> <gs> so that the following could
