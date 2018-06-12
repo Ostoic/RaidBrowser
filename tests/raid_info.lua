@@ -11,7 +11,7 @@ local test_cases = {
 		message = 'LFM need kitty and icc 25 rshammy 5.5+',
 		should_fail = false,
 		raid = 'icc25nm',
-		roles = {'melee_dps', 'healer'},
+		roles = {'dps', 'healer'},
 		gs = '5.5',
 	},
 	
@@ -67,7 +67,7 @@ local test_cases = {
 		message = 'LFM ICC10N NEED 2 TNAKS AND 1 HEALER AND RDPS 5.3GS MIN. WHISPER GS AND EXP. NO GS AND EXP=IGNORE',
 		should_fail = false,
 		raid = 'icc10nm',
-		roles = {'tank', 'healer', 'ranged_dps'},
+		roles = {'tank', 'healer', 'dps'},
 		gs = '5.3',
 	},
 	
@@ -100,7 +100,7 @@ local test_cases = {
 		message = ' ICC10 nm/hc lf 5k7+ boe reserved link achiv// spec // 6/10 need 2 Heals // 1 tank //  1 Rdps (preflock)',
 		should_fail = false,
 		raid = 'icc10nm',
-		roles = {'healer', 'tank', 'ranged_dps'},
+		roles = {'healer', 'tank', 'dps'},
 		gs = '5.7',
 	},
 	
@@ -147,7 +147,7 @@ local test_cases = {
 	{
 		message = 'LFM [Ruins of Ahn\'Qiraj] Achievement / Transmorg Run. Dark Edge Reserved. In progress.  Pst WIll summon. Pst. All welcome.',
 		should_fail = false,
-		raid = 'aq10',
+		raid = 'aq20',
 		roles = {'tank', 'dps', 'healer'},
 		gs = ' ',
 	},
@@ -456,10 +456,62 @@ local test_cases = {
 		message = 'LFM ICC 25 nm need RPDS Fresh Run 5.6k+ FULL GEMS and ENCHANTS! (B+P res) /w best achi. Make sure you have TIME!',
 		should_fail = false,
 		raid = 'icc25nm',
-		roles = {'ranged_dps'},
+		roles = {'dps'},
 		gs = '5.6',
 	},
+	
+	{
+		message = 'ICC 10  NM/HC raid  Need  1 Bommy1 SHAMMY healer  !! min GS 5.7k  --B+P are reserverd 8/10  [Fall of the Lich King (10 player)]',
+		should_fail = false,
+		raid = 'icc10nm',
+		roles = {'dps', 'healer'},
+		gs = '5.7',
+	},
+	
+	{
+		message = ' RS 10 Norm Need Resto Druid  6k+  [Heroic: The Twilight Destroyer (25 player)]',
+		should_fail = false,
+		raid = 'rs10nm',
+		roles = {'healer'},
+		gs = '6.0',
+	},
+	
+	{
+		message = 'LF 1 tank for Ruby Sanctum 10 man normal, 5,6k gs req',
+		should_fail = false,
+		raid = 'rs10nm',
+		roles = {'tank'},
+		gs = '5.6',
+	},
+	
+	{
+		message = 'ICC 25MAN LOOKING FOR 3 HEALERS AND 9 DPS 5.5K GS+ FOR FRASH ICC RUN B/E RES /W ME GS AND ACHIV AIM 7+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@',
+		should_fail = false,
+		raid = 'icc25nm',
+		roles = {'healer', 'dps'},
+		gs = '5.5',
+	},
+	
+	{
+		message = 'TOC 25 man HC need 1 prot pala and 1 heal {  pala } and 2 mdps { rogue / feral } and 3 rdps { mage / shamy ele } min gs 6k /// nothing ress /// all item rolled /// must have time /// link achvi /// come VH for inspect // 20 /25',
+		should_fail = false,
+		raid = 'toc25hc',
+		roles = {'healer', 'tank', 'dps'},
+		gs = '6.0',
+	},
+	
+	-- Idea: Convert raid/roles/gs into intermediate text such as <role> <class> <raid> <gs> so that the following could
+	-- be parsed as: <role> for <raid>/HC.. Gs Req <gs>... [The Frostwing Halls (10 player)]...9/10
+	-- This could be a more powerful technique for distinguishing between LFM messages and other messages
+	--[[{
+		message = '1 Lock for ICC 10 NM/HC.. Gs Req 5.7... [The Frostwing Halls (10 player)]...9/10',
+		should_fail = false,
+		raid = 'icc10nm',
+		roles = {'dps'},
+		gs = '5.7',
+	},]]--
 } 
+
 
 
 
@@ -474,6 +526,10 @@ local function array_contains(table, element)
 end
 
 local function compare_arrays(table1, table2)
+	if #table1 ~= #table2 then
+		return false;
+	end
+   
 	for _, x in ipairs(table1) do
 		if not array_contains(table2, x) then
 			return false;

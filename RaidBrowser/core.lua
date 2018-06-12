@@ -262,10 +262,10 @@ local raid_list = {
 	{
 		name = 'molten core',
 		instance_name = 'Molten Core',
-		size = 25,
+		size = 40,
 		patterns = {
 			'molte?n[%s]*core?',
-			'[%s-_,.%^]+mc'..sep..'*2?5?[%s-_,.$]+',
+			'[%s-_,.%^]+mc'..sep..'*4?0?[%s-_,.$]+',
 		},
 	},
 	
@@ -290,7 +290,7 @@ local raid_list = {
 	},
 	
 	{
-		name = 'aq10',
+		name = 'aq20',
 		instance_name = 'Ruins of Ahn\'Qiraj',
 		size = 20,
 		patterns = {
@@ -300,36 +300,34 @@ local raid_list = {
 	},
 }
 
-local role_patterns = {
-	ranged_dps = {
-		"[0-9]*[%s-_,.]*r[dp][dp]s",
-		'[0-9]*[%s-_,.]*w?a?r?lock',
-		'[0-9]*[%s-_,.]*spri?e?st',
-		'[0-9]*[%s-_,.]*elem?e?n?t?a?l?',
-		'[0-9]*[%s-_,.]*mage',
-		'[0-9]*[%s-_,.]*boomy?k?i?n?',
-		'[0-9]*[%s-_,.]*hunte?r?s?',
-	},
-	
-	melee_dps = {
+local role_patterns = {	
+	dps = {
+		'[0-9]*[%s-_,.]*dps',
+		
+		-- melee dps
 		'[0-9]*[%s-_,.]*m[dp][dp]s',
 		'[0-9]*[%s-_,.]*rogue',
 		'[0-9]*[%s-_,.]*kitt?y?',
 		'[0-9]*[%s-_,.]*feral',
 		'[0-9]*[%s-_,.]*ret[%s-_,.]*pal[al]?[dy]?i?n?',
-	},
-	
-	dps = {
-		'[0-9]*[%s-_,.]*dps',
+		
+		-- ranged dps
+		"[0-9]*[%s-_,.]*r[dp][dp]s",
+		'[0-9]*[%s-_,.]*w?a?r?lock',
+		'[0-9]*[%s-_,.]*spri?e?st',
+		'[0-9]*[%s-_,.]*elem?e?n?t?a?l?',
+		'[0-9]*[%s-_,.]*mage',
+		'[0-9]*[%s-_,.]*boo?mm?y?k?i?n?',
+		'[0-9]*[%s-_,.]*hunte?r?s?',
 	},
 	
 	healer = {
 		'[0-9]*[%s-_,.]*he[a]?l[er|ers]*', -- LF healer
-		'[0-9]*[%s-_,.]*rd[ru][ud][iu]d?', -- LF rdruid/rdudu
+		'[0-9]*[%s-_,.]*re?s?t?o?'..sep..'*d[ru][ud][iu]d?', -- LF rdruid/rdudu
 		'[0-9]*[%s-_,.]*tree', 			   -- LF tree
 		'[0-9]*[%s-_,.]*re?s?t?o?[%s-_,.]*shamm?y?', -- LF rsham
-		'[0-9]*'..sep..'*di?s?c?'..sep..'*pri?e?st', -- disc priest
-		'[0-9]*[%s-_,.]*hpala',			   -- LF hpala
+		'[0-9]*'..sep..'*di?s?c?o?'..sep..'*pri?e?st', -- disc priest
+		'[0-9]*[%s-_,.]*ho?l?l?y?'..sep..'*pala',	   -- LF hpala
 	},
 	
 	tank = {
@@ -352,20 +350,21 @@ local gearscore_patterns = {
 
 local lfm_patterns = {
 	'lf[0-9]*m',
-	'looking[%s]*for[%s]*all',
-	'looking'..sep..'*for'..sep..'*an?',
-	'looking[%s]*for[%s]*[0-9]*[%s]*more',		-- looking for 9 more
-	'lf[%s]*.*for',								-- LF <any characters> for 
-	'lf[%s]*[0-9]*[%s]*he[a]?l[er|ers]*',		-- LF healer
-	'lf[%s]*[0-9]*[%s]*t[a]?nk[s]?',			-- LF 5 tanks
-	'lf[%s]*[0-9]*[%s]*[mr]?dps',				-- LF 9 DPS
-	'seek[%s]*[0-9]*[%s]*he[a]?l[er|ers]*',		-- seek healer
-	'seek[%s]*[0-9]*[%s]*t[a]?nk[s]?',			-- seek 5 tanks
-	'seek[%s]*[0-9]*[%s]*[mr]?dps',				-- seek 9 DPS
-	'lf[%s]*all',
+	'lf'..sep..'*all',
 	'need',
-	'need[%s]*all',
-	'whispe?r?[%s]*me',
+	'need'..sep..'*all',
+	'seek'..sep..'*[0-9]*'..sep..'*he[a]?l[er|ers]*',		-- seek healer
+	'seek'..sep..'*[0-9]*'..sep..'*t[a]?nk[s]?',			-- seek 5 tanks
+	'seek'..sep..'*[0-9]*'..sep..'*[mr]?dps',				-- seek 9 DPS
+	'looking'..sep..'*for[%s]*all',
+	'looking'..sep..'*for'..sep..'*an?'..sep,
+	'looking'..sep..'*for'..sep..'*[0-9]*'..sep..'*more',		-- looking for 9 more
+	'lf'..sep..'*.*for',								-- LF <any characters> for 
+	'looking'..sep..'*for'..sep..'*.*'..sep..'for',		-- LF <any characters> for 
+	'lf'..sep..'*[0-9]*'..sep..'*he[a]?l[er|ers]*',		-- LF healer
+	'lf'..sep..'*[0-9]*'..sep..'*t[a]?nk[s]?',			-- LF 5 tanks
+	'lf'..sep..'*[0-9]*'..sep..'*[mr]?dps',				-- LF 9 DPS
+	'whispe?r?'..sep..'*me',
 	--'[%s]/w[%s]*[%a]+', -- Too greedy
 }
 
@@ -434,6 +433,28 @@ local function remove_http_links(message)
 	local http_pattern = 'https?://*[%a]*.[%a]*.[%a]*/?[%a%-%%0-9_]*/?';
 	return string.gsub(message, http_pattern, '');
 end
+	
+local function find_roles(roles, message, pattern_table, role)
+	local found = false;
+	for _, pattern in ipairs(pattern_table[role]) do
+		local result = string.find(message, pattern)
+
+		-- If a raid was found then save it to our list of roles and continue.
+		if result then
+			found = true;
+			
+			-- Remove the substring from the message
+			message = string.gsub(message, pattern, '')
+		end
+	end
+	
+	if not found then
+		return roles, message;
+	end
+	
+	table.insert(roles, role);
+	return roles, message;
+end
 
 function raid_browser.raid_info(message)
 	message = string.lower(message)
@@ -481,19 +502,10 @@ function raid_browser.raid_info(message)
 	
 	-- Get any roles that are needed
 	local roles = {};
-	for r, patterns in pairs(role_patterns) do
-		for _, pattern in ipairs(patterns) do
-			local result = string.find(message, pattern)
-
-			-- If a raid was found then save it to our list of roles and continue.
-			if result then
-				table.insert(roles, r)
-
-				-- Remove the substring from the message
-				message = string.gsub(message, pattern, '')
-			end
-		end
-	end
+	
+	roles, message  = find_roles(roles, message, role_patterns, 'dps');
+	roles, message  = find_roles(roles, message, role_patterns, 'tank');
+	roles, message = find_roles(roles, message, role_patterns, 'healer');
 
 	-- If there is only an LFM message, then it is assumed that all roles are needed
 	if #roles == 0 then
@@ -537,13 +549,25 @@ end
 
 function raid_browser:OnEnable()
 	raid_browser:Print("loaded. Type /rb to toggle the raid browser.")
+	
+	if not raid_browser_character_current_raidset then
+		raid_browser_character_current_raidset = 'Active';
+	end
+	
+	if not raid_browser_character_raidsets then
+		raid_browser_character_raidsets = {
+			primary = {},
+			secondary = {},
+		};
+	end
 
 	-- LFM messages expire after 60 seconds
 	raid_browser.expiry_time = 60;
 
 	raid_browser.lfm_messages = {}
 	raid_browser.timer = raid_browser.set_timer(10, refresh_lfm_messages, true)
-	raid_browser.listener = raid_browser.add_event_listener("CHAT_MSG_CHANNEL",	event_handler )
+	raid_browser.listener = raid_browser.add_event_listener("CHAT_MSG_CHANNEL",	event_handler)
+	raid_browser.gui.raidset.initialize();
 end
 
 function raid_browser:OnDisable()
