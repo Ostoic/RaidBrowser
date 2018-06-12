@@ -20,8 +20,8 @@ the raid browser UI. Alternatively, the interface can be accessed as follows:
 2. Select the raid tab,
 3. Click "Raid Browser"
 
-![alt text](https://i.imgur.com/1hCayWJ.png)
-![alt text](https://i.imgur.com/rEx7HiX.png)
+![alt text](https://i.imgur.com/dR7MIUf.png)
+![alt text](https://i.imgur.com/qkVS07w.png)
 
 # Todo
 - Add more raids and achievements. Icc, toc, naxx, rs, ulduar, and os are currently the only supported raids.
