@@ -128,7 +128,7 @@ function raid_browser.stats.get_raidset(set)
 end
 
 function raid_browser.stats.current_raidset()
-	if raid_browser_character_current_raidset == 'active' then
+	if raid_browser_character_current_raidset == 'Active' then
 		return raid_browser.stats.get_active_raidset();
 	end
 	
@@ -141,12 +141,12 @@ end
 
 function raid_browser.stats.save_primary_raidset()
 	local spec, gs = raid_browser.stats.get_active_raidset();
-	raid_browser_character_raidsets['primary'] = {spec = spec, gs = gs};
+	raid_browser_character_raidsets['Primary'] = {spec = spec, gs = gs};
 end
 
 function raid_browser.stats.save_secondary_raidset()
 	local spec, gs = raid_browser.stats.get_active_raidset();
-	raid_browser_character_raidsets['secondary'] = {spec = spec, gs = gs};
+	raid_browser_character_raidsets['Secondary'] = {spec = spec, gs = gs};
 end
 
 function raid_browser.stats.build_inv_string(raid_name)

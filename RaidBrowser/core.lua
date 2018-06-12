@@ -551,7 +551,7 @@ function raid_browser:OnEnable()
 	raid_browser:Print("loaded. Type /rb to toggle the raid browser.")
 	
 	if not raid_browser_character_current_raidset then
-		raid_browser_character_current_raidset = 'active';
+		raid_browser_character_current_raidset = 'Active';
 	end
 	
 	if not raid_browser_character_raidsets then
@@ -566,7 +566,8 @@ function raid_browser:OnEnable()
 
 	raid_browser.lfm_messages = {}
 	raid_browser.timer = raid_browser.set_timer(10, refresh_lfm_messages, true)
-	raid_browser.listener = raid_browser.add_event_listener("CHAT_MSG_CHANNEL",	event_handler )
+	raid_browser.listener = raid_browser.add_event_listener("CHAT_MSG_CHANNEL",	event_handler)
+	raid_browser.gui.raidset.initialize();
 end
 
 function raid_browser:OnDisable()

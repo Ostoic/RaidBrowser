@@ -1,3 +1,5 @@
+raid_browser.gui.raidset = {};
+
 local frame = CreateFrame("Frame", "RaidBrowserRaidSetMenu", LFRBrowseFrame, "UIDropDownMenuTemplate")
 
 local current_selection = nil;
@@ -14,17 +16,13 @@ local function is_secondary_selected(option)
 	return ('Secondary' == current_selection);
 end
 
-local raidset_frame_menu = {};
-
 local function set_selection(selection)
-	local menu_map = { Active = 1, Primary = 2, Secondary = 3};
-	local index = menu_map[selection];
 	local text = '';
 	
-	if index == 1 then
+	if selection == 'Active' then
 		text = 'Active';
 	else
-		local spec, gs = raid_browser.stats.get_raidset(string.lower(selection));
+		local spec, gs = raid_browser.stats.get_raidset(selection);
 		if not spec then
 			text = 'Open';
 		else
@@ -34,22 +32,21 @@ local function set_selection(selection)
 	
 	UIDropDownMenu_SetText(RaidBrowserRaidSetMenu, text)
 	current_selection = selection;
-	raid_browser:Print('Raidset <' .. text .. '> selected');
 end
 
 local function on_active() 	
 	set_selection('Active');
-	raid_browser.stats.select_current_raidset('active');
+	raid_browser.stats.select_current_raidset('Active');
 end
 
 local function on_primary()	
 	set_selection('Primary');
-	raid_browser.stats.select_current_raidset('primary');
+	raid_browser.stats.select_current_raidset('Primary');
 end
 
 local function on_secondary()
 	set_selection('Secondary');
-	raid_browser.stats.select_current_raidset('secondary');
+	raid_browser.stats.select_current_raidset('Secondary');
 end
 
 local menu = {
@@ -76,7 +73,7 @@ raidset_frame_menu = menu;
 
 -- Get the menu option text
 local function get_option_text(option)
-	local spec = raid_browser.stats.get_raidset(string.lower(option));
+	local spec = raid_browser.stats.get_raidset(option);
 	if not spec then
 		return (option .. ': Open');
 	end
@@ -87,7 +84,6 @@ end
 -- Setup dropdown menu for the raidset selection
 frame:SetPoint("CENTER", LFRBrowseFrame, "CENTER", 30, 165)
 UIDropDownMenu_Initialize(frame, EasyMenu_Initialize, nil, nil, menu);
-set_selection('Active');
 
 local function show_menu()
 	menu[2].text = get_option_text('Primary');
@@ -108,6 +104,10 @@ local function on_raidset_save()
 	local spec, gs = raid_browser.stats.current_raidset();
 	raid_browser:Print('Raidset saved: ' .. spec .. ' ' .. gs .. 'gs');
 	set_selection(current_selection);
+end
+
+function raid_browser.gui.raidset.initialize()
+	set_selection(raid_browser_character_current_raidset);
 end
 
 -- Create raidset save button
