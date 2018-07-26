@@ -40,5 +40,6 @@ positives, or may omit valid LFM messages. As an example, some guild recruitment
 Thanks to the following people for feature ideas and bug reports:
 - Adidi
 - Swenson
+- Imbued
 
 
