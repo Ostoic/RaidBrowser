@@ -11,6 +11,7 @@ embeds.xml
 
 core.lua
 event.lua
+algorithm.lua
 timer.lua
 stats.lua
 gui.lua

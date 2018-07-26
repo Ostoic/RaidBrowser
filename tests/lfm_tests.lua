@@ -500,6 +500,46 @@ local test_cases = {
 		gs = '6.0',
 	},
 	
+	{
+		message = '<Release and Run> is a progressive guild led by experienced players. Looking for competent people for our ICC + RS 25man groups. Progress: 11/12 25hc and 12/12 10hc. RT 7pm ST, EPGP+LC used. Apply at [http://releaseandrun.shivtr.com]',
+		should_fail = true,
+		raid = 'guild_message',
+		roles = {'dps'},
+		gs = ' ',
+	},
+	
+	{
+		message = 'LFM ALL VOA 25 5k gs + /W ME ONLY FROST. DPS = LOCK ROGUE WARR PRIEST LFM ALL VOA 25 5k gs + /W ME ONLY FROST. DPS = LOCK ROGUE WARR PRIEST LFM ALL VOA 25 5k gs + /W ME ONLY FROST. DPS = LOCK ROGUE WARR PRIEST',
+		should_fail = false,
+		raid = 'voa25',
+		roles = {'dps', 'healer', 'tank'},
+		gs = '5.0',
+	},
+	
+	{
+		message = 'Lfm ICC 25 8 dps. 5/12 killed Dreamwalker. Restarting Run. Wisper me gs / Achieve.',
+		should_fail = false,
+		raid = 'icc25nm',
+		roles = {'dps'},
+		gs = ' ',
+	},
+	
+	{
+		message = 'WTS 6.4k gs Fire mage w lots of BiS, Boes, Transmog, Ashes of Alar mount, 450 tailor/enchant. Can remove items if needed. Char name - "Onepiecenami" on armory. LOD/RS25 achieve. can remove gear as needed',
+		should_fail = true,
+		raid = 'guild_message',
+		roles = {'dps'},
+		gs = ' ',
+	},
+	
+	{
+		message = 'Selling BIS Nelf Hunter with LOD,Bane,RS25HC. Everything is BIS. 11-12k DPS on dummy. Also loads of other stuff. /w for more info. only trading via warmane marketplace. Easy TOP DPS every raid. :)',
+		should_fail = true,
+		raid = 'guild_message',
+		roles = {'dps'},
+		gs = ' ',
+	}
+	
 	-- Idea: Convert raid/roles/gs into intermediate text such as <role> <class> <raid> <gs> so that the following could
 	-- be parsed as: <role> for <raid>/HC.. Gs Req <gs>... [The Frostwing Halls (10 player)]...9/10
 	-- This could be a more powerful technique for distinguishing between LFM messages and other messages
@@ -511,9 +551,6 @@ local test_cases = {
 		gs = '5.7',
 	},]]--
 } 
-
-
-
 
 local function array_contains(table, element)
 	for _, k in ipairs(table) do

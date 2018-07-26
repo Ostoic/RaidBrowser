@@ -31,7 +31,7 @@ local raid_patterns_template = {
 	}
 };
 
-local function create_raid_patterns(raid_name_pattern, size, difficulty)
+local function create_raid_patterns(raid_name_pattern, size, difficulty, instance_name)
 	if not raid_name_pattern or not size or not difficulty then
 		return;
 	end
@@ -44,13 +44,18 @@ local function create_raid_patterns(raid_name_pattern, size, difficulty)
 		size = '4[0p]';
 	end
 	
+	local i = 1;
 	-- Replace placeholders with the specified raid info
-	for i, pattern in ipairs(patterns) do
+	for _, pattern in ipairs(patterns) do
 		pattern = string.gsub(pattern, '<raid>', raid_name_pattern);
 		pattern = string.gsub(pattern, '<size>', size);
 		patterns[i] = pattern;
+		i = i + 1;
 	end
 	
+	if instance_name then
+		patterns[i] = string.gsub(instance_name, 'The ', '');
+	end
 	return patterns;
 end
 			
@@ -63,8 +68,8 @@ local raid_list = {
 		instance_name = 'Icecrown Citadel',
 		size = 25,
 		patterns = {
-			'icc[%s-_,.]*25[%s-_,.]*m?a?n?[%s-_,.]*rep[%s-_,.]*',
-			'icc[%s-_,.]*rep[%s-_,.]*25[%s-_,.]*m?a?n?',
+			'icc[%s-_,.]*25[%s-_,.]*m?a?n?[%s-_,.]*repu?t?a?t?i?o?n?[%s-_,.]*',
+			'icc[%s-_,.]*repu?t?a?t?i?o?n?[%s-_,.]*25[%s-_,.]*m?a?n?',
 		}
 	},
 	
@@ -73,9 +78,9 @@ local raid_list = {
 		instance_name = 'Icecrown Citadel',
 		size = 10,
 		patterns = {
-			'icc[%s-_,.]*10[%s-_,.]*m?a?n?[%s-_,.]*rep[%s-_,.]*',
-			'icc[%s-_,.]*rep[%s-_,.]*10',
-			 'icc[%s-_,.]*rep',
+			'icc[%s-_,.]*10[%s-_,.]*m?a?n?[%s-_,.]*repu?t?a?t?i?o?n?[%s-_,.]*',
+			'icc[%s-_,.]*repu?t?a?t?i?o?n?[%s-_,.]*10',
+			 'icc[%s-_,.]*repu?t?a?t?i?o?n?',
 		}
 	},
 	
@@ -83,84 +88,84 @@ local raid_list = {
 		name = 'icc10hc',
 		instance_name = 'Icecrown Citadel',
 		size = 10,
-		patterns = create_raid_patterns('icc', 10, 'hc');
+		patterns = create_raid_patterns('icc', 10, 'hc', instance_name);
 	},
 
 	{
 		name = 'icc25hc',
 		instance_name = 'Icecrown Citadel',
 		size = 25,
-		patterns = create_raid_patterns('icc', 25, 'hc'),
+		patterns = create_raid_patterns('icc', 25, 'hc', instance_name),
 	},
 
 	{
 		name = 'icc10nm',
 		instance_name = 'Icecrown Citadel',
 		size = 10,
-		patterns = create_raid_patterns('icc', 10, 'nm'),
+		patterns = create_raid_patterns('icc', 10, 'nm', instance_name),
 	},
 
 	{
 		name = 'icc25nm',
 		instance_name = 'Icecrown Citadel',
 		size = 25,
-		patterns = create_raid_patterns('icc', 25, 'nm'),
+		patterns = create_raid_patterns('icc', 25, 'nm', instance_name),
 	},
 
 	{
 		name = 'toc10hc',
 		instance_name = 'Trial of the Crusader',
 		size = 10,
-		patterns = create_raid_patterns('tog?c', 10, 'hc'),
+		patterns = create_raid_patterns('tog?c', 10, 'hc', instance_name),
 	},
 
 	{
 		name = 'toc25hc',
 		instance_name = 'Trial of the Crusader',
 		size = 25,
-		patterns = create_raid_patterns('tog?c', 25, 'hc'),
+		patterns = create_raid_patterns('tog?c', 25, 'hc', instance_name),
 	},
 
 	{
 		name = 'toc10nm',
 		instance_name = 'Trial of the Crusader',
 		size = 10,
-		patterns = create_raid_patterns('tog?c', 10, 'nm'),
+		patterns = create_raid_patterns('tog?c', 10, 'nm', instance_name),
 	},
 
 	{
 		name = 'toc25nm',
 		instance_name = 'Trial of the Crusader',
 		size = 25,
-		patterns = create_raid_patterns('tog?c', 25, 'nm'),
+		patterns = create_raid_patterns('tog?c', 25, 'nm', instance_name),
 	},
 	
 	{
 		name = 'rs10hc',
 		instance_name = 'The Ruby Sanctum',
 		size = 10,
-		patterns = create_raid_patterns('rs', 10, 'hc'),
+		patterns = create_raid_patterns('rs', 10, 'hc', instance_name),
 	},
 
 	{
 		name = 'rs25hc',
 		instance_name = 'The Ruby Sanctum',
 		size = 25,
-		patterns = create_raid_patterns('rs', 25, 'hc'),
+		patterns = create_raid_patterns('rs', 25, 'hc', instance_name),
 	},
 
 	{
 		name = 'rs10nm',
 		instance_name = 'The Ruby Sanctum',
 		size = 10,
-		patterns = create_raid_patterns('rs', 10, 'nm'),
+		patterns = create_raid_patterns('rs', 10, 'nm', instance_name),
 	},
 
 	{
 		name = 'rs25nm',
 		instance_name = 'The Ruby Sanctum',
 		size = 25,
-		patterns = create_raid_patterns('rs', 25, 'nm'),
+		patterns = create_raid_patterns('rs', 25, 'nm', instance_name),
 	},
 	
 	{
@@ -220,6 +225,8 @@ local raid_list = {
 		size = 10,
 		patterns = {
 			'naxx?r?a?m?m?a?s?[%s-_,.]*10',
+			'naxx'..sep..'weekly',
+			'patchwerk'..sep..'must'..sep..'die!',
 		},
 	},
 	
@@ -372,7 +379,7 @@ local guild_recruitment_patterns = {
 	'recrui?ti?ng',
 	'recrui?t',
 	'we[%s]*raid',
-	'[<({-][%a]+[-})>][%s]*is[%s]*a?', -- (<GuildName> is a) pve guild looking for
+	'[<({-][%a%s]+[-})>][%s]*is[%s]*a?', -- (<GuildName> is a) pve guild looking for
 	'[0-9][0-9][pa]m[%s]*st', -- we raid (12pm set)
 	'autorecruit',
 	'raid[%s]*time',
@@ -380,7 +387,10 @@ local guild_recruitment_patterns = {
 	'is[%s]*a[%s]*[%a]*[%s]*[pvep][pvep][pvep][%s]*guild',
 };
 
-
+local wts_message_patterns = {
+	'wts ',
+	'selling ',
+};
 
 local function refresh_lfm_messages()
 	for name, info in pairs(raid_browser.lfm_messages) do
@@ -418,14 +428,22 @@ local function format_gs_string(gs)
 	return string.format('%.1f', formatted );
 end
 
-local function is_guild_recruitment(message)
-	for _, pattern in ipairs(guild_recruitment_patterns) do
+local function is_in_patterns(message, patterns)
+	for _, pattern in ipairs(patterns) do
 		if string.find(message, pattern) then
 			return true;
 		end
 	end
 	
 	return false;
+end
+
+local function is_guild_recruitment(message)
+	return is_in_patterns(message, guild_recruitment_patterns);
+end
+
+local function is_wts_message(message)
+	return is_in_patterns(message, wts_message_patterns);
 end
 
 -- Basic http pattern matching for streaming sites and etc.
@@ -461,7 +479,7 @@ function raid_browser.raid_info(message)
 	message = remove_http_links(message);
 	
 	-- Stop if it's a guild recruit message
-	if is_guild_recruitment(message) then
+	if is_guild_recruitment(message) or is_wts_message(message) then
 		return;
 	end
 		

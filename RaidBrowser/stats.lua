@@ -25,7 +25,7 @@ local raid_achievements = {
 	},
 	
 	toc = {
-		3917, -- Call of the Crusade 10-man  
+		3917, -- Call of the Crusade 10-man	
 		3916, -- Call of the Crusade 25-man
 		3918, -- Call of the Grand Crusade (10 HC)
 		3812, -- Call of the Grand Crusade (25 HC)
@@ -52,7 +52,7 @@ local function find_best_achievement(raid)
 		local _, _, _, completed = GetAchievementInfo(id);
 		if completed and (not max_achievement or max_achievement[1] <= i) then
 			max_achievement = {i, id};
-		end     
+		end		 
 	end
 	
 	-- Find the highest ranking completed achievement criterion
@@ -61,7 +61,7 @@ local function find_best_achievement(raid)
 			local _, _, completed = GetAchievementCriteriaInfo(id, j)
 			if completed and (not max_achievement or max_achievement[1] <= i) then
 				max_achievement = {i, id};
-			end     
+			end		 
 		end
 	end
 	
@@ -72,30 +72,34 @@ local function find_best_achievement(raid)
 	end
 end
 
+-- Function wrapper around GetTalentTabInfo
+local function GetTalentTabPoints(i)
+	local _, _, pts = GetTalentTabInfo(i)
+	return pts;
+end
+
 function raid_browser.stats.active_spec_index()
-	local index = 1;
-	local _, _, points = GetTalentTabInfo(index);
-	for i = 2, 3 do
-		local _, _, p = GetTalentTabInfo(i);
-		if (p > points) then
-			index = i;
-		end
-	end
-	
-	return index
+	local indices = raid_browser.algorithm.transform({1, 2, 3}, GetTalentTabPoints)
+	local i, v = raid_browser.algorithm.max_of(indices);
+	return i;
 end
 
 function raid_browser.stats.active_spec()
-	local index = 1;
-	local _, _, points = GetTalentTabInfo(index);
-	for i = 2, 3 do
-		local _, _, p = GetTalentTabInfo(i);
-		if (p > points) then
-			index = i;
+	local active_tab = raid_browser.stats.active_spec_index()
+	local tab_name = GetTalentTabInfo(active_tab);
+	
+	-- If we're a feral druid, then we need to distinguish between tank and cat feral.
+	if tab_name == 'Feral Combat' then
+		local protector_of_pack_talent = 22;
+		local _, _, _, _, points = GetTalentInfo(active_tab, protector_of_pack_talent)
+		if points > 0 then
+			return tab_name .. ' (Bear)'
+		else
+			return tab_name ' .. (Cat)'
 		end
 	end
 	
-	return GetTalentTabInfo(raid_browser.stats.active_spec_index());
+	return tab_name;
 end
 
 function raid_browser.stats.raid_lock_info(instance_name, size)
