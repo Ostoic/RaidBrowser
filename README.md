@@ -11,7 +11,7 @@ LFR raid browser, which is unused in patch 3.3.5a.
 - Join / Double click: After clicking on an entry in the raid browser, send a formatted message to the raid host with your GS, class, spec, and highest achievement obtained for that raid.
 - Tooltip Hover: Hovering your mouse over an entry in the raid browser shows the original chat message, as well as how long it's been since the message was sent.
 - Raid hosts that do not send a message after 1-2 minutes will have their entry expire in the raid browser. This ensures that the raid browser does not become cluttered.
-- Create primary and secondary raid sets (Ex: Afflication 5641gs) for use in join messages. If you are pvping in WG while searching for raids, the addon will send information from the currently selected raidset to the raid host instead of your pvp (spec, gs).
+- Create primary and secondary raid sets (Ex: Elemental 5641gs) for use in join messages. In the given example, your message will be formatted in a manner similar to "inv 5641gs Elemental Shaman <possible achievement link>". If you are pvping in WG while searching for raids, the addon will send information from the currently selected raidset to the raid host instead of your pvp (spec, gs).
 
 # Installation and Usage
 As with any other addon, copy the RaidBrowser folder into your %WoW Root%/Interface/AddOns directory. When ingame, type /rb to activate
@@ -22,6 +22,7 @@ the raid browser UI. Alternatively, the interface can be accessed as follows:
 
 ![alt text](https://i.imgur.com/dR7MIUf.png)
 ![alt text](https://i.imgur.com/qkVS07w.png)
+![alt text](https://i.imgur.com/GvEgQSJ.gif)
 
 # Todo
 - Add more raids and achievements. Icc, toc, naxx, rs, ulduar, and os are currently the only supported raids.
@@ -40,5 +41,6 @@ positives, or may omit valid LFM messages. As an example, some guild recruitment
 Thanks to the following people for feature ideas and bug reports:
 - Adidi
 - Swenson
+- Imbued
 
 
