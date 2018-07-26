@@ -95,7 +95,7 @@ function raid_browser.stats.active_spec()
 		if points > 0 then
 			return tab_name .. ' (Bear)'
 		else
-			return tab_name .. ' .. (Cat)'
+			return tab_name .. ' (Cat)'
 		end
 	end
 	
