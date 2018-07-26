@@ -93,9 +93,9 @@ function raid_browser.stats.active_spec()
 		local protector_of_pack_talent = 22;
 		local _, _, _, _, points = GetTalentInfo(active_tab, protector_of_pack_talent)
 		if points > 0 then
-			return tab_name .. ' (Bear)'
+			return 'Feral (Bear)'
 		else
-			return tab_name .. ' (Cat)'
+			return 'Feral (Cat)'
 		end
 	end
 	
