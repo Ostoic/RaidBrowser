@@ -22,6 +22,7 @@ the raid browser UI. Alternatively, the interface can be accessed as follows:
 
 ![alt text](https://i.imgur.com/dR7MIUf.png)
 ![alt text](https://i.imgur.com/qkVS07w.png)
+![alt text](https://i.gyazo.com/c0ff4ffb319e2c88c1c03a1124ddec98.mp4)
 
 # Todo
 - Add more raids and achievements. Icc, toc, naxx, rs, ulduar, and os are currently the only supported raids.
