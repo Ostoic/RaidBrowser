@@ -1,6 +1,6 @@
 ## Interface: 30300
 ## Title: Raid Browser
-## Version: v1.2.0
+## Version: v1.2.1
 ## Notes: A raid finder that parses chat channel text and displays any found raids in the raid browser LFR frame.
 ## Author: Horsebreed
 ## SavedVariablesPerCharacter: raid_browser_character_raidsets, raid_browser_character_current_raidset

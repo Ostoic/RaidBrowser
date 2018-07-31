@@ -375,6 +375,13 @@ local lfm_patterns = {
 	--'[%s]/w[%s]*[%a]+', -- Too greedy
 }
 
+local lfm_channel_listeners = {
+	["CHAT_MSG_CHANNEL"] = {},
+	["CHAT_MSG_YELL"] = {},
+};
+
+local channel_listeners = {};
+
 local guild_recruitment_patterns = {
 	'recrui?ti?ng',
 	'recrui?t',
@@ -546,8 +553,12 @@ function raid_browser.raid_info(message)
 	return raid_info, roles, gs
 end
 
+local function is_lfm_channel(channel)
+	return channel == "CHAT_MSG_CHANNEL" or channel == "CHAT_MSG_YELL";
+end
+
 local function event_handler(self, event, message, sender)
-	if event == "CHAT_MSG_CHANNEL" then
+	if is_lfm_channel(event) then
 		local raid_info, roles, gs = raid_browser.raid_info(message)
 		if raid_info and roles and gs then
 			
@@ -584,11 +595,17 @@ function raid_browser:OnEnable()
 
 	raid_browser.lfm_messages = {}
 	raid_browser.timer = raid_browser.set_timer(10, refresh_lfm_messages, true)
-	raid_browser.listener = raid_browser.add_event_listener("CHAT_MSG_CHANNEL",	event_handler)
+	for channel, listener in pairs(lfm_channel_listeners) do
+		channel_listeners[i] = raid_browser.add_event_listener(channel, event_handler)	
+	end
+	
 	raid_browser.gui.raidset.initialize();
 end
 
 function raid_browser:OnDisable()
-	raid_browser.remove_event_listener ("CHAT_MSG_CHANNEL", raid_browser.listener)
+	for channel, listener in pairs(lfm_channel_listeners) do
+		raid_browser.remove_event_listener(channel, listener)
+	end
+	
 	raid_browser.kill_timer(raid_browser.timer)
 end
