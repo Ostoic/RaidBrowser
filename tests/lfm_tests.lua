@@ -538,7 +538,23 @@ local test_cases = {
 		raid = 'guild_message',
 		roles = {'dps'},
 		gs = ' ',
-	}
+	},
+	
+	{
+		message = 'GUILD |cffffff00|Hachievement:3917:070000000012D4AD:1:3:15:15:4294967295:4294967295:4294967295:4294967295|h[Adrenaline]|h|r is LF members for ICC/RS25 HC and glory runs for BANE/TOC/NAXX/ULDU. Req: 6.1+ Discord. DkP/Raids@ 5 ST. Apply: https://adrenaline-icecrown.shivtr.com or wisp.',
+		should_fail = true,
+		raid = 'guild_message',
+		roles = {'dps'},
+		gs = ' ',
+	},
+	
+	{
+		message = 'Guild <Adrenaline> LF members for ICC/RS25 HC and glory runs for BANE/ULDU/TOC. Req: 6.1k+ Discord. Apply; [adrenaline-icecrown.shivtr.com] Raids @ 5-6 Pmst.',
+		should_fail = true,
+		raid = 'guild_message',
+		roles = {'dps'},
+		gs = ' ',
+	},
 	
 	-- Idea: Convert raid/roles/gs into intermediate text such as <role> <class> <raid> <gs> so that the following could
 	-- be parsed as: <role> for <raid>/HC.. Gs Req <gs>... [The Frostwing Halls (10 player)]...9/10
