@@ -8,7 +8,7 @@ When searching for a raid to join in Global, there can be large amounts of text 
 
 ![alt text](https://i.imgur.com/6aqE1TD.png)
 
-No longer will you join a raid and embarrass yourself upon realizing that you've already been locked in that raid for that week. RaidBrowser clearly highlights any locked raids in red. Any raids for which you are not saved are marked in bright green.
+No longer will you join a raid and embarrass yourself upon realizing that you've already been locked in that raid for the week. RaidBrowser clearly highlights locked raids in red (e.g. ![alt text](https://i.imgur.com/hvTL7s8.png) ). Any raids for which you are not saved are marked in bright green (e.g. ![alt text](https://i.imgur.com/5SkqcwA.png) ). Thus, it is simple to distinguish between which raids you should consider joining. 
 
 # Features
 
