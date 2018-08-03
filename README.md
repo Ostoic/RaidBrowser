@@ -1,8 +1,11 @@
 # RaidBrowser
-A Raid Browser/Finder Addon for World of Warcraft 3.3.5a
+Bringing LFR to Wotlk.
 
-RaidBrowser searches for LFM messages sent in all chat channels and lists found raids in Blizzard's 
-LFR raid browser, which is unused in patch 3.3.5a. 
+This addon replaces the unused (in 3.3.5a) LFR tab in the social menu with a working raid finder. RaidBrowser works similarly to Live WoW's group finder, except raid leaders do not need to interact with the addon to list their group. RaidBrowser searches for LFR messages sent in chat and /y channels and lists any found raids in the "Browse" tab of the raid browser. 
+
+# Abstract
+When searching for a raid to join in Global, there can be large amounts of text (and meaningless spam) to read in order find anything. This addon does all the text processing work and lists all the raids in an easy to read format. Each entry in the raid browser is formatted as follows:
+Raid Leader Name | Gearscore Requirements (if any) | Raid Name | If any Tank, Healer, or Dps is Needed
 
 # Features
 
@@ -10,15 +13,15 @@ LFR raid browser, which is unused in patch 3.3.5a.
 - Identifies saved raids by coloring their name as red for locked raids, and green for unsaved raids.
 - Join / Double click: After clicking on an entry in the raid browser, send a formatted message to the raid host with your GS, class, spec, and highest achievement obtained for that raid.
 - Tooltip Hover: Hovering your mouse over an entry in the raid browser shows the original chat message, as well as how long it's been since the message was sent.
-- Raid hosts that do not send a message after 1-2 minutes will have their entry expire in the raid browser. This ensures that the raid browser does not become cluttered.
 - Create primary and secondary raid sets (Ex: Elemental 5641gs) for use in join messages. In the given example, your message will be formatted in a manner similar to "inv 5641gs Elemental Shaman <possible achievement link>". If you are pvping in WG while searching for raids, the addon will send information from the currently selected raidset to the raid host instead of your pvp (spec, gs).
+- Raid hosts that do not send a message after 1-2 minutes will have their entry expire in the raid browser. This ensures that the raid browser does not become cluttered.
 
 # Installation and Usage
 As with any other addon, copy the RaidBrowser folder into your %WoW Root%/Interface/AddOns directory. When ingame, type /rb to activate
 the raid browser UI. Alternatively, the interface can be accessed as follows:
-1. Open the social menu,
-2. Select the raid tab,
-3. Click "Raid Browser"
+1. Open the social menu (Press O),
+2. Select the "Raid" tab,
+3. Click "Open Raid Browser"
 
 ![alt text](https://i.imgur.com/dR7MIUf.png)
 ![alt text](https://i.imgur.com/qkVS07w.png)
