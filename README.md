@@ -26,6 +26,7 @@ the raid browser UI. Alternatively, the interface can be accessed as follows:
 2. Select the "Raid" tab,
 3. Click "Open Raid Browser"
 
+# Examples 
 ![alt text](https://i.imgur.com/dR7MIUf.png)
 ![alt text](https://i.imgur.com/qkVS07w.png)
 ![alt text](https://i.imgur.com/GvEgQSJ.gif)
