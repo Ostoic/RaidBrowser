@@ -26,6 +26,15 @@ the raid browser UI. Alternatively, the interface can be accessed as follows:
 2. Select the "Raid" tab,
 3. Click "Open Raid Browser"
 
+It is important to join the global channel in order for the addon to find raids. If you don't want your chat window to be filled with global chatter, you can simply hide the global channel from your default chat window. 
+
+1. Right click the "General" tab
+2. Click settings (under Filters)
+3. Select the Global Channels tab
+4. Make sure "global" is unchecked in the list of channels.
+
+Now RaidBrowser will be able to find raids without having global being dumped into the General chat window.
+
 # Examples 
 ![alt text](https://i.imgur.com/dR7MIUf.png)
 ![alt text](https://i.imgur.com/qkVS07w.png)
