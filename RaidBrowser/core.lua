@@ -1,42 +1,46 @@
 -- Register addon
-raid_browser = LibStub("AceAddon-3.0"):NewAddon("RaidBrowser", "AceConsole-3.0")
+raid_browser = LibStub('AceAddon-3.0'):NewAddon('RaidBrowser', 'AceConsole-3.0')
 
-local function table_copy(t)
-	local copy = {};
-	
-	for k, v in pairs(t) do
-		copy[k] = v;
-	end
-	
-	return copy;
-end
-
+-- Whitespace separator
 local sep = '[%s-_,.]';
+
+-- Kleene closure of sep.
+local csep = sep..'*';
+
+-- Positive closure of sep.
+local psep = sep..'+';
 
 -- Raid patterns template for a raid with 2 difficulties and 2 sizes
 local raid_patterns_template = {
 	hc = {
-		'<raid>' .. sep .. '*<size>' .. sep .. '*m?a?n?' .. sep .. '*%(?hc?%)?',
-		sep..'+%(?hc?%)?' .. sep .. '*<raid>' .. sep .. '*<size>',
-		'<raid>' .. sep .. '*%(?hc?%)?' .. sep .. '*<size>',
-		--'<size>'..sep..'+m?a?n?'..sep..'*<raid>[%s-_,.]*%(?hc?%)?',
+		'<raid>' .. csep .. '<size>' .. csep .. 'm?a?n?' .. csep .. '%(?hc?%)?',
+		psep..'%(?hc?%)?' .. csep .. '<raid>' .. csep .. '<size>',
+		'<raid>' .. csep .. '%(?hc?%)?' .. csep .. '<size>',
+		
+		'<fullraid>' .. csep .. '<size>' .. sep .. 'm?a?n?' .. csep .. '%(?hc?%)?',
+		psep..'%(?hc?%)?' .. csep .. '<fullraid>' .. csep .. '<size>',
+		'<fullraid>' .. csep .. '%(?hc?%)?' .. csep .. '<size>',
 	},
 	
 	nm = {
-		'<raid>' .. sep .. '*<size>' .. sep .. '*m?a?n?' .. sep .. '*%(?nm?%)?',
-		sep..'+%(?nm?%)?' .. sep .. '*<raid>' .. sep .. '*<size>',
-		'<raid>' .. sep .. '*%(?nm?%)?' .. sep .. '*<size>',
-		--'<size>'..sep..'+m?a?n?'..sep..'*<raid>[%s-_,.]*%(?nm?%)?',
-		'<raid>' .. sep .. '*<size>',
+		'<raid>' .. csep .. '<size>' .. csep .. 'm?a?n?' .. csep .. '%(?nm?%)?',
+		psep..'%(?nm?%)?' .. csep .. '<raid>' .. csep .. '<size>',
+		'<raid>' .. csep .. '%(?nm?%)?' .. csep .. '<size>',
+		'<raid>' .. csep .. '<size>',
+		
+		'<fullraid>' .. csep .. '<size>' .. csep .. 'm?a?n?' .. csep .. '%(?nm?%)?',
+		psep..'%(?nm?%)?' .. csep .. '<fullraid>' .. csep .. '<size>',
+		'<fullraid>' .. csep .. '%(?nm?%)?' .. csep .. '<size>',
+		'<fullraid>' .. csep .. '<size>',
 	}
 };
 
-local function create_raid_patterns(raid_name_pattern, size, difficulty, instance_name)
-	if not raid_name_pattern or not size or not difficulty then
+local function create_pattern_from_template(raid_name_pattern, size, difficulty, full_raid_name)
+	if not raid_name_pattern or not size or not difficulty or not full_raid_name then
 		return;
 	end
 	
-	local patterns = table_copy(raid_patterns_template[difficulty]);
+	full_raid_name = string.lower(full_raid_name);
 	
 	if size == 10 then
 		size = '1[0o]';
@@ -44,19 +48,13 @@ local function create_raid_patterns(raid_name_pattern, size, difficulty, instanc
 		size = '4[0p]';
 	end
 	
-	local i = 1;
 	-- Replace placeholders with the specified raid info
-	for _, pattern in ipairs(patterns) do
-		pattern = string.gsub(pattern, '<raid>', raid_name_pattern);
-		pattern = string.gsub(pattern, '<size>', size);
-		patterns[i] = pattern;
-		i = i + 1;
-	end
-	
-	if instance_name then
-		patterns[i] = string.gsub(instance_name, 'The ', '');
-	end
-	return patterns;
+	return std.algorithm.transform(raid_patterns_template[difficulty], function(pattern)
+		pattern = string.gsub(pattern, '<fullraid>', full_raid_name);
+        pattern = string.gsub(pattern, '<raid>', raid_name_pattern);
+        pattern = string.gsub(pattern, '<size>', size);
+        return pattern;
+	end);
 end
 			
 local raid_list = {
@@ -68,8 +66,8 @@ local raid_list = {
 		instance_name = 'Icecrown Citadel',
 		size = 25,
 		patterns = {
-			'icc[%s-_,.]*25[%s-_,.]*m?a?n?[%s-_,.]*repu?t?a?t?i?o?n?[%s-_,.]*',
-			'icc[%s-_,.]*repu?t?a?t?i?o?n?[%s-_,.]*25[%s-_,.]*m?a?n?',
+			'icc'..csep..'25'..csep..'m?a?n?'..csep..'repu?t?a?t?i?o?n?'..csep..'',
+			'icc'..csep..'repu?t?a?t?i?o?n?'..csep..'25'..csep..'m?a?n?',
 		}
 	},
 	
@@ -78,9 +76,9 @@ local raid_list = {
 		instance_name = 'Icecrown Citadel',
 		size = 10,
 		patterns = {
-			'icc[%s-_,.]*10[%s-_,.]*m?a?n?[%s-_,.]*repu?t?a?t?i?o?n?[%s-_,.]*',
-			'icc[%s-_,.]*repu?t?a?t?i?o?n?[%s-_,.]*10',
-			 'icc[%s-_,.]*repu?t?a?t?i?o?n?',
+			'icc'..csep..'10'..csep..'m?a?n?'..csep..'repu?t?a?t?i?o?n?'..csep..'',
+			'icc'..csep..'repu?t?a?t?i?o?n?'..csep..'10',
+			'icc'..csep..'repu?t?a?t?i?o?n?',
 		}
 	},
 	
@@ -88,98 +86,104 @@ local raid_list = {
 		name = 'icc10hc',
 		instance_name = 'Icecrown Citadel',
 		size = 10,
-		patterns = create_raid_patterns('icc', 10, 'hc', instance_name);
+		patterns = create_pattern_from_template('icc', 10, 'hc', 'Icecrown Citadel'),
 	},
 
 	{
 		name = 'icc25hc',
 		instance_name = 'Icecrown Citadel',
 		size = 25,
-		patterns = create_raid_patterns('icc', 25, 'hc', instance_name),
+		patterns = create_pattern_from_template('icc', 25, 'hc', 'Icecrown Citadel'),
 	},
 
 	{
 		name = 'icc10nm',
 		instance_name = 'Icecrown Citadel',
 		size = 10,
-		patterns = create_raid_patterns('icc', 10, 'nm', instance_name),
+		patterns = create_pattern_from_template('icc', 10, 'nm', 'Icecrown Citadel'),
 	},
 
 	{
 		name = 'icc25nm',
 		instance_name = 'Icecrown Citadel',
 		size = 25,
-		patterns = create_raid_patterns('icc', 25, 'nm', instance_name),
+		patterns = create_pattern_from_template('icc', 25, 'nm', 'Icecrown Citadel'),
 	},
 
 	{
 		name = 'toc10hc',
 		instance_name = 'Trial of the Crusader',
 		size = 10,
-		patterns = create_raid_patterns('tog?c', 10, 'hc', instance_name),
+		patterns = std.algorithm.copy_back(
+			create_pattern_from_template('toc', 10, 'hc', 'Trial of the Crusader'),
+			{ 'togc'..csep..'10' } -- Trial of the grand crusader (togc) refers to heroic toc
+		),
 	},
 
 	{
 		name = 'toc25hc',
 		instance_name = 'Trial of the Crusader',
 		size = 25,
-		patterns = create_raid_patterns('tog?c', 25, 'hc', instance_name),
+		patterns = std.algorithm.copy_back(
+			create_pattern_from_template('toc', 25, 'hc', 'Trial of the Crusader'),
+			{ 'togc'..csep..'25' } -- Trial of the grand crusader (togc) refers to heroic toc
+		),
 	},
 
 	{
 		name = 'toc10nm',
 		instance_name = 'Trial of the Crusader',
 		size = 10,
-		patterns = create_raid_patterns('tog?c', 10, 'nm', instance_name),
+		patterns = create_pattern_from_template('toc', 10, 'nm', 'Trial of the Crusader'),
 	},
 
 	{
 		name = 'toc25nm',
 		instance_name = 'Trial of the Crusader',
 		size = 25,
-		patterns = create_raid_patterns('tog?c', 25, 'nm', instance_name),
+		patterns = create_pattern_from_template('toc', 25, 'nm', 'Trial of the Crusader'),
 	},
 	
 	{
 		name = 'rs10hc',
 		instance_name = 'The Ruby Sanctum',
 		size = 10,
-		patterns = create_raid_patterns('rs', 10, 'hc', instance_name),
+		patterns = create_pattern_from_template('rs', 10, 'hc', 'ruby sanctum'),
 	},
 
 	{
 		name = 'rs25hc',
 		instance_name = 'The Ruby Sanctum',
 		size = 25,
-		patterns = create_raid_patterns('rs', 25, 'hc', instance_name),
+		patterns = create_pattern_from_template('rs', 25, 'hc', 'ruby sanctum'),
 	},
 
 	{
 		name = 'rs10nm',
 		instance_name = 'The Ruby Sanctum',
 		size = 10,
-		patterns = create_raid_patterns('rs', 10, 'nm', instance_name),
+		patterns = create_pattern_from_template('rs', 10, 'nm', 'ruby sanctum'),
 	},
 
 	{
 		name = 'rs25nm',
 		instance_name = 'The Ruby Sanctum',
 		size = 25,
-		patterns = create_raid_patterns('rs', 25, 'nm', instance_name),
+		patterns = create_pattern_from_template('rs', 25, 'nm', 'ruby sanctum'),
 	},
 	
 	{
 		name = 'voa10',
 		instance_name = 'Vault of Archavon',
 		size = 10,
-		patterns = {"voa[%s-_,.]*10"},
+		patterns = {'voa'..csep..'10'},
 	},
 	
 	{
 		name = 'voa25',
 		instance_name = 'Vault of Archavon',
 		size = 25,
-		patterns = {"voa[%s-_,.]*25"},
+		patterns = {'voa'..csep..'25'},
 	},
 		
 	{
@@ -187,7 +191,7 @@ local raid_list = {
 		instance_name = 'Ulduar',
 		size = 10,
 		patterns = {
-			'uldu?a?r?[%s-_,.]*10',
+			'uldu?a?r?'..csep..'10',
 		},
 	},
 	
@@ -196,7 +200,7 @@ local raid_list = {
 		instance_name = 'Ulduar',
 		size = 25,
 		patterns = {
-			'uldu?a?r?[%s-_,.]*25',
+			'uldu?a?r?'..csep..'25',
 		}
 	},
 	
@@ -205,7 +209,7 @@ local raid_list = {
 		instance_name = 'The Obsidian Sanctum',
 		size = 10,
 		patterns = {
-			'os[%s-_,.]*10',
+			'os'..csep..'10',
 			'sartharion must die!',
 		},
 	},
@@ -215,7 +219,7 @@ local raid_list = {
 		instance_name = 'The Obsidian Sanctum',
 		size = 25,
 		patterns = {
-			'os[%s-_,.]*25',
+			'os'..csep..'25',
 		},
 	},
 	
@@ -224,7 +228,7 @@ local raid_list = {
 		instance_name = 'Naxxramas',
 		size = 10,
 		patterns = {
-			'naxx?r?a?m?m?a?s?[%s-_,.]*10',
+			'naxx?r?a?m?m?a?s?'..csep..'10',
 			'naxx'..sep..'weekly',
 			'patchwerk'..sep..'must'..sep..'die!',
 		},
@@ -235,7 +239,7 @@ local raid_list = {
 		instance_name = 'Naxxramas',
 		size = 25,
 		patterns = {
-			'naxx?r?a?m?m?a?s?[%s-_,.]*25',
+			'naxx?r?a?m?m?a?s?'..csep..'25',
 		},
 	},
 	
@@ -244,7 +248,7 @@ local raid_list = {
 		instance_name = 'Onyxia\'s Lair',
 		size = 25,
 		patterns = {
-			'onyx?i?a?[%s-_,.]*25'
+			'onyx?i?a?'..csep..'25'
 		},
 	},
 	
@@ -253,7 +257,7 @@ local raid_list = {
 		instance_name = 'Onyxia\'s Lair',
 		size = 10,
 		patterns = {
-			'onyx?i?a?[%s-_,.]*10'
+			'onyx?i?a?'..csep..'10'
 		},
 	},
 	
@@ -262,7 +266,7 @@ local raid_list = {
 		instance_name = 'Karazhan',
 		size = 10,
 		patterns = {
-			'karaz?h?a?n?[%s-_,.]*1?0?', -- karazhan 
+			'karaz?h?a?n?'..csep..'1?0?', -- karazhan 
 		},
 	},
 	
@@ -271,8 +275,8 @@ local raid_list = {
 		instance_name = 'Molten Core',
 		size = 40,
 		patterns = {
-			'molte?n[%s]*core?',
-			'[%s-_,.%^]+mc'..sep..'*4?0?[%s-_,.$]+',
+			'molte?n'..csep..'core?',
+			'[%s-_,.%^]+mc'..csep..'4?0?[%s-_,.$]+',
 		},
 	},
 	
@@ -281,8 +285,8 @@ local raid_list = {
 		instance_name = 'The Black Temple',
 		size = 25,
 		patterns = {
-			'black[%s]*temple',
-			'[%s-_,.]+bt[%s-_,.]*25[%s-_,.]+',
+			'black'..csep..'temple',
+			'[%s-_,.]+bt'..csep..'25[%s-_,.]+',
 		},
 	},
 	
@@ -291,8 +295,8 @@ local raid_list = {
 		instance_name = 'Ahn\'Qiraj Temple',
 		size = 40,
 		patterns = {
-			'temple?'..sep..'*of?'..sep..'*ahn\'?'..sep..'*qiraj',
-			sep..'*aq[%s-_,.]*40'..sep..'*',
+			'temple?'..csep..'of?'..csep..'ahn\'?'..csep..'qiraj',
+			sep..'*aq'..csep..'40'..csep..'',
 		},
 	},
 	
@@ -301,102 +305,105 @@ local raid_list = {
 		instance_name = 'Ruins of Ahn\'Qiraj',
 		size = 20,
 		patterns = {
-			'ruins?'..sep..'*of?'..sep..'*ahn\'?'..sep..'*qiraj',
-			sep..'*aq[%s-_,.]*20'..sep..'*',
+			'ruins?'..csep..'of?'..csep..'ahn\'?'..csep..'qiraj',
+			sep..'*aq'..csep..'20'..csep..'',
 		},
 	},
 }
 
 local role_patterns = {	
 	dps = {
-		'[0-9]*[%s-_,.]*dps',
+		'[0-9]*'..csep..'dps',
 		
 		-- melee dps
-		'[0-9]*[%s-_,.]*m[dp][dp]s',
-		'[0-9]*[%s-_,.]*rogue',
-		'[0-9]*[%s-_,.]*kitt?y?',
-		'[0-9]*[%s-_,.]*feral',
-		'[0-9]*[%s-_,.]*ret[%s-_,.]*pal[al]?[dy]?i?n?',
+		'[0-9]*'..csep..'m[dp][dp]s',
+		'[0-9]*'..csep..'rogue',
+		'[0-9]*'..csep..'kitt?y?',
+		'[0-9]*'..csep..'cat'..sep,
+		'[0-9]*'..csep..'feral'..csep..'cat'..sep,
+		'[0-9]*'..csep..'ret'..csep..'pal[al]?[dy]?i?n?',
 		
 		-- ranged dps
-		"[0-9]*[%s-_,.]*r[dp][dp]s",
-		'[0-9]*[%s-_,.]*w?a?r?lock',
-		'[0-9]*[%s-_,.]*spri?e?st',
-		'[0-9]*[%s-_,.]*elem?e?n?t?a?l?',
-		'[0-9]*[%s-_,.]*mage',
-		'[0-9]*[%s-_,.]*boo?mm?y?k?i?n?',
-		'[0-9]*[%s-_,.]*hunte?r?s?',
+		'[0-9]*'..csep..'r[dp][dp]s',
+		'[0-9]*'..csep..'w?a?r?lock',
+		'[0-9]*'..csep..'spri?e?st',
+		'[0-9]*'..csep..'elem?e?n?t?a?l?',
+		'[0-9]*'..csep..'mage',
+		'[0-9]*'..csep..'boo?mm?y?k?i?n?',
+		'[0-9]*'..csep..'hunte?r?s?',
 	},
 	
 	healer = {
-		'[0-9]*[%s-_,.]*he[a]?l[er|ers]*', -- LF healer
-		'[0-9]*[%s-_,.]*re?s?t?o?'..sep..'*d[ru][ud][iu]d?', -- LF rdruid/rdudu
-		'[0-9]*[%s-_,.]*tree', 			   -- LF tree
-		'[0-9]*[%s-_,.]*re?s?t?o?[%s-_,.]*shamm?y?', -- LF rsham
-		'[0-9]*'..sep..'*di?s?c?o?'..sep..'*pri?e?st', -- disc priest
-		'[0-9]*[%s-_,.]*ho?l?l?y?'..sep..'*pala',	   -- LF hpala
+		'[0-9]*'..csep..'he[a]?l[er|ers]*', -- LF healer
+		'[0-9]*'..csep..'re?s?t?o?'..csep..'d[ru][ud][iu]d?', -- LF rdruid/rdudu
+		'[0-9]*'..csep..'tree', 			   -- LF tree
+		'[0-9]*'..csep..'re?s?t?o?'..csep..'shamm?y?', -- LF rsham
+		'[0-9]*'..csep..'di?s?c?o?'..csep..'pri?e?st', -- disc priest
+		'[0-9]*'..csep..'ho?l?l?y?'..csep..'pala',	   -- LF hpala
 	},
 	
 	tank = {
-		'[0-9]*[%s-_,.]*t[a]?nk[s]?',	-- NEED TANKS
-		'[0-9]*[%s-_,.]*tn?[a]?k[s]?',  -- Need TNAK
-		'[%s-_,.]+[mo]t[%s-_,.]+',				-- Need MT/OT
-		'[0-9]*[%s-_,.]*bears?',
-		'[0-9]*'..sep..'*prot'..sep..'*pal[al]?[dy]?i?n?',
+		'[0-9]*'..csep..'t[a]?nk[s]?',	 -- NEED TANKS
+		'[0-9]*'..csep..'tn?[a]?k[s]?',  -- Need TNAK
+		'[%s-_,.]+[mo]t[%s-_,.]+',		 -- Need MT/OT
+		'[0-9]*'..csep..'bears?',
+		'[0-9]*'..csep..'prot'..csep..'pal[al]?[dy]?i?n?',
 	},
 }
 
 local gearscore_patterns = {
-	'[1-6]'..sep..'*k[0-9]+',
+	'[1-6]'..csep..'k[0-9]+',
 	'[1-6][.,][0-9]',
-	'[1-6][%s]*k[%s]*%+?',
-	'%+?[%s]*[1-6][%s]*k',
+	'[1-6]'..csep..'k'..csep..'%+',
+	'[1-6]'..csep..'k'..sep,
+	'%+?'..csep..'[1-6]'..csep..'k'..sep,
 	'[1-6][0-9][0-9][0-9]',
 	'[1-6]%+',
 }
 
 local lfm_patterns = {
 	'lf[0-9]*m',
-	'lf'..sep..'*all',
+	'lf'..csep..'all',
 	'need',
-	'need'..sep..'*all',
-	'seek'..sep..'*[0-9]*'..sep..'*he[a]?l[er|ers]*',		-- seek healer
-	'seek'..sep..'*[0-9]*'..sep..'*t[a]?nk[s]?',			-- seek 5 tanks
-	'seek'..sep..'*[0-9]*'..sep..'*[mr]?dps',				-- seek 9 DPS
-	'looking'..sep..'*for[%s]*all',
-	'looking'..sep..'*for'..sep..'*an?'..sep,
-	'looking'..sep..'*for'..sep..'*[0-9]*'..sep..'*more',		-- looking for 9 more
-	'lf'..sep..'*.*for',								-- LF <any characters> for 
-	'looking'..sep..'*for'..sep..'*.*'..sep..'for',		-- LF <any characters> for 
-	'lf'..sep..'*[0-9]*'..sep..'*he[a]?l[er|ers]*',		-- LF healer
-	'lf'..sep..'*[0-9]*'..sep..'*t[a]?nk[s]?',			-- LF 5 tanks
-	'lf'..sep..'*[0-9]*'..sep..'*[mr]?dps',				-- LF 9 DPS
-	'whispe?r?'..sep..'*me',
-	--'[%s]/w[%s]*[%a]+', -- Too greedy
+	'need'..csep..'all',
+	'seek'..csep..'[0-9]*'..csep..'he[a]?l[er|ers]*',		-- seek healer
+	'seek'..csep..'[0-9]*'..csep..'t[a]?nk[s]?',			-- seek 5 tanks
+	'seek'..csep..'[0-9]*'..csep..'[mr]?dps',				-- seek 9 DPS
+	'looking'..csep..'for'..csep..'all',
+	'looking'..csep..'for'..csep..'an?'..sep,
+	'looking'..csep..'for'..csep..'[0-9]*'..csep..'more',		-- looking for 9 more
+	'lf'..csep..'.*for',								-- LF <any characters> for 
+	'looking'..csep..'for'..csep..'.*'..sep..'for',		-- LF <any characters> for 
+	'lf'..csep..'[0-9]*'..csep..'he[a]?l[er|ers]*',		-- LF healer
+	'lf'..csep..'[0-9]*'..csep..'t[a]?nk[s]?',			-- LF 5 tanks
+	'lf'..csep..'[0-9]*'..csep..'[mr]?dps',				-- LF 9 DPS
+	'whispe?r?'..csep..'me',
+	--''..sep..'/w'..csep..'[%a]+', -- Too greedy
 }
 
-local lfm_channel_listeners = {
-	["CHAT_MSG_CHANNEL"] = {},
-	["CHAT_MSG_YELL"] = {},
+lfm_channel_listeners = {
+	['CHAT_MSG_CHANNEL'] = {},
+	['CHAT_MSG_YELL'] = {},
 };
 
 local channel_listeners = {};
 
 local guild_recruitment_patterns = {
-	'recrui?ti?ng',
-	'recrui?t',
-	'we[%s]*raid',
-	'[<({-][%a%s]+[-})>][%s]*is[%s]*a?', -- (<GuildName> is a) pve guild looking for
-	'[0-9][0-9][pa]m[%s]*st', -- we raid (12pm set)
+	'recrui?ti?n?g?',
+	'we'..csep..'raid',
+	'[<({-][%a%s]+[-})>]'..csep..'is'..csep..'a?', -- (<GuildName> is a) pve guild looking for
+	'is'..csep..'[%a%s]*playe?rs?',
+	'[0-9][0-9][pa]m'..csep..'st', -- we raid (12pm set)
 	'autorecruit',
-	'raid[%s]*time',
-	'active[%s]*raiders?',
-	'is[%s]*a[%s]*[%a]*[%s]*[pvep][pvep][pvep][%s]*guild',
+	'raid'..csep..'time',
+	'active'..csep..'raiders?',
+	'is'..csep..'a'..csep..'[%a]*'..csep..'[pvep][pvep][pvep]'..csep..'guild',
+	'lf'..sep..'members',
 };
 
 local wts_message_patterns = {
-	'wts ',
-	'selling ',
+	'wts'..sep,
+	'selling'..sep,
 };
 
 local function refresh_lfm_messages()
@@ -435,22 +442,16 @@ local function format_gs_string(gs)
 	return string.format('%.1f', formatted );
 end
 
-local function is_in_patterns(message, patterns)
-	for _, pattern in ipairs(patterns) do
-		if string.find(message, pattern) then
-			return true;
-		end
-	end
-	
-	return false;
-end
-
 local function is_guild_recruitment(message)
-	return is_in_patterns(message, guild_recruitment_patterns);
+	return std.algorithm.find_if(guild_recruitment_patterns, function(pattern)
+		return string.find(message, pattern);
+	end);
 end
 
 local function is_wts_message(message)
-	return is_in_patterns(message, wts_message_patterns);
+	return std.algorithm.find_if(wts_message_patterns, function(pattern)
+		return string.find(message, pattern);
+	end);
 end
 
 -- Basic http pattern matching for streaming sites and etc.
@@ -491,14 +492,9 @@ function raid_browser.raid_info(message)
 	end
 		
 	-- Search for LFM announcement in the message
-	local found_lfm = false;
-	for _, pattern in ipairs(lfm_patterns) do
-		if string.find(message, pattern) then
-			found_lfm = true
-		end
-	end
-
-	if not found_lfm then
+	local lfm_found = std.algorithm.find_if(lfm_patterns, function(pattern) return string.find(message, pattern) end) 
+	
+	if not lfm_found then
 		return;
 	end
 	
@@ -528,9 +524,12 @@ function raid_browser.raid_info(message)
 	-- Get any roles that are needed
 	local roles = {};
 	
-	roles, message  = find_roles(roles, message, role_patterns, 'dps');
-	roles, message  = find_roles(roles, message, role_patterns, 'tank');
-	roles, message = find_roles(roles, message, role_patterns, 'healer');
+	--if string.find(message, '
+	if not string.find(message, 'lfm? all ') and not string.find(message, 'need all ') then 
+		roles, message  = find_roles(roles, message, role_patterns, 'dps');
+		roles, message  = find_roles(roles, message, role_patterns, 'tank');
+		roles, message = find_roles(roles, message, role_patterns, 'healer');
+	end
 
 	-- If there is only an LFM message, then it is assumed that all roles are needed
 	if #roles == 0 then
@@ -554,7 +553,7 @@ function raid_browser.raid_info(message)
 end
 
 local function is_lfm_channel(channel)
-	return channel == "CHAT_MSG_CHANNEL" or channel == "CHAT_MSG_YELL";
+	return channel == 'CHAT_MSG_CHANNEL' or channel == 'CHAT_MSG_YELL';
 end
 
 local function event_handler(self, event, message, sender)
@@ -577,7 +576,7 @@ local function event_handler(self, event, message, sender)
 end
 
 function raid_browser:OnEnable()
-	raid_browser:Print("loaded. Type /rb to toggle the raid browser.")
+	raid_browser:Print('loaded. Type /rb to toggle the raid browser.')
 	
 	if not raid_browser_character_current_raidset then
 		raid_browser_character_current_raidset = 'Active';
@@ -596,7 +595,7 @@ function raid_browser:OnEnable()
 	raid_browser.lfm_messages = {}
 	raid_browser.timer = raid_browser.set_timer(10, refresh_lfm_messages, true)
 	for channel, listener in pairs(lfm_channel_listeners) do
-		channel_listeners[i] = raid_browser.add_event_listener(channel, event_handler)	
+		channel_listeners[i] = raid_browser.add_event_listener(channel, event_handler)
 	end
 	
 	raid_browser.gui.raidset.initialize();

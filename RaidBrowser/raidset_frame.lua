@@ -1,6 +1,8 @@
 raid_browser.gui.raidset = {};
 
 local frame = CreateFrame("Frame", "RaidBrowserRaidSetMenu", LFRBrowseFrame, "UIDropDownMenuTemplate")
+UIDropDownMenu_SetWidth(RaidBrowserRaidSetMenu, 150)
+frame:SetWidth(90);
 
 local current_selection = nil;
 
@@ -110,12 +112,12 @@ end
 
 -- Create raidset save button
 local button = CreateFrame("BUTTON","RaidBrowserRaidSetSaveButton", LFRBrowseFrame, "OptionsButtonTemplate")
-button:SetPoint("CENTER", LFRBrowseFrame, "CENTER", -40, 168)
+button:SetPoint("CENTER", LFRBrowseFrame, "CENTER", -53, 168)
 button:EnableMouse(true)
 button:RegisterForClicks("AnyUp")
 
 button:SetText("Save Raid Set");
-button:SetWidth(120);
+button:SetWidth(110);
 button:SetScript("OnClick", on_raidset_save);
 button:Show();
 

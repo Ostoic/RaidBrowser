@@ -171,7 +171,7 @@ local function assign_lfr_button(button, host_name, lfm_info, index)
 	if button.raid_locked then
 		button.class:SetTextColor(1, 0, 0);
 	else
-		button.class:SetTextColor(0, 1, 0);
+		button.class:SetTextColor(0, 1, 1);
 	end;
 	
 	-- Set up the corresponding textures for the roles columns
@@ -259,3 +259,9 @@ end
 LFRBrowse_UpdateButtonStates = update_buttons
 LFRBrowseFrameList_Update = raid_browser.gui.update_list
 LFRBrowseFrameListButton_SetData = insert_lfm_button
+
+-- Set the "Browse" tab to be active.
+LFRFrame_SetActiveTab(2)
+
+LFRParentFrameTab1:Hide();
+LFRParentFrameTab2:Hide();

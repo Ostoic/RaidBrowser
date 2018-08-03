@@ -16,6 +16,14 @@ local test_cases = {
 	},
 	
 	{
+		message = 'LFM need feral cat and icc 25 rshammy 5.5+',
+		should_fail = false,
+		raid = 'icc25nm',
+		roles = {'dps', 'healer'},
+		gs = '5.5',
+	},
+	
+	{
 		message = 'LFM icc			 25htea35c nn_-r3eraefneed__363626yrkgk,grMT_-363ylrdslh5k+',
 		should_fail = false,
 		raid = 'icc25hc',
@@ -163,7 +171,7 @@ local test_cases = {
 	{
 		message = ' NEED dpriest  TANK FOR TOGC 10 5K++',
 		should_fail = false,
-		raid = 'toc10nm',
+		raid = 'toc10hc',
 		roles = {'tank', 'healer'},
 		gs = '5.0',
 	},
@@ -556,6 +564,55 @@ local test_cases = {
 		gs = ' ',
 	},
 	
+	{
+		message = '|cffffff00|Hachievement:2336:0x07000000000023FF:0:0:0:0:0:0:0:0|h[Primus]|h|r is LFM heroic experienced players. ICC25HC 12/12 - ICC10HC 12/12 - RS10HC 4/4 -4PM ST/DKP/DISCORD - PRIMUS-WARMANE.SHIVTR.COM',
+		should_fail = true,
+		raid = 'guild_message',
+		roles = { 'dps' },
+		gs = ' ',
+	},
+	
+	{
+		message = '#### LFM VOA 25 NEED ALL /w GS AND SPEC FROST ONLY FAST RUN !!!! (warr pvp set res!( #####',
+		should_fail = false,
+		raid = 'voa25',
+		roles = { 'dps', 'healer', 'tank' },
+		gs = ' ',
+	},
+	
+	{
+		message = 'ICC 10HC/nm need 1TANK 2HEALS 1DPS(preff Fwar)!min 6k +achiv! (B/P ress) _!',
+		should_fail = false,
+		raid = 'icc10hc',
+		roles = { 'dps', 'healer', 'tank' },
+		gs = '6.0',
+	},
+	
+	{
+		message = 'Lfm fresh raid ToC 25 nm fast run need healers tank and dps rdps ..mins gs 5500 !! (BOE RESS ) +++++++',
+		should_fail = false,
+		raid = 'toc25nm',
+		roles = { 'dps', 'healer', 'tank' },
+		gs = '5.5',
+	},
+	
+	{
+		message = 'LFM VOA 25 Need all 5.2+  FIRE+Frost Fast Run',
+		should_fail = false,
+		raid = 'voa25',
+		roles = { 'dps', 'healer', 'tank' },
+		gs = '5.2',
+	},
+	
+	--[[{
+		message = 'LFM  [Bane of the Fallen King] need dog and mans for tank',
+		should_fail = false,
+		raid = 'icc25hc',
+		roles = { 'tank' },
+		gs = ' ',
+	},]]-- TODO
+	
+	--'
 	-- Idea: Convert raid/roles/gs into intermediate text such as <role> <class> <raid> <gs> so that the following could
 	-- be parsed as: <role> for <raid>/HC.. Gs Req <gs>... [The Frostwing Halls (10 player)]...9/10
 	-- This could be a more powerful technique for distinguishing between LFM messages and other messages
@@ -598,27 +655,22 @@ local function display_test(test)
 		roles_string = role .. ' ' .. roles_string;
 	end
 	
-	raid_browser:Print('Test case for ' .. test.raid);
 	raid_browser:Print('Original message: ' .. test.message);
-	raid_browser:Print('Roles: ' .. roles_string);
-	raid_browser:Print('Gearscore: ' .. test.gs);
+	raid_browser:Print('[Required]: ' .. test.raid .. ', ' .. roles_string .. ', ' .. test.gs);
 	raid_browser:Print('Should fail: ' .. tostring(test.should_fail));
 end
 
 local function test_failed(test, detected, message)
-	raid_browser:Print('Test failed: ' .. message);
 	display_test(test);
+	raid_browser:Print('Test failed: ' .. message);
 	
-	raid_browser:Print('Detected info: ');
 	if detected then
 		local roles_string = '';
 		for _, role in ipairs(detected.roles) do
 			roles_string = role .. ' ' .. roles_string;
 		end
 		
-		raid_browser:Print('Raid: ' .. detected.raid);
-		raid_browser:Print('Roles: ' .. roles_string);
-		raid_browser:Print('Gearscore: ' .. detected.gs);
+		raid_browser:Print('[Detected]: ' .. detected.raid .. ', ' .. roles_string .. ', ' .. detected.gs);
 	end
 	
 	print('');
@@ -635,29 +687,39 @@ local function run_test_case(test)
 	if raid_info and test.should_fail then
 		if test.raid == 'guild_message' then
 			test_failed(test, detected, 'guild recruitment message passed');
+			return false;
 		else
 			test_failed(test, detected, 'test should have failed');
+			return false;
 		end
 		
 	elseif not raid_info then
 		if not test.should_fail then
 			test_failed(test, detected, 'no raid detected');
+			return false;
 		end
 		
 	elseif not (test.raid == raid_info.name) then
 		test_failed(test, detected, 'detected raid name is incorrect');
+		return false;
 		
 	elseif not (test.gs == gs) then 
 		test_failed(test, detected, 'detected gearscore is incorrect');
+		return false;
 		
 	elseif not compare_arrays(test.roles, roles) then
 		test_failed(test, detected, 'detected list of roles is not correct');
+		return false;
 	end
+	
+	return true;
 end
 
-for _, test in ipairs(test_cases) do
-	run_test_case(test);
-end
+-- Run all the test cases
+local test_results = std.algorithm.transform(test_cases, run_test_case);
 
-raid_browser:Print('All unit tests completed');
+-- Count the number of failed tests.
+local number_failed_tests = std.algorithm.count(test_results, false);
 
+raid_browser:Print('All unit tests executed.');
+raid_browser:Print('There were ' .. number_failed_tests .. ' failed unit tests!');

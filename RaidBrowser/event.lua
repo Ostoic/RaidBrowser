@@ -34,7 +34,7 @@ frame:SetScript('OnEvent', OnEvent)
 
 -- INTERFACE
 
-function raid_browser.add_event_listener (event, callback, userparam)
+function raid_browser.add_event_listener(event, callback, userparam)
 	assert(callback, 'invalid callback')
 	if not registry[event] then
 		registry[event] = {}

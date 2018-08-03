@@ -79,8 +79,8 @@ local function GetTalentTabPoints(i)
 end
 
 function raid_browser.stats.active_spec_index()
-	local indices = raid_browser.algorithm.transform({1, 2, 3}, GetTalentTabPoints)
-	local i, v = raid_browser.algorithm.max_of(indices);
+	local indices = std.algorithm.transform({1, 2, 3}, GetTalentTabPoints)
+	local i, v = std.algorithm.max_of(indices);
 	return i;
 end
 
@@ -167,7 +167,7 @@ function raid_browser.stats.build_inv_string(raid_name)
 	
 	-- Find the best possible achievement for the given raid_name.
 	local achieve_id = find_best_achievement(raid_name);
-		if achieve_id then
+	if achieve_id then
 		message = message .. ' ' .. GetAchievementLink(achieve_id);
 	end
 	
