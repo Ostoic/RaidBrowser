@@ -604,6 +604,14 @@ local test_cases = {
 		gs = '5.2',
 	},
 	
+	{
+		message = ' >Industry< IS LOOKING FOR SKILLED AND FRIENDLY MEMBERS TO FILL OUR CORE GROUPS. We are raiding ICC25HC,ICC10HC/N,RS,ULDUAR AND XMOG RUNS. USING DKP SYSTEM AND DISCORD. FEEL FREE TO APPLY ON industry.shivtr.com. FOR MORE INFO /W ME. RT 5pm st',
+		should_fail = true,
+		raid = 'guild_message',
+		roles = { 'dps' },
+		gs = ' ',
+	},
+	
 	--[[{
 		message = 'LFM  [Bane of the Fallen King] need dog and mans for tank',
 		should_fail = false,

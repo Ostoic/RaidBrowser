@@ -391,6 +391,7 @@ local channel_listeners = {};
 local guild_recruitment_patterns = {
 	'recrui?ti?n?g?',
 	'we'..csep..'raid',
+	'we'..csep..'are'..csep..'raidi?n?g?',
 	'[<({-][%a%s]+[-})>]'..csep..'is'..csep..'a?', -- (<GuildName> is a) pve guild looking for
 	'is'..csep..'[%a%s]*playe?rs?',
 	'[0-9][0-9][pa]m'..csep..'st', -- we raid (12pm set)
