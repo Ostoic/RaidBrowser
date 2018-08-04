@@ -612,6 +612,14 @@ local test_cases = {
 		gs = ' ',
 	},
 	
+	{
+		message = 'NEED TANK FOR ICC 10 HC 9/12 BOSES HC !! LINK BEST ACHIVE AND GS !!',
+		should_fail = false,
+		raid = 'icc10hc',
+		roles = { 'tank' },
+		gs = ' ',
+	},
+	
 	--[[{
 		message = 'LFM  [Bane of the Fallen King] need dog and mans for tank',
 		should_fail = false,
