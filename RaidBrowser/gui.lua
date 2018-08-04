@@ -93,7 +93,7 @@ for i = 1, NUM_LFR_LIST_BUTTONS do
 				local _, reset_time = raid_browser.stats.raid_lock_info(button.raid_info.instance_name, button.raid_info.size)
 				GameTooltip:AddLine('Lockout expires in ' .. format_seconds(reset_time));
 			else
-				GameTooltip:AddLine('\nYou are |cff00ff00not saved|cffffd100 for ' .. button.raid_info.name);
+				GameTooltip:AddLine('\nYou are |cff00ffffnot saved|cffffd100 for ' .. button.raid_info.name);
 			end
 			
 			GameTooltip:Show();
