@@ -620,6 +620,70 @@ local test_cases = {
 		gs = ' ',
 	},
 	
+	{
+		message = 'TOC  NM LF 3  RDPS link [Call of the Crusade (10 player)]',
+		should_fail = false,
+		raid = 'toc10nm',
+		roles = { 'dps' },
+		gs = ' ',
+	},
+	
+	{
+		message = 'LFM all FOR ICC 10 nm 5300 mini gs',
+		should_fail = false,
+		raid = 'icc10nm',
+		roles = { 'dps', 'tank', 'healer' },
+		gs = '5.3',
+	},
+	
+	{
+		message = 'LFM ULDAUR - 25 - Need 1 HEAL 5 DPS 1/12 BOSS - +5.1 GS - RAID 24/25 /w me - CraSh Serveur -PpL dc-',
+		should_fail = false,
+		raid = 'ulduar25',
+		roles = { 'healer', 'dps' },
+		gs = '5.1',
+	},
+	
+	{
+		message = 'TOC 10 HC NEED 1 TANK 6.2k GS (Pally)',
+		should_false = false,
+		raid = 'toc10hc',
+		roles = { 'tank' },
+		gs = '6.2',
+	},
+	
+	{
+		message = 'ULDUAR 10M HC NEED 2 TANKY - -- GS 5.5K--- ',
+		should_false = false,
+		raid = 'ulduar10',
+		roles = { 'tank' },
+		gs = '5.5',
+	},
+	
+	{
+		message = 'LFM Ulduar 25 - Need 2 heal 3 DPS - 1Boss dead - +5.1k gs /w me 20/25..',
+		should_fail = false,
+		raid = 'ulduar25',
+		roles = { 'healer', 'dps' }, 
+		gs = '5.1'
+	},
+	
+	{
+		message = 'ICC 25HC/N need MDPS RDPS HEALS 6,1k+  lk  run   no  achiv no [INV][ [The Light of Dawn]]  b+p+sfs  res discord req',
+		should_fail = false,
+		raid = 'icc25hc',
+		roles = { 'dps', 'healer' },
+		gs = '6.1'
+	},
+
+	{
+		message = 'LF TOc 10 Nm need Rdps and x2 tank  Gs +5.1k Scroll RuN  [Call of the Grand Crusade (10 player)]..',
+		should_fail = false,
+		raid = 'toc10nm',
+		roles = { 'dps', 'tank' },
+		gs = '5.1',
+	},
+	
 	--[[{
 		message = 'LFM  [Bane of the Fallen King] need dog and mans for tank',
 		should_fail = false,
@@ -641,8 +705,8 @@ local test_cases = {
 	},]]--
 } 
 
-local function array_contains(table, element)
-	for _, k in ipairs(table) do
+local function array_contains(t, element)
+	for _, k in ipairs(t) do
 		if k == element then
 			return true;
 		end
@@ -657,6 +721,7 @@ local function compare_arrays(table1, table2)
 	end
    
 	for _, x in ipairs(table1) do
+		
 		if not array_contains(table2, x) then
 			return false;
 		end
@@ -669,6 +734,10 @@ local function display_test(test)
 	local roles_string = '';
 	for _, role in ipairs(test.roles) do
 		roles_string = role .. ' ' .. roles_string;
+	end
+	
+	if not test.message then
+		print(test.raid)
 	end
 	
 	raid_browser:Print('Original message: ' .. test.message);

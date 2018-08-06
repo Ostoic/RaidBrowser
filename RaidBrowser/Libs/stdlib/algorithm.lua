@@ -81,6 +81,19 @@ function std.algorithm.copy(source)
 	return target;
 end
 
+function std.algorithm.equal(first, second)
+	if #first ~= #second then 
+		return false;
+	end
+	
+	for i, v in ipairs(first) do
+		if v ~= second[i] then
+			return false;
+		end
+	end
+	
+	return true;
+end
 
 function std.algorithm.copy_back(target, source)
 	for _, v in ipairs(source) do

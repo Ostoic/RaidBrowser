@@ -116,7 +116,10 @@ local raid_list = {
 		size = 10,
 		patterns = std.algorithm.copy_back(
 			create_pattern_from_template('toc', 10, 'hc', 'Trial of the Crusader'),
-			{ 'togc'..csep..'10' } -- Trial of the grand crusader (togc) refers to heroic toc
+			{ 
+				'togc'..csep..'10',
+				--'%[call of the grand crusade %(10 player%)%]'
+			} -- Trial of the grand crusader (togc) refers to heroic toc
 		),
 	},
 
@@ -126,7 +129,10 @@ local raid_list = {
 		size = 25,
 		patterns = std.algorithm.copy_back(
 			create_pattern_from_template('toc', 25, 'hc', 'Trial of the Crusader'),
-			{ 'togc'..csep..'25' } -- Trial of the grand crusader (togc) refers to heroic toc
+			{ 
+				'togc'..csep..'25',
+				--'%[call of the grand crusade %(25 player%)%]'
+			} -- Trial of the grand crusader (togc) refers to heroic toc
 		),
 	},
 
@@ -134,14 +140,20 @@ local raid_list = {
 		name = 'toc10nm',
 		instance_name = 'Trial of the Crusader',
 		size = 10,
-		patterns = create_pattern_from_template('toc', 10, 'nm', 'Trial of the Crusader'),
+		patterns = std.algorithm.copy_back(
+			create_pattern_from_template('toc', 10, 'nm', 'Trial of the Crusader'),
+			{ '%[call of the crusade %(10 player%)%]' }
+		),
 	},
 
 	{
 		name = 'toc25nm',
 		instance_name = 'Trial of the Crusader',
 		size = 25,
-		patterns = create_pattern_from_template('toc', 25, 'nm', 'Trial of the Crusader'),
+		patterns = std.algorithm.copy_back(
+			create_pattern_from_template('toc', 25, 'nm', 'Trial of the Crusader'),
+			{ '%[call of the crusade %(25 player%)%]' }
+		),
 	},
 	
 	{
@@ -191,7 +203,7 @@ local raid_list = {
 		instance_name = 'Ulduar',
 		size = 10,
 		patterns = {
-			'uldu?a?r?'..csep..'10',
+			'ull?a?d[au]?[au]?r?'..csep..'10',
 		},
 	},
 	
@@ -200,7 +212,7 @@ local raid_list = {
 		instance_name = 'Ulduar',
 		size = 25,
 		patterns = {
-			'uldu?a?r?'..csep..'25',
+			'ull?a?d[au]?[au]?r?'..csep..'25',
 		}
 	},
 	
@@ -484,6 +496,7 @@ local function find_roles(roles, message, pattern_table, role)
 end
 
 function raid_browser.raid_info(message)
+	if not message then return end;
 	message = string.lower(message)
 	message = remove_http_links(message);
 	
