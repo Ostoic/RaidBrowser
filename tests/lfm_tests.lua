@@ -179,9 +179,6 @@ local test_cases = {
 	{
 		message = 'LFM TOC 5 NM FARM need heal  and go  /w me gs,spec (banner res) 3.5k + 4/5',
 		should_fail = true,
-		raid = 'toc5nm',
-		roles = {'healer'},
-		gs = '3.5',
 	},
 	
 	{
@@ -511,9 +508,6 @@ local test_cases = {
 	{
 		message = '<Release and Run> is a progressive guild led by experienced players. Looking for competent people for our ICC + RS 25man groups. Progress: 11/12 25hc and 12/12 10hc. RT 7pm ST, EPGP+LC used. Apply at [http://releaseandrun.shivtr.com]',
 		should_fail = true,
-		raid = 'guild_message',
-		roles = {'dps'},
-		gs = ' ',
 	},
 	
 	{
@@ -535,41 +529,26 @@ local test_cases = {
 	{
 		message = 'WTS 6.4k gs Fire mage w lots of BiS, Boes, Transmog, Ashes of Alar mount, 450 tailor/enchant. Can remove items if needed. Char name - "Onepiecenami" on armory. LOD/RS25 achieve. can remove gear as needed',
 		should_fail = true,
-		raid = 'guild_message',
-		roles = {'dps'},
-		gs = ' ',
 	},
 	
 	{
 		message = 'Selling BIS Nelf Hunter with LOD,Bane,RS25HC. Everything is BIS. 11-12k DPS on dummy. Also loads of other stuff. /w for more info. only trading via warmane marketplace. Easy TOP DPS every raid. :)',
 		should_fail = true,
-		raid = 'guild_message',
-		roles = {'dps'},
-		gs = ' ',
 	},
 	
 	{
 		message = 'GUILD |cffffff00|Hachievement:3917:070000000012D4AD:1:3:15:15:4294967295:4294967295:4294967295:4294967295|h[Adrenaline]|h|r is LF members for ICC/RS25 HC and glory runs for BANE/TOC/NAXX/ULDU. Req: 6.1+ Discord. DkP/Raids@ 5 ST. Apply: https://adrenaline-icecrown.shivtr.com or wisp.',
 		should_fail = true,
-		raid = 'guild_message',
-		roles = {'dps'},
-		gs = ' ',
 	},
 	
 	{
 		message = 'Guild <Adrenaline> LF members for ICC/RS25 HC and glory runs for BANE/ULDU/TOC. Req: 6.1k+ Discord. Apply; [adrenaline-icecrown.shivtr.com] Raids @ 5-6 Pmst.',
 		should_fail = true,
-		raid = 'guild_message',
-		roles = {'dps'},
-		gs = ' ',
 	},
 	
 	{
 		message = '|cffffff00|Hachievement:2336:0x07000000000023FF:0:0:0:0:0:0:0:0|h[Primus]|h|r is LFM heroic experienced players. ICC25HC 12/12 - ICC10HC 12/12 - RS10HC 4/4 -4PM ST/DKP/DISCORD - PRIMUS-WARMANE.SHIVTR.COM',
 		should_fail = true,
-		raid = 'guild_message',
-		roles = { 'dps' },
-		gs = ' ',
 	},
 	
 	{
@@ -607,9 +586,6 @@ local test_cases = {
 	{
 		message = ' >Industry< IS LOOKING FOR SKILLED AND FRIENDLY MEMBERS TO FILL OUR CORE GROUPS. We are raiding ICC25HC,ICC10HC/N,RS,ULDUAR AND XMOG RUNS. USING DKP SYSTEM AND DISCORD. FEEL FREE TO APPLY ON industry.shivtr.com. FOR MORE INFO /W ME. RT 5pm st',
 		should_fail = true,
-		raid = 'guild_message',
-		roles = { 'dps' },
-		gs = ' ',
 	},
 	
 	{
@@ -684,6 +660,84 @@ local test_cases = {
 		gs = '5.1',
 	},
 	
+	{
+		message = 'LF DPS FOR LAST SPOT 3 drake MOUNT RUN LAST SPOT GROUP LOOT DPS LAST SPOT 5.7k+ RANGED DPS MOUNT FREE ROLL GROUP LOOT DPS LAST SPOT OS 3 drake SUMMONING 10  MAN QUICK HURRY UP TRASH CLEAR 10 man os 3 drake zerg',
+		should_fail = false,
+		raid = 'os10',
+		roles = { 'dps' },
+		gs = '5.7',
+	},
+	
+	{
+		message = 'LFM <<<<<ICC 25 HC/N 5.9k min  ONLY DPS >>>>>>>>>>> B+p ress  [Fall of the Lich King (25 player)]',
+		should_fail = false,
+		raid = 'icc25hc',
+		roles = { 'dps' },
+		gs = '5.9',
+	},
+	
+	{
+		message = 'DRUID TANK 5.4k LF ICC10/25 TOC 10/25',
+		should_fail = true,
+	},
+	
+	{
+		message = 'LF TOC 5 NM NEED  HEAL',
+		should_fail = true,
+	},
+	
+	{
+		message = 'Voa 10 Man W/me Need All 4/10',
+		should_fail = false,
+		raid = 'voa10',
+		roles = { 'dps', 'tank', 'healer' },
+		gs = ' ',
+	},
+	
+	{
+		message = 'LF TOC 10 NM NEED  HEAL',
+		should_fail = false,
+		raid = 'toc10nm',
+		roles = { 'healer' },
+		gs = ' ',
+	},
+	
+	{
+		message = '<Scale> is now recuiting competitive players to fill our core. ICC25HC 12/12 ICC10HC 12/12 RS10hc 4/4 we require TS3 and decent gear for heroics our raid time is 5pm st feel free to apply on [https://scale.shivtr.com]',
+		should_fail = true,
+	},
+	
+	{
+		message = '- // ICC 10 REP FARM // - Master Loot -  // w me ',
+		should_fail = false,
+		raid = 'icc10rep',
+		roles = { 'dps', 'tank', 'healer' },
+		gs = ' '
+	},
+	
+	{
+		message = ' LFM ICC 25 n/hcNEED boom gs+5.9[Heroic: The Frostwing Halls (25 player)]no achi no [inv]',
+		should_fail = false,
+		raid = 'icc25nm',
+		roles = { 'dps' },
+		gs = '5.9',
+	},
+	
+	{
+		message = '<Fade> is recruiting!  We are a social-pve guild raiding at 11 PM Server Time!  Doing daily 25man raids such as ICC 25HC / TOC 25HC / RS 25HC,  Achievment raids as Ulduar 25 / TBC Raids  Using Discord/DKP loot system! Join us!  /w me for more info!',
+		should_fail = true,
+	},
+	
+	{
+		message = 'lfm VOA 25 need tank heal dps 5+ fire frost',
+		should_fail = false,
+		raid = 'voa25',
+		roles = { 'tank', 'healer', 'dps' },
+		gs = '5.0',
+	},
+	
+	--1 tank for ICC 10 Run - 9/10, aim 11/12
+	--TOC 10 NM 1 TANK 1 HEAL + 1 PRIEST DPS
 	--[[{
 		message = 'LFM  [Bane of the Fallen King] need dog and mans for tank',
 		should_fail = false,
@@ -703,6 +757,15 @@ local test_cases = {
 		roles = {'dps'},
 		gs = '5.7',
 	},]]--
+	
+	--[[
+		1. first discard non-lfm messages
+		2. discard raids without a mentioned raid
+		3. save raid, role, and gs info
+		4. convert string into (raid) (role) (gs) format for lfm parsing
+		5. parse string: e.g. (role) for (raid) (gs)?
+		
+	]]--
 } 
 
 local function array_contains(t, element)
@@ -807,4 +870,4 @@ local test_results = std.algorithm.transform(test_cases, run_test_case);
 local number_failed_tests = std.algorithm.count(test_results, false);
 
 raid_browser:Print('All unit tests executed.');
-raid_browser:Print('There were ' .. number_failed_tests .. ' failed unit tests!');
+raid_browser:Print('There were ' .. number_failed_tests .. '/' .. #test_cases .. ' failed unit tests!');

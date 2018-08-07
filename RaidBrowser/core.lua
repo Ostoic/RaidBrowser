@@ -32,7 +32,13 @@ local raid_patterns_template = {
 		psep..'%(?nm?%)?' .. csep .. '<fullraid>' .. csep .. '<size>',
 		'<fullraid>' .. csep .. '%(?nm?%)?' .. csep .. '<size>',
 		'<fullraid>' .. csep .. '<size>',
-	}
+	},
+	
+	simple = {
+		'<raid>' .. csep .. '<size>' .. csep .. 'ma?n?',
+		'<raid>' .. csep .. '<size>',
+		'<size>' .. csep .. 'ma?n?' .. csep .. '<raid>',
+	},
 };
 
 local function create_pattern_from_template(raid_name_pattern, size, difficulty, full_raid_name)
@@ -220,19 +226,14 @@ local raid_list = {
 		name = 'os10',
 		instance_name = 'The Obsidian Sanctum',
 		size = 10,
-		patterns = {
-			'os'..csep..'10',
-			'sartharion must die!',
-		},
+		patterns = create_pattern_from_template('os', 10, 'simple', 'The Obsidian Sanctum'),
 	},
 	
 	{
 		name = 'os25',
 		instance_name = 'The Obsidian Sanctum',
 		size = 25,
-		patterns = {
-			'os'..csep..'25',
-		},
+		patterns = create_pattern_from_template('os', 25, 'simple', 'The Obsidian Sanctum'),
 	},
 	
 	{
@@ -333,6 +334,7 @@ local role_patterns = {
 		'[0-9]*'..csep..'kitt?y?',
 		'[0-9]*'..csep..'cat'..sep,
 		'[0-9]*'..csep..'feral'..csep..'cat'..sep,
+		'[0-9]*'..csep..'feral'..sep,
 		'[0-9]*'..csep..'ret'..csep..'pal[al]?[dy]?i?n?',
 		
 		-- ranged dps
@@ -390,6 +392,7 @@ local lfm_patterns = {
 	'lf'..csep..'[0-9]*'..csep..'t[a]?nk[s]?',			-- LF 5 tanks
 	'lf'..csep..'[0-9]*'..csep..'[mr]?dps',				-- LF 9 DPS
 	'whispe?r?'..csep..'me',
+	sep .. 'w' .. csep .. 'me', -- /w me
 	--''..sep..'/w'..csep..'[%a]+', -- Too greedy
 }
 
