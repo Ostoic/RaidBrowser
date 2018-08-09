@@ -31,6 +31,35 @@ function std.algorithm.transform(values, fn)
 	return t;
 end
 
+function std.algorithm.generate_n(n, gen)
+	local t = {};
+	
+	for i = 1, n do 
+		table.insert(t, gen);
+	end
+	
+	return t;
+end
+
+function std.algorithm.fold(values, init, fn)
+	for i, v in ipairs(values) do
+		init = fn(init, v);
+	end
+	
+	return init;
+end
+
+std.algorithm.foldl = std.algorithm.fold;
+std.algorithm.accumulate = std.algorithm.fold;
+
+function std.algorithm.foldr(values, init, fn)
+	for i, v in ipairs(values) do
+		init = fn(v, init);
+	end
+	
+	return init;
+end
+
 -- Count the number of values that match the given predicate "pred".
 -- t is a table of values to count
 function std.algorithm.count_if(t, pred)
@@ -102,4 +131,3 @@ function std.algorithm.copy_back(target, source)
 	
 	return target;
 end
-

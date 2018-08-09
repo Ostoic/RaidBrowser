@@ -1,8 +1,9 @@
 -- Register addon
 raid_browser = LibStub('AceAddon-3.0'):NewAddon('RaidBrowser', 'AceConsole-3.0')
 
+--[[ Parsing and pattern matching ]]--
 -- Whitespace separator
-local sep = '[%s-_,.]';
+local sep = '[%s-_,.\/<>)(]';
 
 -- Kleene closure of sep.
 local csep = sep..'*';
@@ -10,34 +11,51 @@ local csep = sep..'*';
 -- Positive closure of sep.
 local psep = sep..'+';
 
+local metachar = '¿';
+
+local function make_meta(text)
+	return metachar .. text .. metachar;
+end
+
+local meta_role = make_meta('role');
+local meta_roles = make_meta('roles');
+local meta_raid = make_meta('raid');
+local meta_gs = make_meta('gs');
+local meta_achieve = make_meta('achiev')
+
 -- Raid patterns template for a raid with 2 difficulties and 2 sizes
 local raid_patterns_template = {
 	hc = {
-		'<raid>' .. csep .. '<size>' .. csep .. 'm?a?n?' .. csep .. '%(?hc?%)?',
-		psep..'%(?hc?%)?' .. csep .. '<raid>' .. csep .. '<size>',
-		'<raid>' .. csep .. '%(?hc?%)?' .. csep .. '<size>',
+		'<raid>' .. csep .. '<size>' .. csep .. 'm?a?n?' .. csep .. 'hc?' .. sep,
+		sep..'hc?' .. csep .. '<raid>' .. csep .. '<size>' .. sep,
+		'<raid>' .. csep .. 'hc?' .. csep .. '<size>' .. sep,
+		sep .. '<size>' .. csep .. '<raid>' .. sep,
+		'^<size>' .. csep .. '<raid>' .. sep,
 		
-		'<fullraid>' .. csep .. '<size>' .. sep .. 'm?a?n?' .. csep .. '%(?hc?%)?',
-		psep..'%(?hc?%)?' .. csep .. '<fullraid>' .. csep .. '<size>',
-		'<fullraid>' .. csep .. '%(?hc?%)?' .. csep .. '<size>',
+		'<fullraid>' .. csep .. '<size>' .. sep .. 'm?a?n?' .. csep .. 'hc?' .. sep,
+		sep..'hc?' .. csep .. '<fullraid>' .. csep .. '<size>' .. sep,
+		'<fullraid>' .. csep .. 'hc?' .. csep .. '<size>' .. sep,
 	},
 	
 	nm = {
-		'<raid>' .. csep .. '<size>' .. csep .. 'm?a?n?' .. csep .. '%(?nm?%)?',
-		psep..'%(?nm?%)?' .. csep .. '<raid>' .. csep .. '<size>',
-		'<raid>' .. csep .. '%(?nm?%)?' .. csep .. '<size>',
+		'<raid>' .. csep .. '<size>' .. csep .. 'm?a?n?' .. csep .. 'nm?' .. sep,
+		sep..'nm?' .. csep .. '<raid>' .. csep .. '<size>' .. sep,
+		'<raid>' .. csep .. 'nm?' .. csep .. '<size>' .. sep,
 		'<raid>' .. csep .. '<size>',
+		sep .. '<size>' .. csep .. '<raid>' .. sep,
+		'^<size>' .. csep .. '<raid>' .. sep,
 		
-		'<fullraid>' .. csep .. '<size>' .. csep .. 'm?a?n?' .. csep .. '%(?nm?%)?',
-		psep..'%(?nm?%)?' .. csep .. '<fullraid>' .. csep .. '<size>',
-		'<fullraid>' .. csep .. '%(?nm?%)?' .. csep .. '<size>',
-		'<fullraid>' .. csep .. '<size>',
+		'<fullraid>' .. csep .. '<size>' .. csep .. 'm?a?n?' .. csep .. 'nm?' .. sep,
+		sep..'nm?' .. csep .. '<fullraid>' .. csep .. '<size>' .. sep,
+		'<fullraid>' .. csep .. 'nm?' .. csep .. '<size>' .. sep,
+		'<fullraid>' .. csep .. '<size>' .. sep,
 	},
 	
 	simple = {
-		'<raid>' .. csep .. '<size>' .. csep .. 'ma?n?',
-		'<raid>' .. csep .. '<size>',
-		'<size>' .. csep .. 'ma?n?' .. csep .. '<raid>',
+		'<raid>' .. csep .. '<size>' .. csep .. 'm[an][an]',
+		'<raid>' .. csep .. '<size>' .. sep,
+		'^<size>' .. csep .. 'm?a?n?' .. csep .. '<raid>' .. sep,
+		sep .. '<size>' .. csep .. 'm?a?n?' .. csep .. '<raid>' .. sep,
 	},
 };
 
@@ -46,7 +64,7 @@ local function create_pattern_from_template(raid_name_pattern, size, difficulty,
 		return;
 	end
 	
-	full_raid_name = string.lower(full_raid_name);
+	full_raid_name = full_raid_name:lower();
 	
 	if size == 10 then
 		size = '1[0o]';
@@ -56,9 +74,9 @@ local function create_pattern_from_template(raid_name_pattern, size, difficulty,
 	
 	-- Replace placeholders with the specified raid info
 	return std.algorithm.transform(raid_patterns_template[difficulty], function(pattern)
-		pattern = string.gsub(pattern, '<fullraid>', full_raid_name);
-        pattern = string.gsub(pattern, '<raid>', raid_name_pattern);
-        pattern = string.gsub(pattern, '<size>', size);
+		pattern = pattern:gsub('<fullraid>', full_raid_name);
+        pattern = pattern:gsub('<raid>', raid_name_pattern);
+        pattern = pattern:gsub('<size>', size);
         return pattern;
 	end);
 end
@@ -194,14 +212,14 @@ local raid_list = {
 		name = 'voa10',
 		instance_name = 'Vault of Archavon',
 		size = 10,
-		patterns = {'voa'..csep..'10'},
+		patterns = create_pattern_from_template('voa', 10, 'simple', 'Vault of Archavon'),
 	},
 	
 	{
 		name = 'voa25',
 		instance_name = 'Vault of Archavon',
 		size = 25,
-		patterns = {'voa'..csep..'25'},
+		patterns = create_pattern_from_template('voa', 25, 'simple', 'Vault of Archavon'),
 	},
 		
 	{
@@ -226,14 +244,20 @@ local raid_list = {
 		name = 'os10',
 		instance_name = 'The Obsidian Sanctum',
 		size = 10,
-		patterns = create_pattern_from_template('os', 10, 'simple', 'The Obsidian Sanctum'),
+		patterns = std.algorithm.copy_back(
+			create_pattern_from_template('os', 10, 'simple', 'The Obsidian Sanctum'),
+			{ '%[sartharion must die!]' }
+		),
 	},
 	
 	{
 		name = 'os25',
 		instance_name = 'The Obsidian Sanctum',
 		size = 25,
-		patterns = create_pattern_from_template('os', 25, 'simple', 'The Obsidian Sanctum'),
+		patterns = std.algorithm.copy_back(
+			create_pattern_from_template('os', 25, 'simple', 'The Obsidian Sanctum'),
+			{ '%[sartharion must die!]' }
+		),
 	},
 	
 	{
@@ -294,6 +318,32 @@ local raid_list = {
 	},
 	
 	{
+		name = 'eoe10',
+		instance_name = 'The Eye of Eternity',
+		size = 10,
+		patterns = std.algorithm.copy_back(
+			create_pattern_from_template('eoe', 10, 'simple', 'The Eye of Eternity'),
+			{ '%[malygos must die!]' }
+		),
+	},
+	
+	{
+		name = 'eoe25',
+		instance_name = 'The Eye of Eternity',
+		size = 25,
+		patterns = std.algorithm.copy_back(
+			create_pattern_from_template('eoe', 25, 'simple', 'The Eye of Eternity'),
+			{ '%[malygos must die!]' }
+		),
+	},
+	
+	--
+	--
+	--[[{
+		name = '
+	},]]--
+	
+	{
 		name = 'black temple',
 		instance_name = 'The Black Temple',
 		size = 25,
@@ -348,7 +398,7 @@ local role_patterns = {
 	},
 	
 	healer = {
-		'[0-9]*'..csep..'he[a]?l[er|ers]*', -- LF healer
+		'[0-9]*'..csep..'h[ea]*l[ers]*', -- LF healer
 		'[0-9]*'..csep..'re?s?t?o?'..csep..'d[ru][ud][iu]d?', -- LF rdruid/rdudu
 		'[0-9]*'..csep..'tree', 			   -- LF tree
 		'[0-9]*'..csep..'re?s?t?o?'..csep..'shamm?y?', -- LF rsham
@@ -359,8 +409,8 @@ local role_patterns = {
 	tank = {
 		'[0-9]*'..csep..'t[a]?nk[s]?',	 -- NEED TANKS
 		'[0-9]*'..csep..'tn?[a]?k[s]?',  -- Need TNAK
-		'[%s-_,.]+[mo]t[%s-_,.]+',		 -- Need MT/OT
-		'[0-9]*'..csep..'bears?',
+		sep .. '[mo]t' .. sep,		 	 -- Need MT/OT
+		'[0-9]*'..csep..'b[ea]*rs?',
 		'[0-9]*'..csep..'prot'..csep..'pal[al]?[dy]?i?n?',
 	},
 }
@@ -374,34 +424,6 @@ local gearscore_patterns = {
 	'[1-6][0-9][0-9][0-9]',
 	'[1-6]%+',
 }
-
-local lfm_patterns = {
-	'lf[0-9]*m',
-	'lf'..csep..'all',
-	'need',
-	'need'..csep..'all',
-	'seek'..csep..'[0-9]*'..csep..'he[a]?l[er|ers]*',		-- seek healer
-	'seek'..csep..'[0-9]*'..csep..'t[a]?nk[s]?',			-- seek 5 tanks
-	'seek'..csep..'[0-9]*'..csep..'[mr]?dps',				-- seek 9 DPS
-	'looking'..csep..'for'..csep..'all',
-	'looking'..csep..'for'..csep..'an?'..sep,
-	'looking'..csep..'for'..csep..'[0-9]*'..csep..'more',		-- looking for 9 more
-	'lf'..csep..'.*for',								-- LF <any characters> for 
-	'looking'..csep..'for'..csep..'.*'..sep..'for',		-- LF <any characters> for 
-	'lf'..csep..'[0-9]*'..csep..'he[a]?l[er|ers]*',		-- LF healer
-	'lf'..csep..'[0-9]*'..csep..'t[a]?nk[s]?',			-- LF 5 tanks
-	'lf'..csep..'[0-9]*'..csep..'[mr]?dps',				-- LF 9 DPS
-	'whispe?r?'..csep..'me',
-	sep .. 'w' .. csep .. 'me', -- /w me
-	--''..sep..'/w'..csep..'[%a]+', -- Too greedy
-}
-
-lfm_channel_listeners = {
-	['CHAT_MSG_CHANNEL'] = {},
-	['CHAT_MSG_YELL'] = {},
-};
-
-local channel_listeners = {};
 
 local guild_recruitment_patterns = {
 	'recrui?ti?n?g?',
@@ -422,40 +444,35 @@ local wts_message_patterns = {
 	'selling'..sep,
 };
 
-local function refresh_lfm_messages()
-	for name, info in pairs(raid_browser.lfm_messages) do
-		-- If the last message from the sender was too long ago, then
-		-- remove his raid from lfm_messages.
-		if time() - info.time > raid_browser.expiry_time then
-			raid_browser.lfm_messages[name] = nil;
-		end
-	end
-end
+local lfg_message_patterns = {
+	'l[fg][fg]?' .. csep .. meta_raid,
+	'inv' .. csep .. 'for' .. meta_raid,
+}
 
-local function remove_achievement_text(message)
-	return string.gsub(message, '|c.*|r', '');
-end
+local lfm_patterns = {
+	
+	'need' .. csep .. meta_role,
+	'need' .. csep .. 'all' .. sep,
+	
+	'seek' .. csep .. meta_role,
+	'seek' .. csep .. 'all' .. sep,
+	
+	'lf[0-9]*' .. csep .. meta_role,
+	'looking' .. csep .. 'for' .. csep .. '[0-9]*' .. meta_role,
+	'lfm?' .. csep .. '.*for' .. meta_raid,
+	
+	'[0-9]*' .. csep .. meta_role .. 'for' .. csep .. meta_raid,
+	meta_raid .. csep .. '/?wh*i*s*p*e*r*' .. sep,
+	'/?wh*i*s*p*e*r*' .. csep .. 'me' .. csep .. meta_raid,
+	
+	meta_raid .. csep .. meta_roles .. csep .. meta_gs,
+	meta_raid .. 'need' .. csep .. '[0-9]*' .. meta_raid,
+}
 
-local function format_gs_string(gs)
-	local formatted = string.gsub(gs, sep..'*%+?', ''); -- Trim whitespace
-	formatted  = string.gsub(formatted , 'k', '')
-	formatted  = string.gsub(formatted , sep, '.');
-	formatted  = tonumber(formatted);
-
-	-- Convert ex: 5800 into 5.8 for display
-	if formatted  > 1000 then
-		formatted  = formatted /1000;
-		
-	-- Convert 57.0 into 5.7
-	elseif formatted > 100 then
-		formatted = formatted / 100;
-		
-	-- Convert 57.0 into 5.7
-	elseif formatted > 10 then
-		formatted = formatted / 10;
-	end
-
-	return string.format('%.1f', formatted );
+local function is_lfm_message(message)
+	return std.algorithm.find_if(lfm_patterns, function(pattern)
+		return string.find(message, pattern);
+	end);
 end
 
 local function is_guild_recruitment(message)
@@ -466,108 +483,167 @@ end
 
 local function is_wts_message(message)
 	return std.algorithm.find_if(wts_message_patterns, function(pattern)
-		return string.find(message, pattern);
+		return message:find(pattern);
 	end);
+end
+
+local function is_lfg_message(parsed_message)
+	return std.algorithm.find_if(lfg_message_patterns, function(pattern)
+		return parsed_message:find(pattern);
+	end);
+end
+
+local function parse_achievement_text(message)
+	return message:gsub('|c.*|r', meta_achieve);
 end
 
 -- Basic http pattern matching for streaming sites and etc.
 local function remove_http_links(message)
 	local http_pattern = 'https?://*[%a]*.[%a]*.[%a]*/?[%a%-%%0-9_]*/?';
-	return string.gsub(message, http_pattern, '');
+	return message:gsub(http_pattern, '');
 end
 	
-local function find_roles(roles, message, pattern_table, role)
-	local found = false;
-	for _, pattern in ipairs(pattern_table[role]) do
-		local result = string.find(message, pattern)
-
-		-- If a raid was found then save it to our list of roles and continue.
-		if result then
-			found = true;
-			
-			-- Remove the substring from the message
-			message = string.gsub(message, pattern, '')
-		end
-	end
+local function find_roles(roles, message, role)	
+	local found = std.algorithm.find_if(role_patterns[role], function(pattern)
+		local m, result = message:gsub(pattern, meta_role);
+		
+		if result > 0 then 
+			message = m;
+			return true;
+		end;
+		
+		return false;
+	end)
 	
-	if not found then
-		return roles, message;
-	end
-	
-	table.insert(roles, role);
+	if found then table.insert(roles, role) end
 	return roles, message;
 end
 
-function raid_browser.raid_info(message)
+local function format_gs_string(gs)
+	local formatted = gs:gsub(sep .. '*%+?', ''); -- Trim whitespace
+	formatted = formatted:gsub('k', '')
+	formatted = formatted:gsub(sep, '.');
+	gs = tonumber(formatted);
+
+	-- Convert ex: 5800 into 5.8 for display
+	if gs  > 1000 then
+		gs  = gs /1000;
+		
+	-- Convert 57.0 into 5.7
+	elseif gs > 100 then
+		gs = gs / 100;
+		
+	-- Convert 57.0 into 5.7
+	elseif gs > 10 then
+		gs = gs / 10;
+	end
+
+	return string.format('%.1f', gs);
+end
+
+local function find_gs_req(message)
+	for _, pattern in pairs(gearscore_patterns) do
+		local gs_start, gs_end = message:find(pattern)
+		
+		if gs_start and gs_end then
+			local gs_text = message:sub(gs_start, gs_end);
+
+			-- Extract gs and replace it with the gearscore nonterminal
+			return 
+				format_gs_string(gs_text), 
+				message:gsub(gs_text, meta_gs)
+		end
+	end
+	
+	return nil, message;
+end
+
+local function find_raid_info(message)	
+	for _, r in ipairs(raid_list) do
+	
+		local index = std.algorithm.find_if(r.patterns, function(pattern)
+			local m, result = string.gsub(message, pattern, meta_raid);
+			
+			if result > 0 then 
+				message = m;
+				return true;
+			end;
+			
+			return false;
+		end);
+		
+		if index then 
+			return r, message 
+		end;
+	end
+	
+	return nil;
+end
+
+function raid_browser.parse_roles(message)
+	local role_begin = message:find(meta_role)
+	local role_end = message:reverse():find(meta_role:reverse());
+
+	return message:sub(role_begin, #message - role_end + 1);
+end
+
+function raid_browser.parse_message(message)
 	if not message then return end;
-	message = string.lower(message)
+	message = message:lower();
 	message = remove_http_links(message);
 	
-	-- Stop if it's a guild recruit message
+	-- Stop if it's a guild recruit/wts message
 	if is_guild_recruitment(message) or is_wts_message(message) then
 		return;
 	end
 		
-	-- Search for LFM announcement in the message
-	local lfm_found = std.algorithm.find_if(lfm_patterns, function(pattern) return string.find(message, pattern) end) 
-	
-	if not lfm_found then
-		return;
-	end
-	
 	-- Get the raid_info from the message
-	local raid_info = nil;
-	for _, r in ipairs(raid_list) do
-		for _, pattern in ipairs(r.patterns) do
-			local result = string.find(message, pattern);
-
-			-- If a raid was found then save it and continue.
-			if result then
-				raid_info = r;
-
-				-- Remove the substring from the message
-				message = string.gsub(message, pattern, '')
-				break
-			end
-		end
-		
-		if raid_info then 
-			break;
-		end
-	end
+	local raid_info, message = find_raid_info(message);
+	if not raid_info then return end
 	
-	message = remove_achievement_text(message);
+	message = parse_achievement_text(message);
 	
 	-- Get any roles that are needed
 	local roles = {};
 	
-	--if string.find(message, '
-	if not string.find(message, 'lfm? all ') and not string.find(message, 'need all ') then 
-		roles, message  = find_roles(roles, message, role_patterns, 'dps');
-		roles, message  = find_roles(roles, message, role_patterns, 'tank');
-		roles, message = find_roles(roles, message, role_patterns, 'healer');
+	if not message:find('lfm? all ') and not message:find('need all ') then 
+		roles, message = find_roles(roles, message, 'dps');
+		roles, message = find_roles(roles, message, 'tank');
+		roles, message = find_roles(roles, message, 'healer');
 	end
+	
+	--message = parse_roles(message);
 
 	-- If there is only an LFM message, then it is assumed that all roles are needed
 	if #roles == 0 then
-		roles = {'dps', 'tank', 'healer'}
+		roles = {'dps', 'tank', 'healer' }
 	end
-
-	local gs = ' ';
 
 	-- Search for a gearscore requirement.
-	for _, pattern in pairs(gearscore_patterns) do
-		local gs_start, gs_end = string.find(message, pattern)
-
-		-- If a gs requirement was found, then save it and continue.
-		if gs_start and gs_end then
-			gs = format_gs_string(string.sub(message, gs_start, gs_end))
-			break
-		end
+	local gs, message = find_gs_req(message);
+	
+	-- Exclude any lfg messages that are not definite lfm messages
+	if not is_lfm_message(message) then
+		return 
 	end
-
-	return raid_info, roles, gs
+	
+	return message, raid_info, roles, gs or ' ';
 end
+
+function raid_browser.raid_info(message)
+	local raid_info, roles, gs;
+	
+	message, raid_info, roles, gs = raid_browser.parse_message(message);
+	return raid_info, roles, gs or ' ';
+end
+
+--[[ Event handlers and listeners ]]--
+lfm_channel_listeners = {
+	['CHAT_MSG_CHANNEL'] = {},
+	['CHAT_MSG_YELL'] = {},
+};
+
+local channel_listeners = {};
 
 local function is_lfm_channel(channel)
 	return channel == 'CHAT_MSG_CHANNEL' or channel == 'CHAT_MSG_YELL';
@@ -588,6 +664,20 @@ local function event_handler(self, event, message, sender)
 			};
 			
 			raid_browser.gui.update_list();
+		end
+	end
+end
+
+local function refresh_lfm_messages()
+	-- Requesting lock info each time a tooltip is produced creates a lot of lag.
+	-- This is a better alternative
+	RequestRaidInfo();
+	
+	for name, info in pairs(raid_browser.lfm_messages) do
+		-- If the last message from the sender was too long ago, then
+		-- remove his raid from lfm_messages.
+		if time() - info.time > raid_browser.expiry_time then
+			raid_browser.lfm_messages[name] = nil;
 		end
 	end
 end

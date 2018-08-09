@@ -445,7 +445,7 @@ local test_cases = {
 		message = 'ICC 10 nm wis me .....need all ..........gs up 5.5 ........and link me achive ..........{no B+P ress} ..... { com VH } ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++',
 		should_fail = false,
 		raid = 'icc10nm',
-		roles = {'tank', 'dps', 'healer'},
+		roles = { 'tank', 'dps', 'healer' },
 		gs = '5.5',
 	},	
 	
@@ -736,8 +736,221 @@ local test_cases = {
 		gs = '5.0',
 	},
 	
-	--1 tank for ICC 10 Run - 9/10, aim 11/12
-	--TOC 10 NM 1 TANK 1 HEAL + 1 PRIEST DPS
+	{
+		message = '<Asperity> End game guild looking for exceptional players to join our roster. ICC10hc 12/12, ICC25hc 11/12, RS25N 4/4. Raid time: 10 PM ST. We use DKP+DISCORD 6.1k+ Apply @ [Asperity-ic.shivtr.com]',
+		should_fail = true,
+	},
+	
+	{
+		message = 'VOA 25  5k+ fire + frost need Mdps Dk/dudu/war',
+		should_fail = false,
+		raid = 'voa25',
+		roles = { 'dps' },
+		gs = '5.0',
+	},
+	
+	{
+		message = 'ICC10REP-FARM NEED heal MUST CAN FLY  boe ress',
+		should_fail = false,
+		raid = 'icc10rep',
+		roles = { 'healer' },
+		gs = ' ',
+	},
+	
+	{
+		message = ' lf icc 10 group',
+		should_fail = true,
+	},
+	
+	{
+		message = 'LF DPS VoA25, fast run, 5k gs+ (Feral pvp/pve legs res)',
+		should_fail = false,
+		raid = 'voa25',
+		roles = { 'dps' },
+		gs = '5.0',
+	},
+	
+	{
+		message = '10VOA NEED warri OT',
+		should_fail = false,
+		raid = 'voa10',
+		roles = { 'tank' },
+		gs = ' ',
+	},
+	
+	{
+		message = 'LFG VOA 10/25 - rdps',
+		should_fail = true,
+	},
+	
+	{
+		message = 'VOA 25 DPS  /W CLASS AND GS (RESS ROGUE)',
+		should_fail = false,
+		raid = 'voa25',
+		roles = { 'dps' },
+		gs = ' ',
+	},
+	
+	{
+		message = 'TOC 10 NM semi grun 1x Main tank 5k+ 9/10',
+		should_fail = false,
+		raid = 'toc10nm',
+		roles = { 'tank' },
+		gs = '5.0',
+	},
+	
+	{
+		message = '5.9k ret pally / 5.3k holy LF VOA Group',
+		should_fail = true,
+	},
+	
+	{
+		message = '<TOC 25n> FAST SCROLL + EOT RUN (25MIN RAID)! 5,5K GS + [Call of the Crusade (25 player)]! B/P/O RESS!',
+		should_fail = false,
+		raid = 'toc25nm',
+		roles = { 'dps', 'healer', 'tank' },
+		gs = '5.5'
+	},
+	
+	{
+		message = 'VOA 25 1xheal 2xRdps /w me',
+		should_fail = false,
+		raid = 'voa25',
+		roles = { 'healer', 'dps' },
+		gs = ' '
+	},
+	
+	{
+		message = 'VOA10 Frost only, Class run need all /w me ',
+		should_fail = false,
+		raid = 'voa10',
+		roles = { 'dps', 'healer', 'tank' },
+		gs = ' ',
+	},
+	
+	{
+		message = 'VOA 10 NEED RSHAMY AND 1 TANK ',
+		should_fail = false,
+		raid = 'voa10',
+		roles = { 'healer', 'tank' },
+		gs = ' ',
+	},
+	
+	{
+		message = 'Tides of Azshara is a social PvE guild currently looking for members, all levels are welcome, We currently need all classes(Low on healers) for our building of a progression team for TOC/ICC 10!',
+		should_fail = true,
+	},
+	
+	{
+		message = 'PALA DPS 5.9 LFG ICC10 REP!!!!!! [INV] ME!!!!!!<3',
+		should_fail = true,
+	},
+	
+	{
+		message = ' <<Knuckles Deep>> LF 5.6K+ ACTIVE RAIDERS for ICC 10 HC + ICC 25 NM PROGRESSION!!--> LF DISC/HOLY PRIEST + RANGED DPS --> 4PM/6PM ST RAID TIMES!!',
+		should_fail = true, 
+	},
+	
+	{
+		message = 'LFM VOA 10  need  1 Heler,  clas run  min gs 5,1k 9/10',
+		should_fail = false,
+		raid = 'voa10',
+		roles = { 'healer', },
+		gs = '5.1'
+	},
+	
+	{
+		message = '5.1k prot pally LFG VOA 10/25',
+		should_fail = true,
+	},
+	
+	{
+		message = '[Sartharion Must Die!] OS 10 heal/dps 4.5k+',
+		should_fail = false,
+		raid = 'os10',
+		roles = { 'healer', 'dps' },
+		gs = '4.5',
+	},
+	
+	{
+		message = 'VOA 25 wiss me (DK item ress) DPS 24/25',
+		should_fail = false,
+		raid = 'voa25',
+		roles = { 'dps' },
+		gs = ' ',
+	},
+	
+	{
+		message = 'LF 2 Healers and dps VoA25 5k gs+ fast run! (Mage items res)',
+		should_fail = false,
+		raid = 'voa25',
+		roles = { 'healer', 'dps' },
+		gs = '5.0',
+	},
+	
+	{
+		message = 'druid tank 5.8 LF ICC 25',
+		should_fail = true
+	},
+	
+	{
+		message = '!!! Bulgarski Guild < BOMBASTIC  > nabira seriozni i opitni igrachi sus svobodno vreme i jelanie za igra za svoite raidove ICC / RS / Ulduar.   ICC 10 HC 10/12. !! RS  10 - 25  /  ICC 10 - 25 = CLEAR !.  Iziskvaniq 5,8 GS  ++ !',
+		should_fail = true
+	},
+	
+	{
+		message = 'INV FOR  ICC REP FARM',
+		should_fail = true,
+	},
+	
+	{
+		message = 'HUNT 5K8 LF ICC 10 N /H',
+		should_fail = true,
+	},
+	
+	{
+		message = ' Nova bulgarska guildiq < X A H O B E T E > tursi PVE IGRACHI za ICC 10 / 25 // TOC 10/25 ?? RS 10/25//',
+		should_fail = true,
+	},
+		      
+	{
+		message = '1 tank for ICC 10 Run - 9/10, aim 11/12',
+		should_fail = false,
+		raid = 'icc10nm',
+		roles = { 'tank' },
+		gs = ' ',
+	},
+		      
+	{
+		message = 'TOC 10 NM 1 TANK 1 HEAL + 1 PRIEST DPS',
+		should_fail = false,
+		raid = 'icc10nm',
+		roles = { 'tank' },
+		gs = ' ',
+	},
+	
+	{
+		message = '1 Lock for ICC 10 NM/HC.. Gs Req 5.7... [The Frostwing Halls (10 player)]...9/10',
+		should_fail = false,
+		raid = 'icc10nm',
+		roles = {'dps'},
+		gs = '5.7',
+	},
+	
+	{
+		message = 'some icc25',
+		should_fail = true,
+	},
+	
+	{
+		message = 'OS 10+3 systém  ---> WEEKLY quest ->> drop 100% fly mout -> ACHIEV -> drop bag 22sloth ->  need all +6K gs tank, dmg  /W me   [Reins of the Black Drake]',
+		should_fail = false,
+		raid = 'os10',
+		roles = { 'dps', 'healer', 'tank' },
+		'6.0',
+	},
+	
+	--
 	--[[{
 		message = 'LFM  [Bane of the Fallen King] need dog and mans for tank',
 		should_fail = false,
@@ -750,13 +963,6 @@ local test_cases = {
 	-- Idea: Convert raid/roles/gs into intermediate text such as <role> <class> <raid> <gs> so that the following could
 	-- be parsed as: <role> for <raid>/HC.. Gs Req <gs>... [The Frostwing Halls (10 player)]...9/10
 	-- This could be a more powerful technique for distinguishing between LFM messages and other messages
-	--[[{
-		message = '1 Lock for ICC 10 NM/HC.. Gs Req 5.7... [The Frostwing Halls (10 player)]...9/10',
-		should_fail = false,
-		raid = 'icc10nm',
-		roles = {'dps'},
-		gs = '5.7',
-	},]]--
 	
 	--[[
 		1. first discard non-lfm messages
@@ -778,7 +984,7 @@ local function array_contains(t, element)
 	return false;
 end
 
-local function compare_arrays(table1, table2)
+local function subset_of(table1, table2)
 	if #table1 ~= #table2 then
 		return false;
 	end
@@ -795,16 +1001,17 @@ end
 
 local function display_test(test)
 	local roles_string = '';
-	for _, role in ipairs(test.roles) do
-		roles_string = role .. ' ' .. roles_string;
-	end
+	local raid_string = test.raid or '';
+	local gs_string = test.gs or '';
 	
-	if not test.message then
-		print(test.raid)
+	if (test.roles) then
+		for _, role in ipairs(test.roles) do
+			roles_string = role .. ' ' .. roles_string;
+		end
 	end
 	
 	raid_browser:Print('Original message: ' .. test.message);
-	raid_browser:Print('[Required]: ' .. test.raid .. ', ' .. roles_string .. ', ' .. test.gs);
+	raid_browser:Print('[Required]: ' .. raid_string .. ', ' .. roles_string .. ', ' .. gs_string);
 	raid_browser:Print('Should fail: ' .. tostring(test.should_fail));
 end
 
@@ -813,10 +1020,9 @@ local function test_failed(test, detected, message)
 	raid_browser:Print('Test failed: ' .. message);
 	
 	if detected then
-		local roles_string = '';
-		for _, role in ipairs(detected.roles) do
-			roles_string = role .. ' ' .. roles_string;
-		end
+		local roles_string = std.algorithm.fold(detected.roles, '', function(text, role)
+			return text .. role .. ' ';
+		end)
 		
 		raid_browser:Print('[Detected]: ' .. detected.raid .. ', ' .. roles_string .. ', ' .. detected.gs);
 	end
@@ -832,6 +1038,7 @@ local function run_test_case(test)
 		detected = {raid = raid_info.name, roles = roles, gs = gs};
 	end
 	
+	-- Raid was mistakenly found
 	if raid_info and test.should_fail then
 		if test.raid == 'guild_message' then
 			test_failed(test, detected, 'guild recruitment message passed');
@@ -841,21 +1048,26 @@ local function run_test_case(test)
 			return false;
 		end
 		
+	-- No raid was found
 	elseif not raid_info then
+		-- But one should have been found
 		if not test.should_fail then
 			test_failed(test, detected, 'no raid detected');
 			return false;
 		end
 		
+	-- Incorrect raid was found
 	elseif not (test.raid == raid_info.name) then
 		test_failed(test, detected, 'detected raid name is incorrect');
 		return false;
 		
+	-- Incorrect gearscore detected
 	elseif not (test.gs == gs) then 
 		test_failed(test, detected, 'detected gearscore is incorrect');
 		return false;
 		
-	elseif not compare_arrays(test.roles, roles) then
+	-- Incorrect list of roles
+	elseif not subset_of(test.roles, roles) then
 		test_failed(test, detected, 'detected list of roles is not correct');
 		return false;
 	end

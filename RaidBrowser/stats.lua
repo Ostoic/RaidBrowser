@@ -103,7 +103,6 @@ function raid_browser.stats.active_spec()
 end
 
 function raid_browser.stats.raid_lock_info(instance_name, size)
-	RequestRaidInfo();
 	for i = 1, GetNumSavedInstances() do
 		local saved_name, _, reset, _, _, _, _, _, saved_size = GetSavedInstanceInfo(i);
 		
