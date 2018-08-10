@@ -950,6 +950,36 @@ local test_cases = {
 		'6.0',
 	},
 	
+	-- meta_raid .. sep .. nonalpha .. meta_roles .. sep .. nonalpha .. gs
+	{
+		message = 'TOC 25NM NEED ** 1RESTO DRUID/SHAMAN  &  DPS** 5.5 GS + w/me gs spec and link achiv or NO [inv] !!! Throphy reserv [Call of the Crusade (25 player)]',
+		should_fail = false,
+		raid = 'toc25nm',
+		roles = { 'healer', 'dps' },
+		gs = '5.5',
+	},
+	
+	{
+		 message = 'lf icc10 5.5k rogue',
+		 should_fail = true,
+	},
+	
+	{
+		message = 'lf rogue icc10 5.5k',
+		should_fail = false,
+		raid = 'icc10nm',
+		roles = { 'dps' },
+		gs = '5.5'
+	},
+	
+	{
+		message = 'ICC 10 N/HC # LF   TANK # HEAL # DPS 5.8k+ LINK KS # BRING TIME #  B+P  Reserved',
+		should_fail = false,
+		raid = 'icc10nm',
+		roles = { 'tank', 'healer', 'dps' },
+		gs = '5.8',
+	},
+	
 	--
 	--[[{
 		message = 'LFM  [Bane of the Fallen King] need dog and mans for tank',
