@@ -924,8 +924,8 @@ local test_cases = {
 	{
 		message = 'TOC 10 NM 1 TANK 1 HEAL + 1 PRIEST DPS',
 		should_fail = false,
-		raid = 'icc10nm',
-		roles = { 'tank' },
+		raid = 'toc10nm',
+		roles = { 'tank', 'healer', 'dps' },
 		gs = ' ',
 	},
 	
@@ -947,7 +947,7 @@ local test_cases = {
 		should_fail = false,
 		raid = 'os10',
 		roles = { 'dps', 'healer', 'tank' },
-		'6.0',
+		gs = '6.0',
 	},
 	
 	-- meta_raid .. sep .. nonalpha .. meta_roles .. sep .. nonalpha .. gs
@@ -978,6 +978,88 @@ local test_cases = {
 		raid = 'icc10nm',
 		roles = { 'tank', 'healer', 'dps' },
 		gs = '5.8',
+	},
+	
+	{
+		message = 'LFM  [Anub\'Rekhan Must Die!] NEED ALL',
+		should_fail = false,
+		raid = 'naxx10',
+		roles = { 'dps', 'healer', 'tank' },
+		gs = ' ',
+	},
+	
+	{
+		message = 'LFM ICC 10 N REP FARM NEED  2 HEAL 4.5 (BOE RESS)',
+		should_fail = false,
+		raid = 'icc10rep',
+		roles = { 'healer' },
+		gs = '4.5',
+	},
+	
+	{
+		message = 'LFM [The Black Temple] Achievement and Transmog run',
+		should_fail = false,
+		raid = 'black temple',
+		roles = { 'dps', 'healer', 'tank' },
+		gs = ' ',
+	},
+	
+	{
+		message = 'LF tank ICC nm10',
+		should_fail = false,
+		raid = 'icc10nm',
+		roles = { 'tank' },
+		gs = ' ',
+	},
+	
+	{
+		message = 'LF tank ICC 10nm',
+		should_fail = false,
+		raid = 'icc10nm',
+		roles = { 'tank' },
+		gs = ' ',
+	},
+	
+	{
+		message = 'LFM |cffffff00|Hachievement:697:07000000001CB65C:0:0:0:-1:0:0:0:0|h[The Black Temple]|h|r. Get some transmorg. 12/20',
+		should_fail = false,
+		raid = 'black temple',
+		roles = { 'dps', 'tank', 'healer' },
+		gs = ' ',
+	},
+	
+	{
+		message = 'lfm mount hyjal XMOG RUn need all lvl 80 only w me fast  [The Battle for Mount Hyjal] TOken Hand Pala res',
+		should_fail = false,
+		raid = 'hyjal',
+		roles = { 'dps', 'healer', 'tank' },
+		gs = ' ',
+	},
+	
+	{
+		message = 'LFM  ALL TO [Zul\'Aman]/ TRANSMOG RUN ALL FREE!!',
+		should_fail = false,
+		raid = 'zul\'aman',
+		roles = { 'dps', 'healer', 'tank' },
+		gs = ' ',
+	},
+	
+	{
+		message = 'LFM RS10 NM! Need 1 TANK - 2HEAL - 5DPS ! 5k8 + Link ACHIV or no inv ! ID in front of the boss ! {losange}',
+		should_fail = false,
+		raid = 'rs10nm',
+		roles = { 'tank', 'healer', 'dps' },
+		gs = '5.8',
+	},
+	
+	{
+		message = 'PVE guild <Abyssal> is recruiting serious and dedicated players. LF active players (6,2k GS) with decent HC knowledge.Our progress:ICC 10 12/12HC, ICC 25 11/12HC, RS 25 4/4.Raids @ 5PM ST (using Discord/DKPs).Apply on [http://abyssal.shivtr.blue/]',
+		should_fail = true,
+	},
+	
+	{
+		message = 'Guild ++ Virtual Experience ++ Trazi nove clanove za raidovanje. Radimo progres Guild-a! 12/12 NM, 11/12 HC, 25man 12/12 NM, 6/12 HC! Trazimo samo ozbiljne igrace koji ce biti aktivni! Za vise info /w me.',
+		should_fail = true,
 	},
 	
 	--
@@ -1068,38 +1150,36 @@ local function run_test_case(test)
 		detected = {raid = raid_info.name, roles = roles, gs = gs};
 	end
 	
-	-- Raid was mistakenly found
-	if raid_info and test.should_fail then
-		if test.raid == 'guild_message' then
-			test_failed(test, detected, 'guild recruitment message passed');
-			return false;
-		else
+	if test.should_fail then
+		-- If we found an lfm message, then the test failed
+		if raid_info then
 			test_failed(test, detected, 'test should have failed');
 			return false;
 		end
-		
-	-- No raid was found
-	elseif not raid_info then
-		-- But one should have been found
-		if not test.should_fail then
+	else
+		-- No raid was found
+		if not raid_info then
 			test_failed(test, detected, 'no raid detected');
 			return false;
+		
+		elseif test.raid ~= raid_info.name then
+			test_failed(test, detected, 'detected raid name is incorrect');
+			return false;
+			
+		elseif test.gs ~= gs then 
+			test_failed(test, detected, 'detected gearscore is incorrect');
+			return false;
+		
+		-- Incorrect gearscore detected
+		elseif not (test.gs == gs) then 
+			test_failed(test, detected, 'detected gearscore is incorrect');
+			return false;
+			
+		-- Incorrect list of roles
+		elseif not subset_of(test.roles, roles) then
+			test_failed(test, detected, 'detected list of roles is not correct');
+			return false;
 		end
-		
-	-- Incorrect raid was found
-	elseif not (test.raid == raid_info.name) then
-		test_failed(test, detected, 'detected raid name is incorrect');
-		return false;
-		
-	-- Incorrect gearscore detected
-	elseif not (test.gs == gs) then 
-		test_failed(test, detected, 'detected gearscore is incorrect');
-		return false;
-		
-	-- Incorrect list of roles
-	elseif not subset_of(test.roles, roles) then
-		test_failed(test, detected, 'detected list of roles is not correct');
-		return false;
 	end
 	
 	return true;

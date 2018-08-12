@@ -2,8 +2,13 @@
 raid_browser = LibStub('AceAddon-3.0'):NewAddon('RaidBrowser', 'AceConsole-3.0')
 
 --[[ Parsing and pattern matching ]]--
+-- Separator characters
+local sep_chars = '%s-_,.<>%*)(#+&'
+
 -- Whitespace separator
-local sep = '[%s-_,.\/<>%*)(#]';
+local sep = '[' .. sep_chars .. ']';
+
+local role_sep = '[' .. sep_chars .. '\\/' .. ']';
 
 -- Kleene closure of sep.
 local csep = sep..'*';
@@ -11,12 +16,17 @@ local csep = sep..'*';
 -- Positive closure of sep.
 local psep = sep..'+';
 
-local wtext = '[%w%s-_,.\/<>)(%*$]*'
+-- Separator characters + any text
+local wtext = '[%w' .. sep_chars .. ']*'
 
-local metachar = '¿';
+local meta_char = '¿';
+
+local meta_or_sep = '[^' .. meta_char .. ']?' .. '[' .. sep .. ']?';
+
+local non_meta = '[^' .. meta_char .. ']*';
 
 local function make_meta(text)
-	return metachar .. text .. metachar;
+	return meta_char .. text .. meta_char;
 end
 
 local meta_role = make_meta('role');
@@ -29,23 +39,25 @@ local meta_achieve = make_meta('achiev')
 local raid_patterns_template = {
 	hc = {
 		'<raid>' .. csep .. '<size>' .. csep .. 'm?a?n?' .. csep .. 'hc?',
-		sep..'hc?' .. csep .. '<raid>' .. csep .. '<size>' .. sep,
-		'<raid>' .. csep .. 'hc?' .. csep .. '<size>' .. sep,
-		sep .. '<size>' .. csep .. '<raid>',
-		'^<size>' .. csep .. '<raid>',
+		sep..'hc?' .. csep .. '<raid>' .. csep .. '<size>',
+		'<raid>' .. csep .. 'hc?' .. csep .. '<size>',
+		sep .. '<size>' .. csep .. '<raid>' .. sep,
+		
+		'^<size>' .. csep .. '<raid>' .. sep,
 	},
 	
 	nm = {
-		'<raid>' .. csep .. '<size>' .. csep .. 'm?a?n?' .. csep .. 'n?m?',
-		sep..'nm?' .. csep .. '<raid>' .. csep .. '<size>' .. sep,
-		'<raid>' .. csep .. 'n?m?' .. csep .. '<size>' .. sep,
-		sep .. '<size>' .. csep .. '<raid>',
-		'^<size>' .. csep .. '<raid>',
+		'<raid>' .. csep .. '<size>' .. csep .. 'm?a?n?' .. csep .. 'n?m?' .. sep,
+		sep..'nm?' .. csep .. '<raid>' .. csep .. '<size>',
+		'<raid>' .. csep .. 'n?m?' .. csep .. '<size>',
+		sep .. '<size>' .. csep .. '<raid>' .. sep,
+		
+		'^<size>' .. csep .. '<raid>' .. sep,
 	},
 	
 	simple = {
 		'<raid>' .. csep .. '<size>' .. csep .. 'm[an][an]',
-		'<raid>' .. csep .. '<size>' .. sep,
+		'<raid>' .. csep .. '<size>',
 		'^<size>' .. csep .. 'm?a?n?' .. csep .. '<raid>' .. sep,
 		sep .. '<size>' .. csep .. 'm?a?n?' .. csep .. '<raid>' .. sep,
 	},
@@ -81,6 +93,7 @@ local raid_list = {
 		patterns = {
 			'icc'..csep..'25'..csep..'m?a?n?'..csep..'repu?t?a?t?i?o?n?'..csep..'',
 			'icc'..csep..'repu?t?a?t?i?o?n?'..csep..'25'..csep..'m?a?n?',
+			'icc' .. csep .. '25' .. csep .. 'nm?' .. csep .. 'farm',
 		}
 	},
 	
@@ -89,9 +102,11 @@ local raid_list = {
 		instance_name = 'Icecrown Citadel',
 		size = 10,
 		patterns = {
-			'icc'..csep..'10'..csep..'m?a?n?'..csep..'repu?t?a?t?i?o?n?'..csep..'',
-			'icc'..csep..'repu?t?a?t?i?o?n?'..csep..'10',
-			'icc'..csep..'repu?t?a?t?i?o?n?',
+			'icc' .. csep .. '10' .. csep .. 'm?a?n?' .. csep .. 'repu?t?a?t?i?o?n?' .. csep,
+			'icc' .. csep .. 'repu?t?a?t?i?o?n?' .. csep .. '10',
+			'icc' .. csep .. '10' .. csep .. 'nm?' .. csep .. 'farm',
+			'icc' .. csep .. 'nm?' .. csep .. 'farm',
+			'icc' .. csep .. 'repu?t?a?t?i?o?n?',
 		}
 	},
 	
@@ -173,21 +188,31 @@ local raid_list = {
 		name = 'rs10hc',
 		instance_name = 'The Ruby Sanctum',
 		size = 10,
-		patterns = create_pattern_from_template('rs', 10, 'hc'),
+		patterns = create_pattern_from_template('rs', 10, 'hc')
 	},
 
 	{
 		name = 'rs25hc',
 		instance_name = 'The Ruby Sanctum',
 		size = 25,
-		patterns = create_pattern_from_template('rs', 25, 'hc'),
+		patterns = std.algorithm.copy_back(
+			create_pattern_from_template('rs', 25, 'hc'),
+			{
+				'ruby' .. csep .. 'sanctum' .. csep .. 25
+			}
+		),
 	},
 
 	{
 		name = 'rs10nm',
 		instance_name = 'The Ruby Sanctum',
 		size = 10,
-		patterns = create_pattern_from_template('rs', 10, 'nm'),
+		patterns = std.algorithm.copy_back(
+			create_pattern_from_template('rs', 10, 'nm'),
+			{
+				'ruby' .. csep .. 'sanctum' .. csep .. 10
+			}
+		),
 	},
 
 	{
@@ -235,7 +260,7 @@ local raid_list = {
 		size = 10,
 		patterns = std.algorithm.copy_back(
 			create_pattern_from_template('os', 10, 'simple'),
-			{ '%[sartharion must die!]' }
+			{ 'sartharion must die!' }
 		),
 	},
 	
@@ -243,10 +268,7 @@ local raid_list = {
 		name = 'os25',
 		instance_name = 'The Obsidian Sanctum',
 		size = 25,
-		patterns = std.algorithm.copy_back(
-			create_pattern_from_template('os', 25, 'simple'),
-			{ '%[sartharion must die!]' }
-		),
+		patterns = create_pattern_from_template('os', 25, 'simple'),
 	},
 	
 	{
@@ -256,7 +278,11 @@ local raid_list = {
 		patterns = {
 			'naxx?r?a?m?m?a?s?'..csep..'10',
 			'naxx'..sep..'weekly',
-			'patchwerk'..sep..'must'..sep..'die!',
+			'anub\'rekhan must die!',
+			'patchwerk must die!',
+			'instructor razuvious must die!',
+			'noth the plaguebringer must die!',
+			'patchwerk must die!',
 		},
 	},
 	
@@ -288,6 +314,26 @@ local raid_list = {
 	},
 	
 	{
+		name = 'hyjal',
+		instace_name = 'Mount Hyjal',
+		size = 25,
+		patterns = {
+			'mount' .. csep .. 'hyjal',
+		},
+	},
+	
+	{
+		name = 'zul\'aman',
+		instance_name = 'Zul\'Aman',
+		size = 10,
+		patterns = {
+			sep .. 'za',
+			'za' .. sep,
+			'zul' .. csep .. '\'?' .. csep .. 'aman',
+		},
+	},
+	
+	{
 		name = 'karazhan',
 		instance_name = 'Karazhan',
 		size = 10,
@@ -302,7 +348,7 @@ local raid_list = {
 		size = 40,
 		patterns = {
 			'molte?n'..csep..'core?',
-			'[%s-_,.%^]+mc'..csep..'4?0?[%s-_,.$]+',
+			sep .. 'mc'..csep..'4?0?' .. sep,
 		},
 	},
 	
@@ -312,7 +358,7 @@ local raid_list = {
 		size = 10,
 		patterns = std.algorithm.copy_back(
 			create_pattern_from_template('eoe', 10, 'simple'),
-			{ '%[malygos must die!]' }
+			{ 'malygos must die!' }
 		),
 	},
 	
@@ -320,17 +366,8 @@ local raid_list = {
 		name = 'eoe25',
 		instance_name = 'The Eye of Eternity',
 		size = 25,
-		patterns = std.algorithm.copy_back(
-			create_pattern_from_template('eoe', 25, 'simple'),
-			{ '%[malygos must die!]' }
-		),
+		patterns = create_pattern_from_template('eoe', 25, 'simple'),
 	},
-	
-	--
-	--
-	--[[{
-		name = '
-	},]]--
 	
 	{
 		name = 'black temple',
@@ -358,51 +395,76 @@ local raid_list = {
 		size = 20,
 		patterns = {
 			'ruins?'..csep..'of?'..csep..'ahn\'?'..csep..'qiraj',
-			sep..'*aq'..csep..'20'..csep..'',
+			'aq'..csep..'20',
 		},
 	},
 }
 
 local role_patterns = {	
 	dps = {
-		-- melee dps
-		'[0-9]*'..csep..'m[dp][dp]s',
-		'[0-9]*'..csep..'rogue',
-		'[0-9]*'..csep..'kitt?y?',
-		'[0-9]*'..csep..'cat'..sep .. csep .. 'd?p?s?',
-		'[0-9]*'..csep..'feral'..csep..'cat'..sep,
-		'[0-9]*'..csep..'feral'..sep .. csep .. 'd?p?s?',
-		'[0-9]*'..csep..'ret'..csep..'pal[al]?[dy]?i?n?',
 		
-		-- ranged dps
-		'[0-9]*'..csep..'r[dp][dp]s',
-		'[0-9]*'..csep..'w?a?r?lock',
-		'[0-9]*'..csep..'spri?e?st' .. csep .. 'd?p?s?',
-		'[0-9]*'..csep..'elem?e?n?t?a?l?',
-		'[0-9]*'..csep..'mage',
-		'[0-9]*'..csep..'boo?mm?y?k?i?n?',
-		'[0-9]*'..csep..'b[ru][ud][iu]d?',
-		'[0-9]*'..csep..'hunte?r?s?',
+		'feral' .. csep .. 'cat' .. sep,
+		'feral' .. csep .. 'd?p?s?',
 		
-		'[0-9]*'..csep..'dps',
+		'ret' .. csep .. 'pal[al]?[dy]?i?n?',
 		
+		'shadow' .. csep .. 'pri?e?st',
+		'pri?e?st' .. csep .. 'dps',
+		
+		'balance' .. '[ru][ud][iu]d?',
+		
+		'elem?e?n?t?a?l?' .. csep .. 'shamm?[iy]?',
+		'mage',
+		
+		'boo?my?i?',
+		'boo?mki?n',
+		
+		'b[ru][ud][iu]d?',
+		
+		'rogue' .. meta_or_sep,
+		'rouge' .. meta_or_sep,
+		
+		'kitt?y',
+		
+		'w?a?r?lock',
+		
+		'spri?e?st',
+		
+		'hunte?r?s?',
+		
+		'm[dp][dp]s' .. meta_or_sep,
+		'r[dp][dp]s',
+		'dps',
 	},
 	
 	healer = {
-		'[0-9]*'..csep..'hea?l[ers]*', -- LF healer
-		'[0-9]*'..csep..'re?s?t?o?'..csep..'d[ru][ud][iu]d?', -- LF rdruid/rdudu
-		'[0-9]*'..csep..'tree', 			   -- LF tree
-		'[0-9]*'..csep..'re?s?t?o?'..csep..'shamm?y?', -- LF rsham
-		'[0-9]*'..csep..'di?s?c?o?'..csep..'pri?e?st', -- disc priest
-		'[0-9]*'..csep..'ho?l?l?y?'..csep..'pala',	   -- LF hpala
+		'hea?l[ers]*', -- LF healer
+		
+		'resto' .. csep .. 'd[ru][ud][iu]d?', -- LF rdruid/rdudu
+		'rd[ru][ud][iu]d?', -- LF rdruid/rdudu
+		meta_or_sep .. 'r' .. csep .. 'd[ru][ud][iu]d?', -- LF rdruid/rdudu
+		
+		'tree', 			   -- LF tree
+		
+		'resto' .. csep .. 'shamm?y?', -- LF rsham
+		'rshamm?y?', -- LF rsham
+		meta_or_sep .. 'r' .. csep .. 'shamm?y?', -- LF rsham
+		
+		'disco?' .. csep .. 'pri?e?st', -- disc priest
+		'dpri?e?st', -- disc priest
+		meta_or_sep .. 'd' .. csep .. 'pri?e?st', -- disc priest
+		
+		'holl?y' .. csep .. 'palad?i?n?',	   -- LF holy pala
+		'hpalad?i?n?',	   -- LF hpala
+		meta_or_sep .. 'h' .. csep .. 'palad?i?n?',	   -- LF hpala
 	},
 	
 	tank = {
-		sep .. '[mo]t' .. sep,		 	 -- Need MT/OT
-		'[0-9]*'..csep..'t[a]?nk[s]?',	 -- NEED TANKS
-		'[0-9]*'..csep..'tn?[a]?k[s]?',  -- Need TNAK
-		'[0-9]*'..csep..'b[ea]*rs?',
-		'[0-9]*'..csep..'prot'..csep..'pal[al]?[dy]?i?n?',
+		sep .. '[mo]t' .. sep,		   -- Need MT/OT
+		sep .. '[mo]t' .. csep .. '$', -- Need MT/OT
+		'ta*n+a?k+s?',	 -- NEED TANKS
+		'b[ea]*rs?',
+		'prot' .. csep .. 'pal[al]?[dy]?i?n?',
 	},
 }
 
@@ -438,40 +500,70 @@ local trade_message_patterns = {
 };
 
 local rolelist_patterns = {
-	meta_role .. wtext .. 'and' .. wtext .. meta_role,
-	meta_role .. wtext .. 'or' .. wtext .. meta_role,
-	meta_role .. csep .. meta_role,
+	meta_role .. non_meta .. 'and' .. non_meta .. meta_role,
+	meta_role .. non_meta .. 'or' .. non_meta .. meta_role,
+	meta_role .. non_meta .. meta_role,
 };
 
 local lfm_patterns = {
-	'l[fm][fm]?' .. csep .. meta_role .. wtext .. meta_raid,
-	'l[fm][fm]' .. csep .. meta_raid .. wtext .. meta_role,
+	'l[fm][fm]?' .. non_meta .. meta_role .. non_meta .. meta_raid,
+	'l[fm][fm]' .. non_meta .. meta_raid .. non_meta,
 	
-	meta_raid .. wtext .. 'need' .. wtext .. meta_role,
-	meta_raid .. wtext.. 'seek' .. wtext .. meta_role,
-	meta_raid .. wtext .. 'lf' .. wtext .. meta_role,
+	meta_raid .. non_meta .. sep .. '[0-9]+' .. non_meta .. meta_role,
+   
+   'lf' .. csep .. meta_role .. non_meta .. meta_gs .. '.*' .. meta_raid,
+		
+	meta_raid .. non_meta .. meta_role .. non_meta .. meta_gs,
+	meta_raid .. non_meta .. 'need' .. non_meta .. meta_role,
+	meta_raid .. non_meta .. 'seek' .. non_meta .. meta_role,
+	
+	meta_raid .. non_meta .. 'lf' .. non_meta .. meta_role,
+	meta_raid .. non_meta .. 'looki?ng' .. csep .. 'for' .. non_meta .. meta_role,
+   
+	meta_raid .. non_meta .. 'need' .. csep .. 'all',
+	
+	meta_raid .. non_meta .. meta_gs .. non_meta .. meta_role,
+	
+	meta_role .. non_meta .. 'for' .. non_meta .. meta_raid,
+	
+	meta_raid .. non_meta .. meta_gs .. non_meta .. 'wh?i?s?p?e?r?' .. csep .. 'me',
+	meta_raid .. non_meta .. meta_gs .. non_meta .. 'wh?i?s?p?e?r?' .. csep .. '[A-Z][a-z]+',
+   
+	meta_raid .. non_meta .. 'run' .. non_meta .. meta_gs,
+   
+	meta_raid .. non_meta .. meta_role,
 }
 
-local function is_lfm_message(message)
-	return std.algorithm.find_if(lfm_patterns, function(pattern)
+local lfg_patterns = {
+	'^lfg',
+	sep .. 'lfg',
+};
+
+local function matches_any_pattern(message, patterns)
+	return std.algorithm.find_if(patterns, function(pattern)
 		return message:find(pattern);
 	end);
+end
+
+local function is_lfm_message(message)
+	return matches_any_pattern(message, lfm_patterns);
 end
 
 local function is_guild_recruitment(message)
-	return std.algorithm.find_if(guild_recruitment_patterns, function(pattern)
-		return message:find(pattern);
-	end);
+	return matches_any_pattern(message, guild_recruitment_patterns);
+end
+
+local function is_lfg_message(message)
+	return matches_any_pattern(message, lfg_patterns);
 end
 
 local function is_trade_message(message)
-	return std.algorithm.find_if(trade_message_patterns, function(pattern)
-		return message:find(pattern);
-	end);
+	return matches_any_pattern(message, trade_message_patterns);
 end
 
-local function parse_achievement_text(message)
-	return message:gsub('|c.*|r', meta_achieve);
+local function lex_achievements(message)
+	local achievement_pattern = '\124cffffff00\124h.*\124h(%[.*%])\124h\124r';
+	return message:gsub(achievement_pattern, '%1');
 end
 
 -- Basic http pattern matching for streaming sites and etc.
@@ -480,7 +572,7 @@ local function remove_http_links(message)
 	return message:gsub(http_pattern, '');
 end
 	
-local function find_roles(roles, message, role)		
+local function lex_roles(roles, message, role)		
 	local found = false;
 	
 	for _, pattern in ipairs(role_patterns[role]) do
@@ -518,7 +610,7 @@ local function format_gs_string(gs)
 	return string.format('%.1f', gs);
 end
 
-local function find_gs_req(message)
+local function lex_gs_req(message)
 	for _, pattern in pairs(gearscore_patterns) do
 		local gs_start, gs_end = message:find(pattern)
 		
@@ -535,9 +627,8 @@ local function find_gs_req(message)
 	return nil, message;
 end
 
--- ICC 10 N/HC # LF   TANK # HEAL # DPS 5.8k+ LINK KS # BRING TIME #  B+P  Reserved
-
-function raid_browser.find_raid_info(message)	
+function raid_browser.lex_raid_info(message)
+	
 	for _, r in ipairs(raid_list) do
 	
 		local index = std.algorithm.find_if(r.patterns, function(pattern)
@@ -560,6 +651,7 @@ function raid_browser.find_raid_info(message)
 end
 
 local function reduce_rolelists(message)
+
 	for _, pattern in ipairs(rolelist_patterns) do
 		message = message:gsub(pattern, meta_role);
 	end
@@ -573,7 +665,7 @@ function raid_browser.lex_and_extract(message)
 	message = remove_http_links(message);
 	
 	-- Stop if it's a guild recruit/wts message
-	if is_guild_recruitment(message) or is_trade_message(message) then
+	if is_guild_recruitment(message) or is_trade_message(message) or is_lfg_message(message) then
 		return;
 	end
 	
@@ -581,21 +673,19 @@ function raid_browser.lex_and_extract(message)
 	message = message:gsub(meta_char, '');
 		
 	-- Get the raid_info from the message
-	local raid_info, message = raid_browser.find_raid_info(message);
+	local raid_info, message = raid_browser.lex_raid_info(message);
 	if not raid_info then return end
 	
-	message = parse_achievement_text(message);
+	message = lex_achievements(message);
 	
 	-- Get any roles that are needed
 	local roles = {};
 	
 	if not message:find('lfm? all ') and not message:find('need all ') then 
-		roles, message = find_roles(roles, message, 'dps');
-		roles, message = find_roles(roles, message, 'tank');
-		roles, message = find_roles(roles, message, 'healer');
+		roles, message = lex_roles(roles, message, 'dps');
+		roles, message = lex_roles(roles, message, 'tank');
+		roles, message = lex_roles(roles, message, 'healer');
 	end
-	
-	--message = parse_roles(message);
 	
 	-- If there is only an LFM message, then it is assumed that all roles are needed
 	if #roles == 0 then
@@ -603,7 +693,7 @@ function raid_browser.lex_and_extract(message)
 	end
 
 	-- Search for a gearscore requirement.
-	local gs, message = find_gs_req(message);
+	local gs, message = lex_gs_req(message);
 	
 	message = reduce_rolelists(message);
 	
@@ -613,7 +703,7 @@ end
 function raid_browser.raid_info(message)
 	local lexed_message, raid_info, roles, gs = raid_browser.lex_and_extract(message);
 	
-	if lexed_message then print(lexed_message) end
+	--if lexed_message then print(lexed_message) end
 	
 	-- Parse symbols to determine if the message is valid
 	if lexed_message and not is_lfm_message(lexed_message) then
