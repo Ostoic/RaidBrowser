@@ -1062,6 +1062,42 @@ local test_cases = {
 		should_fail = true,
 	},
 	
+	{
+		message = '<ICC25HC> Lfm Dps( War Boomy) W me Gs 6.2+ And link Hc Achive(Lady PP Sindy Lk Norm){B/P+Shard Res}  [Bane of the Fallen King]',
+		raid = 'icc25hc',
+		roles = { 'dps' },
+		gs = '6.2',
+	},
+	
+	{
+		message = '<<<LFM NEED 1 TANK 3 HEALERS SOME DPS FOR SSC HUNTER TOKENS RESERVED [Serpentshrine Cavern]',
+		should_fail = false,
+		raid = 'ssc',
+		roles = { 'tank', 'healer', 'dps' },
+		gs = ' ',
+	},
+	
+	{
+		message = 'LFM RS 10 NM NEED 1MDPS GS MIN 5.8KGS+ACHIEV WISP ME ',
+		should_fail = false,
+		raid = 'rs10nm',
+		roles = { 'dps' },
+		gs = '5.8',
+	},
+	
+	{
+		message = 'Guild <Elites>  player irani mipazirad >>> Raid hai ICC 25/10 >>>Rs 25/10 . TS3 va DKp system  / RAid time 8 SHab >[The Light of Dawn]<',
+		should_fail = true,
+	},
+
+	{
+		message = 'LFM icc 10 nm/hc need 1tank(pala-dudu) [Heroic: The Frostwing Halls (25 player)] gs+6k fast run eof farm lk run',
+		should_fail = false,
+		raid = 'icc10nm',
+		roles = { 'tank' },
+		gs = '6.0',
+	},
+	
 	--
 	--[[{
 		message = 'LFM  [Bane of the Fallen King] need dog and mans for tank',

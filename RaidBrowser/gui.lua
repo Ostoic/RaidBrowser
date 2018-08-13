@@ -79,6 +79,7 @@ for i = 1, NUM_LFR_LIST_BUTTONS do
 		end
 	);
 	
+	-- Todo: This causes heavy lag for some reason
 	button:SetScript('OnEnter', 
 		function(button)
 			GameTooltip:SetOwner(button, 'ANCHOR_RIGHT');

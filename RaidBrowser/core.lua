@@ -525,6 +525,8 @@ local lfm_patterns = {
 	meta_raid .. non_meta .. meta_gs .. non_meta .. meta_role,
 	
 	meta_role .. non_meta .. 'for' .. non_meta .. meta_raid,
+
+	meta_raid .. non_meta .. sep .. 'loot' .. sep .. non_meta .. 'wh?i?s?p?e?r?' .. csep .. 'me',
 	
 	meta_raid .. non_meta .. meta_gs .. non_meta .. 'wh?i?s?p?e?r?' .. csep .. 'me',
 	meta_raid .. non_meta .. meta_gs .. non_meta .. 'wh?i?s?p?e?r?' .. csep .. '[A-Z][a-z]+',

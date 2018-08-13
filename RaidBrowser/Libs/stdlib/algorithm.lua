@@ -4,6 +4,10 @@
 if not std then std = {} end;
 std.algorithm = {};
 
+function std.algorithm.identity(x)
+	return x;
+end
+
 -- Returns the (i, v) pair max of the given table
 function std.algorithm.max_of(t)
 	local result = -math.huge;
@@ -20,15 +24,26 @@ function std.algorithm.max_of(t)
 end
 
 -- Given a table of values, and a function, return a table of the transformed table
-function std.algorithm.transform(values, fn)
+function std.algorithm.transform_if(values, fn, pred)
 	local t = {}
 	 
 	for _, v in ipairs(values) do
 		local result = fn(v);
-		table.insert(t, result)
+		if pred(result) then
+			table.insert(t, result)
+		end
 	end
 	 
 	return t;
+end
+
+-- Given a table of values, and a function, return a table of the transformed table
+function std.algorithm.transform(values, fn)
+	return std.algorithm.transform_if(values, fn, std.algorithm.identity);
+end
+
+function std.algorithm.filter(values, pred)
+	return std.algorithm.transform_if(values, std.algorithm.identity, pred);
 end
 
 function std.algorithm.generate_n(n, gen)
@@ -122,6 +137,18 @@ function std.algorithm.equal(first, second)
 	end
 	
 	return true;
+end
+
+-- Fills a table [first, last) with sequentially increasing values, starting with first, and ending with last - 1.
+function std.algorithm.iota(first, last)
+	local t = {};
+	
+	while first ~= last do
+		table.insert(t, first);
+		first = first + 1;
+	end
+	
+	return t;
 end
 
 function std.algorithm.copy_back(target, source)
