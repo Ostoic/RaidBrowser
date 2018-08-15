@@ -33,7 +33,7 @@ local meta_role = make_meta('role');
 local meta_roles = make_meta('roles');
 local meta_raid = make_meta('raid');
 local meta_gs = make_meta('gs');
-local meta_achieve = make_meta('achiev')
+local meta_guild = make_meta('guild');
 
 -- Raid patterns template for a raid with 2 difficulties and 2 sizes
 local raid_patterns_template = {
@@ -296,6 +296,23 @@ local raid_list = {
 	},
 	
 	{
+		name = 'eoe10',
+		instance_name = 'The Eye of Eternity',
+		size = 10,
+		patterns = std.algorithm.copy_back(
+			create_pattern_from_template('eoe', 10, 'simple'),
+			{ 'malygos must die!' }
+		),
+	},
+	
+	{
+		name = 'eoe25',
+		instance_name = 'The Eye of Eternity',
+		size = 25,
+		patterns = create_pattern_from_template('eoe', 25, 'simple'),
+	},
+	
+	{
 		name = 'onyxia25',
 		instance_name = 'Onyxia\'s Lair',
 		size = 25,
@@ -315,10 +332,11 @@ local raid_list = {
 	
 	{
 		name = 'hyjal',
-		instace_name = 'Mount Hyjal',
+		instace_name = 'The Battle For Mount Hyjal',
 		size = 25,
 		patterns = {
 			'mount' .. csep .. 'hyjal',
+			'the' .. csep .. 'battle' .. csep .. 'for' .. csep .. 'mount' .. csep .. 'hyjal',
 		},
 	},
 	
@@ -334,11 +352,31 @@ local raid_list = {
 	},
 	
 	{
+		name = 'tempest keep',
+		instance_name = 'Tempest Keep',
+		size = 25,
+		patterns = {
+			'tempest' .. csep .. 'keep',
+			sep .. 'tk',
+			'tk' .. sep,
+		},
+	},
+	
+	{
 		name = 'karazhan',
 		instance_name = 'Karazhan',
 		size = 10,
 		patterns = {
 			'karaz?h?a?n?'..csep..'1?0?', -- karazhan 
+		},
+	},
+	
+	{
+		name = 'mag\'s lair',
+		instance_name = 'Magtheridon\'s Lair',
+		size = 10,
+		patterns = {
+			'magtheridon\'s' .. csep .. 'lair',
 		},
 	},
 	
@@ -353,29 +391,25 @@ local raid_list = {
 	},
 	
 	{
-		name = 'eoe10',
-		instance_name = 'The Eye of Eternity',
-		size = 10,
-		patterns = std.algorithm.copy_back(
-			create_pattern_from_template('eoe', 10, 'simple'),
-			{ 'malygos must die!' }
-		),
-	},
-	
-	{
-		name = 'eoe25',
-		instance_name = 'The Eye of Eternity',
-		size = 25,
-		patterns = create_pattern_from_template('eoe', 25, 'simple'),
-	},
-	
-	{
 		name = 'black temple',
 		instance_name = 'The Black Temple',
 		size = 25,
 		patterns = {
 			'black'..csep..'temple',
 			'[%s-_,.]+bt'..csep..'25[%s-_,.]+',
+		},
+	},
+	
+	{
+		name = 'ssc',
+		instance_name = 'Serpentshrine Cavern',
+		size = 25,
+		patterns = {
+			'^ssc',
+			sep .. 'ssc',
+			'ssc' .. sep,
+			'ssc' .. csep .. '$',
+			'serpent' .. csep .. 'shrine' .. csep .. 'cavern',
 		},
 	},
 	
@@ -507,11 +541,19 @@ local rolelist_patterns = {
 
 local lfm_patterns = {
 	'l[fm][fm]?' .. non_meta .. meta_role .. non_meta .. meta_raid,
-	'l[fm][fm]' .. non_meta .. meta_raid .. non_meta,
 	
 	meta_raid .. non_meta .. sep .. '[0-9]+' .. non_meta .. meta_role,
    
    'lf' .. csep .. meta_role .. non_meta .. meta_gs .. '.*' .. meta_raid,
+   'lf' .. csep .. 'all' .. non_meta .. meta_raid,
+   'need' .. csep .. 'all' .. non_meta .. meta_raid,
+   'seek' .. csep .. 'all' .. non_meta .. meta_raid,
+   
+	meta_raid .. non_meta .. 'lf' .. csep .. 'all',
+	meta_raid .. non_meta .. 'need' .. csep .. 'all',
+	meta_raid .. non_meta .. meta_gs .. non_meta .. 'lf' .. csep .. 'all',
+	meta_raid .. non_meta .. meta_gs .. non_meta .. 'seek' .. csep .. 'all',
+	meta_raid .. non_meta .. meta_gs .. non_meta .. 'need' .. csep .. 'all',
 		
 	meta_raid .. non_meta .. meta_role .. non_meta .. meta_gs,
 	meta_raid .. non_meta .. 'need' .. non_meta .. meta_role,
@@ -533,8 +575,19 @@ local lfm_patterns = {
    
 	meta_raid .. non_meta .. 'run' .. non_meta .. meta_gs,
    
+	'l[fm][fm]' .. non_meta .. meta_raid,
+	
 	meta_raid .. non_meta .. meta_role,
 }
+
+local guild_recruitment_metapatterns = {
+	meta_guild .. non_meta .. meta_raid,
+};
+
+local guild_patterns = {
+	'^guild' .. psep .. '[a-z]+[%s][a-z]*' .. psep,
+	'^guild' .. sep .. '[a-z]+[%s][a-z]*',
+};
 
 local lfg_patterns = {
 	'^lfg',
@@ -563,15 +616,23 @@ local function is_trade_message(message)
 	return matches_any_pattern(message, trade_message_patterns);
 end
 
+-- Basic http pattern matching for streaming sites and etc.
+local function remove_http_links(message)
+	local http_pattern = 'https?://*[%a]*.[%a]*.[%a]*/?[%a%-%%0-9_]*/?';
+	return message:gsub(http_pattern, '');
+end
+
 local function lex_achievements(message)
 	local achievement_pattern = '\124cffffff00\124h.*\124h(%[.*%])\124h\124r';
 	return message:gsub(achievement_pattern, '%1');
 end
 
--- Basic http pattern matching for streaming sites and etc.
-local function remove_http_links(message)
-	local http_pattern = 'https?://*[%a]*.[%a]*.[%a]*/?[%a%-%%0-9_]*/?';
-	return message:gsub(http_pattern, '');
+local function lex_guild_recruitments(message)
+	for _, pattern in ipairs(guild_patterns) do
+		message = message:gsub(pattern, meta_guild);
+	end
+	
+	return message;
 end
 	
 local function lex_roles(roles, message, role)		
@@ -652,6 +713,10 @@ function raid_browser.lex_raid_info(message)
 	return nil;
 end
 
+local function has_guild_recruitment_production(message)
+	return matches_any_pattern(message, guild_recruitment_metapatterns)
+end
+
 local function reduce_rolelists(message)
 
 	for _, pattern in ipairs(rolelist_patterns) do
@@ -674,9 +739,13 @@ function raid_browser.lex_and_extract(message)
 	-- Remove any instances of the meta character
 	message = message:gsub(meta_char, '');
 		
+	message = lex_guild_recruitments(message);
+		
 	-- Get the raid_info from the message
 	local raid_info, message = raid_browser.lex_raid_info(message);
 	if not raid_info then return end
+	
+	if has_guild_recruitment_production(message) then return end
 	
 	message = lex_achievements(message);
 	

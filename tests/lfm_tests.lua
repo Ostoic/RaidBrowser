@@ -1098,6 +1098,91 @@ local test_cases = {
 		gs = '6.0',
 	},
 	
+	{
+		message = 'LF All, ICC Rep Farm, boe ress',
+		should_fail = false,
+		raid = 'icc10rep',
+		roles = { 'dps', 'healer', 'tank' },
+		gs = ' ',
+	},
+	
+	{
+		message = ' [Magtheridon\'s Lair] NEED ALL,  [Chestguard of the Fallen Defender] [Magtheridon\'s Head] RES ',
+		should_fail = false,
+		raid = 'mag\'s lair',
+		roles = { 'dps', 'healer', 'tank' },
+		gs = ' ',
+	},
+	
+	{
+		message = 'TOC 25 N LF ALL b/p res W ME GS 5K+++++ [Call of the Crusade (25 player)]',
+		should_fail = false,
+		raid = 'toc25nm',
+		roles = { 'dps', 'healer', 'tank' },
+		gs = '5.0',
+	},
+	
+	{
+		message = 'Guild ++ Virtual Experience ++ Trazi nove clanve za radidovanje! Radimo progres Guild-a! Radimo ICC 10nm 12/12, HC 11/12, 25m, 12/12, HC 6/12, RS 4/4. Takodje radimo i Ulduar,TOC 10,25man.. Igraci sa 5.8+gs, akitvni i ozbilji nek se jave! /w me.',
+		should_fail = true,
+	},
+	
+	{
+		message = ' ICC 25 N/HC 6k+NEED ALL ATM link BEST ACHV[Heroic: The Frostwing Halls (25 player)] ',
+		should_fail = false,
+		raid = 'icc25nm',
+		roles = { 'dps', 'tank', 'healer' },
+		gs = '6.0',
+	},
+	
+	{
+		message = 'LFM [Tempest Keep] tank 5k+ mount run',
+		should_fail = false,
+		raid = 'tempest keep',
+		roles = { 'tank' },
+		gs = '5.0',
+	},
+	
+	{
+		message = 'NEED ALL FOR TOC 10 (HC) W/ME UR GS CLASS AND SPEC ! LINK ACHIEV ! NO ACHIEV NO [INVITE] !(boes ress) NEED 21 TANK AND GO !',
+		should_fail = false,
+		raid = 'toc10hc',
+		roles = { 'dps', 'healer', 'tank' },
+		gs = ' ',
+	},
+	
+	{
+		message = 'LFM [Tempest Keep] MOUNT RUN (HEALS, DPS NEEDED) FREE ROLL 4 [Ashes of Al\'ar]',
+		should_fail = false,
+		raid = 'tempest keep',
+		roles = { 'dps', 'healer' },
+		gs = ' ',
+	},
+	
+	{
+		message = 'LF1 OT 5.8gs+ icc10hc @plague!',
+		should_fail = false,
+		raid = 'icc10hc',
+		roles = { 'tank' },
+		gs = '5.8',
+	},
+	
+	{
+		message = 'Icc 25 N / HC W/m Gs spec Achiv Boe + Primo Reserved [Fall of the Lich King (25 player)]',
+		should_fail = false,
+		raid = 'icc25nm',
+		roles = { 'dps', 'tank', 'healer' },
+		gs = ' ',
+	},
+	
+	--[[{
+		message = 'NEED DPS and  FOR VOA LAST SPOTS 24/25 warlock needed',
+		should_fail = false,
+		raid = 'voa25',
+		roles = { 'dps' },
+		gs = ' ',
+	},]]--
+	
 	--
 	--[[{
 		message = 'LFM  [Bane of the Fallen King] need dog and mans for tank',
@@ -1225,7 +1310,7 @@ end
 local test_results = std.algorithm.transform(test_cases, run_test_case);
 
 -- Count the number of failed tests.
-local number_failed_tests = std.algorithm.count(test_results, false);
+local number_failed_tests = #test_cases - std.algorithm.count(test_results, true);
 
 raid_browser:Print('All unit tests executed.');
 raid_browser:Print('There were ' .. number_failed_tests .. '/' .. #test_cases .. ' failed unit tests!');
