@@ -107,6 +107,8 @@ local raid_list = {
 			'icc' .. csep .. '10' .. csep .. 'nm?' .. csep .. 'farm',
 			'icc' .. csep .. 'nm?' .. csep .. 'farm',
 			'icc' .. csep .. 'repu?t?a?t?i?o?n?',
+			'rep' .. csep .. 'farm' .. csep .. 'icc' .. csep .. 10,
+			-- Todo: rep farm icc 10, etc combinations
 		}
 	},
 	
@@ -276,7 +278,9 @@ local raid_list = {
 		instance_name = 'Naxxramas',
 		size = 10,
 		patterns = {
-			'naxx?r?a?m?m?a?s?'..csep..'10',
+			'the fall of naxxramas %(10 player%)',
+			'naxx?' .. csep .. 10,
+			'naxx?ramm?as' .. csep .. 10,
 			'naxx'..sep..'weekly',
 			'anub\'rekhan must die!',
 			'patchwerk must die!',
@@ -291,7 +295,9 @@ local raid_list = {
 		instance_name = 'Naxxramas',
 		size = 25,
 		patterns = {
-			'naxx?r?a?m?m?a?s?'..csep..'25',
+			'the fall of naxxramas %(25 player%)',
+			'naxx?' .. csep .. 25,
+			'naxx?ramm?as' .. csep .. 25,
 		},
 	},
 	

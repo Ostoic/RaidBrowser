@@ -1175,6 +1175,39 @@ local test_cases = {
 		gs = ' ',
 	},
 	
+	{
+		message = 'LFM REP FARM ICC 25 Need all GROUP LOOT',
+		should_fail = false,
+		raid = 'icc25rep',
+		roles = { 'dps', 'tank', 'healer' },
+		gs = ' ',
+	},
+	
+	{
+		message = 'LFM NAXX 25 FRESH AND FAST RUN| Need Tanks+DPS+hpal| 5k+ NEED DISCORD| Protector Mark RES| [The Fall of Naxxramas (10 player)] NEED DISCOR',
+		should_fail = false,
+		raid = 'naxx25',
+		roles = { 'dps', 'healer', 'tank' },
+		gs = '5.0',
+	},
+	
+	{
+		message = '>>>>LFM for ICC 25(nm/hc)Fresh Run Need 1xOT/healer /R/mdps  + 5500 /w me your gs & best achiv  [Heroic: The Frostwing Halls (25 player)] ',
+		should_fail = false,
+		raid = 'icc25nm',
+		roles = { 'dps', 'healer', 'tank' },
+		gs = '5.5',
+	},
+	
+	{
+		message = 'NEED  1 TANK  FOR ICC 10 {ONLY NORMAL FAST EOF RUN} LINK ME BEST ACH [The Light of Dawn] AND 6KGS LK RUN @ SINDRA 1000g for JOIN',
+		should_fail = false,
+		raid = 'icc10nm',
+		roles = { 'tank' },
+		gs = '6.0',
+		
+	},
+	
 	--[[{
 		message = 'NEED DPS and  FOR VOA LAST SPOTS 24/25 warlock needed',
 		should_fail = false,
