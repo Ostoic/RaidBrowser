@@ -75,9 +75,19 @@ function std.algorithm.foldr(values, init, fn)
 	return init;
 end
 
--- Count the number of values that match the given predicate "pred".
--- t is a table of values to count
-function std.algorithm.count_if(t, pred)
+local function count_if_iterator(it, pred)
+	local count = 0;
+	
+	for x in it do
+		if pred(x) then
+			count = count + 1;
+		end
+	end
+	
+	return count;
+end
+
+local function count_if_table(t, pred)
 	local count = 0;
 	for _, v in ipairs(t) do
 		if pred(v) then 
@@ -88,6 +98,17 @@ function std.algorithm.count_if(t, pred)
 	return count;
 end
 
+-- Count the number of values that match the given predicate "pred".
+-- t is a table of values to count
+function std.algorithm.count_if(t, pred)
+	-- type dispatch
+	if type(t) == 'table' then 
+		return count_if_table(t, pred);
+	elseif type(t) == 'function' then
+		return count_if_iterator(t, pred);
+	end
+end
+
 -- Count the number of values in a table "t" that match the given value "value".
 -- t is a table, value is possible value contained in the table "t".
 function std.algorithm.count(t, value)
@@ -96,7 +117,7 @@ function std.algorithm.count(t, value)
 	end);
 end
 
-function std.algorithm.find_if(t, pred)
+local function find_if_table(t, pred)
 	for i, v in ipairs(t) do
 		if pred(v) then
 			return i;
@@ -104,6 +125,27 @@ function std.algorithm.find_if(t, pred)
 	end
 	
 	return nil
+end
+
+local function find_if_iterator(it, pred)
+	for v in it do
+		if pred(v) then
+			return it; -- return the iterator?
+		end
+	end
+	
+	return nil
+end
+
+function std.algorithm.find_if(t, pred)
+	
+	-- type dispatch
+	if type(t) == 'table' then 
+		return find_if_table(t, pred);
+		
+	elseif type(t) == 'function' then
+		return find_if_iterator(t, pred);
+	end
 end
 
 function std.algorithm.find(t, value)
@@ -123,6 +165,41 @@ function std.algorithm.copy(source)
 	end
 	
 	return target;
+end
+
+local function copy_n_iterator(it, n)
+	local t = {};
+	
+	local i = 1;
+	for v in it do
+		if i > n then break end
+		table.insert(t, v);
+		i = i + 1;
+	end
+	
+	return t;
+end
+
+local function copy_n_table(s, n)
+	local t = {};
+	
+	for i = 1, n do
+		table.insert(t, s[i]);
+	end
+	
+	return t;
+end
+
+function std.algorithm.copy_n(t, n)
+
+	if type(t) == 'table' then
+		return copy_n_table(t, n);
+		
+	elseif type(t) == 'function' then
+		return copy_n_iterator(t, n);
+	end
+	
+	return nil;
 end
 
 function std.algorithm.equal(first, second)

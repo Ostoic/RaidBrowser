@@ -1,4 +1,77 @@
 local test_cases = {
+
+	{
+		message = '1 GOOD TANK 2 HEALS AND A COUPLE DPS  [Anub\'Rekhan Must Die!] W/ GS AND ROLE EASY WEEKLY',
+		should_fail = false,
+		raid = 'naxx10',
+		roles = { 'dps', 'tank', 'healer' },
+		gs = ' ',
+	},
+	
+	{
+		message = 'LFM 1 GOOD TANK 2 HEALS 2 DPS  [Anub\'Rekhan Must Die!] EASY FAST WEEKLY W GS AND ROLE',
+		should_fail = false,
+		raid = 'naxx10',
+		roles = { 'dps', 'tank', 'healer' },
+		gs = ' ',
+	},
+	{
+		message = 'voa 25 wis me all gs 5.2+ {fire+frost }',
+		should_fail = false,
+		raid = 'voa25',
+		roles = { 'dps', 'tank', 'healer' },
+		gs = '5.2'
+	},
+
+	{
+		message = '4.7k heal looking for ICC rep/boe farm',
+		should_fail = true,
+	},
+	
+	{
+		message = 'OS 10 MOUNT RUN NEED ONLY 1 tank AND GO /W ME CLASS ROLE 6K GS MIN',
+		should_fail = false,
+		raid = 'os10',
+		roles = { 'tank' },
+		gs = '6.0',
+	},
+	
+	{
+		message = 'VoA 10 NEED ALL',
+		should_fail = false,
+		raid = 'voa10',
+		roles = { 'dps', 'tank', 'healer' },
+		gs = ' ',
+	},
+	
+	{
+		message = 'rdruid 5k3 LF toc25/10 icc 10nm w/me',
+		should_fail = true,
+	},
+	
+	{
+		message = '<<INFEST>> Potrebni su nam ozbiljni i aktivni igraci za formiranje MAIN GRUPE. GPROG: ICC10&25 12/12-RS10&25 4/4- Za vise info obratite se meni ili pogledajte na nasem sajtu [www.infest-icecrown.shivtr.com] Sve klase su nam trenutno potrebne!',
+		should_fail = true,
+	},
+	
+	{
+		message = '<<SOUTH PARK>>  Regrutuje ozbiljne clanove sa poznavanjem svoje klase ICC 25NM  12/12  ICC 25 HC 10/12 RS 25 4/4  ICC10NM  12/12  ICC 10HC 12/12/radimo i NAXX TOC ULDUAR. /w za vise informacija.',
+		should_fail = true,
+	},
+	
+	{
+		message = 'Just Dps  [Sartharion Must Die!] >>>Bag Satchel Resserved <<<Dps need',
+		should_fail = false,
+		raid = 'os10',
+		roles = { 'dps' },
+		gs = ' ',
+	},
+	
+	{
+		message = 'hello it\'s me dank man looking for an icc25',
+		should_fail = true,
+	},
+
 	{
 		message = 'LFM need kitty and dps for icc25manhc 5.5+',
 		should_fail = false,

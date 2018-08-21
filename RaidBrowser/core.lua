@@ -3,12 +3,12 @@ raid_browser = LibStub('AceAddon-3.0'):NewAddon('RaidBrowser', 'AceConsole-3.0')
 
 --[[ Parsing and pattern matching ]]--
 -- Separator characters
-local sep_chars = '%s-_,.<>%*)(#+&'
+local sep_chars = '%s-_,.<>%*)(#+&x'
 
 -- Whitespace separator
 local sep = '[' .. sep_chars .. ']';
 
-local role_sep = '[' .. sep_chars .. '\\/' .. ']';
+local role_sep = '[' .. sep_chars .. 'x\\/' .. ']';
 
 -- Kleene closure of sep.
 local csep = sep..'*';
@@ -27,6 +27,11 @@ local non_meta = '[^' .. meta_char .. ']*';
 
 local function make_meta(text)
 	return meta_char .. text .. meta_char;
+end
+
+-- Not needed?
+local function meta_raid_n(n)
+	return make_meta('raid' .. n);
 end
 
 local meta_role = make_meta('role');
@@ -94,6 +99,7 @@ local raid_list = {
 			'icc'..csep..'25'..csep..'m?a?n?'..csep..'repu?t?a?t?i?o?n?'..csep..'',
 			'icc'..csep..'repu?t?a?t?i?o?n?'..csep..'25'..csep..'m?a?n?',
 			'icc' .. csep .. '25' .. csep .. 'nm?' .. csep .. 'farm',
+			'rep' .. csep .. 'farm' .. csep .. 'icc' .. csep .. 25,
 		}
 	},
 	
@@ -279,13 +285,13 @@ local raid_list = {
 		size = 10,
 		patterns = {
 			'the fall of naxxramas %(10 player%)',
-			'naxx?' .. csep .. 10,
+			'noth the plaguebringer must die!',
+			'instructor razuvious must die!',
 			'naxx?ramm?as' .. csep .. 10,
-			'naxx'..sep..'weekly',
 			'anub\'rekhan must die!',
 			'patchwerk must die!',
-			'instructor razuvious must die!',
-			'noth the plaguebringer must die!',
+			'naxx?' .. csep .. 10,
+			'naxx'..sep..'weekly',
 			'patchwerk must die!',
 		},
 	},
@@ -296,8 +302,8 @@ local raid_list = {
 		size = 25,
 		patterns = {
 			'the fall of naxxramas %(25 player%)',
-			'naxx?' .. csep .. 25,
 			'naxx?ramm?as' .. csep .. 25,
+			'naxx?' .. csep .. 25,
 		},
 	},
 	
@@ -478,7 +484,8 @@ local role_patterns = {
 	},
 	
 	healer = {
-		'hea?l[ers]*', -- LF healer
+		'h[ea][ea]l[ers]*', -- LF healer
+		'heler',
 		
 		'resto' .. csep .. 'd[ru][ud][iu]d?', -- LF rdruid/rdudu
 		'rd[ru][ud][iu]d?', -- LF rdruid/rdudu
@@ -495,13 +502,13 @@ local role_patterns = {
 		meta_or_sep .. 'd' .. csep .. 'pri?e?st', -- disc priest
 		
 		'holl?y' .. csep .. 'palad?i?n?',	   -- LF holy pala
-		'hpalad?i?n?',	   -- LF hpala
+		'hpala?d?i?n?',	   -- LF hpala
 		meta_or_sep .. 'h' .. csep .. 'palad?i?n?',	   -- LF hpala
 	},
 	
 	tank = {
-		sep .. '[mo]t' .. sep,		   -- Need MT/OT
-		sep .. '[mo]t' .. csep .. '$', -- Need MT/OT
+		role_sep .. '[mo]t' .. role_sep,		   -- Need MT/OT
+		role_sep .. '[mo]t' .. csep .. '$', -- Need MT/OT
 		'ta*n+a?k+s?',	 -- NEED TANKS
 		'b[ea]*rs?',
 		'prot' .. csep .. 'pal[al]?[dy]?i?n?',
@@ -509,6 +516,7 @@ local role_patterns = {
 }
 
 local gearscore_patterns = {
+	'[1-6].?[0-9]?kgs',
 	'[1-6]'..csep..'k[0-9]+',
 	'[1-6][.,][0-9]',
 	'[1-6]'..csep..'k'..csep..'%+',
@@ -550,7 +558,7 @@ local lfm_patterns = {
 	
 	meta_raid .. non_meta .. sep .. '[0-9]+' .. non_meta .. meta_role,
    
-   'lf' .. csep .. meta_role .. non_meta .. meta_gs .. '.*' .. meta_raid,
+   'lf' .. csep .. '[0-9]*' .. csep .. meta_role .. non_meta .. meta_gs .. '.*' .. meta_raid,
    'lf' .. csep .. 'all' .. non_meta .. meta_raid,
    'need' .. csep .. 'all' .. non_meta .. meta_raid,
    'seek' .. csep .. 'all' .. non_meta .. meta_raid,
@@ -578,8 +586,15 @@ local lfm_patterns = {
 	
 	meta_raid .. non_meta .. meta_gs .. non_meta .. 'wh?i?s?p?e?r?' .. csep .. 'me',
 	meta_raid .. non_meta .. meta_gs .. non_meta .. 'wh?i?s?p?e?r?' .. csep .. '[A-Z][a-z]+',
+	
+	meta_raid .. non_meta .. non_meta .. 'wh?i?s?p?e?r?' .. csep .. 'me' .. non_meta .. meta_gs,
+	meta_raid .. non_meta .. non_meta .. 'wh?i?s?p?e?r?' .. csep .. '[A-Z][a-z]+' .. non_meta .. meta_gs,
    
 	meta_raid .. non_meta .. 'run' .. non_meta .. meta_gs,
+   
+   '[0-9]' .. non_meta ..  meta_role .. non_meta .. meta_raid,
+   
+	meta_raid .. non_meta .. 'reserved',
    
 	'l[fm][fm]' .. non_meta .. meta_raid,
 	
@@ -596,14 +611,18 @@ local guild_patterns = {
 };
 
 local lfg_patterns = {
-	'^lfg',
-	sep .. 'lfg',
+	'^' .. csep .. 'lfg' .. non_meta .. meta_raid,
+	'^' .. csep .. meta_gs .. non_meta .. meta_role .. non_meta .. 'looking' .. csep .. 'for' .. non_meta .. meta_raid,
+	'^' .. csep .. meta_role .. non_meta .. meta_gs .. non_meta .. 'looking' .. csep .. 'for' .. non_meta .. meta_raid,
+	
+	'^' .. csep .. meta_gs .. non_meta .. meta_role .. non_meta .. 'lf' .. non_meta .. meta_raid,
+	'^' .. csep .. meta_role .. non_meta .. meta_gs .. non_meta .. 'lf' .. non_meta .. meta_raid,
 };
 
 local function matches_any_pattern(message, patterns)
 	return std.algorithm.find_if(patterns, function(pattern)
 		return message:find(pattern);
-	end);
+	end) ~= nil;
 end
 
 local function is_lfm_message(message)
@@ -659,7 +678,7 @@ end
 
 local function format_gs_string(gs)
 	local formatted = gs:gsub(sep .. '*%+?', ''); -- Trim whitespace
-	formatted = formatted:gsub('k', '')
+	formatted = formatted:gsub('[kgs]', '')
 	formatted = formatted:gsub(sep, '.');
 	gs = tonumber(formatted);
 
@@ -681,11 +700,8 @@ end
 
 local function lex_gs_req(message)
 	for _, pattern in pairs(gearscore_patterns) do
-		local gs_start, gs_end = message:find(pattern)
-		
-		if gs_start and gs_end then
-			local gs_text = message:sub(gs_start, gs_end);
-
+		local gs_text = message:match(pattern);
+		if gs_text then
 			-- Extract gs and replace it with the gearscore nonterminal
 			return 
 				format_gs_string(gs_text), 
@@ -698,7 +714,9 @@ end
 
 function raid_browser.lex_raid_info(message)
 	
-	for _, r in ipairs(raid_list) do
+	local raid;
+	local num_unique_raids = 0;
+	for i, r in ipairs(raid_list) do
 	
 		local index = std.algorithm.find_if(r.patterns, function(pattern)
 			local m, result = message:gsub(pattern, meta_raid);
@@ -711,12 +729,14 @@ function raid_browser.lex_raid_info(message)
 			return false;
 		end);
 		
-		if index then 
-			return r, message 
+		if index then
+			num_unique_raids = num_unique_raids + 1;
+			raid = r;
 		end;
 	end
 	
-	return nil;
+	if not raid then return end;
+	return raid, message, num_unique_raids;
 end
 
 local function has_guild_recruitment_production(message)
@@ -725,10 +745,17 @@ end
 
 local function reduce_rolelists(message)
 
-	for _, pattern in ipairs(rolelist_patterns) do
-		message = message:gsub(pattern, meta_role);
-	end
+	local sub_count = 0;
 	
+	repeat
+		local results = std.algorithm.transform(rolelist_patterns, function(pattern)
+			local t = {message:gsub(pattern, meta_role)};
+			message = t[1]; return t[2];
+		end);
+		
+		sub_count = std.algorithm.find_if(results, function(x) return x > 0 end) or 0;
+	until sub_count == 0;
+
 	return message;
 end
 
@@ -738,7 +765,7 @@ function raid_browser.lex_and_extract(message)
 	message = remove_http_links(message);
 	
 	-- Stop if it's a guild recruit/wts message
-	if is_guild_recruitment(message) or is_trade_message(message) or is_lfg_message(message) then
+	if is_guild_recruitment(message) or is_trade_message(message) then
 		return;
 	end
 	
@@ -748,10 +775,13 @@ function raid_browser.lex_and_extract(message)
 	message = lex_guild_recruitments(message);
 		
 	-- Get the raid_info from the message
-	local raid_info, message = raid_browser.lex_raid_info(message);
+	local raid_info, message, num_unique_raids = raid_browser.lex_raid_info(message);
 	if not raid_info then return end
 	
 	if has_guild_recruitment_production(message) then return end
+	
+	-- If there are multiple distinct raids, then it is most likely a recruitment message.
+	if num_unique_raids > 1 then return end;
 	
 	message = lex_achievements(message);
 	
@@ -771,7 +801,6 @@ function raid_browser.lex_and_extract(message)
 
 	-- Search for a gearscore requirement.
 	local gs, message = lex_gs_req(message);
-	
 	message = reduce_rolelists(message);
 	
 	return message, raid_info, roles, gs or ' ';
@@ -780,12 +809,13 @@ end
 function raid_browser.raid_info(message)
 	local lexed_message, raid_info, roles, gs = raid_browser.lex_and_extract(message);
 	
-	--if lexed_message then print(lexed_message) end
+	if not lexed_message then return end;
+	
+	-- Any message that is lexed out to be an lfg is excluded (unfortunately near the end).
+	if is_lfg_message(lexed_message) then return end;
 	
 	-- Parse symbols to determine if the message is valid
-	if lexed_message and not is_lfm_message(lexed_message) then
-		return 
-	end
+	if not is_lfm_message(lexed_message) then return  end
 	
 	return raid_info, roles, gs or ' ';
 end
