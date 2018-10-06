@@ -611,7 +611,9 @@ function raid_browser:OnEnable()
 
 	raid_browser.lfm_messages = {}
 	raid_browser.timer = raid_browser.set_timer(10, refresh_lfm_messages, true)
+	local i = 0
 	for channel, listener in pairs(lfm_channel_listeners) do
+		i = i + 1
 		channel_listeners[i] = raid_browser.add_event_listener(channel, event_handler)
 	end
 	
