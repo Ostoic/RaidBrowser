@@ -17,6 +17,10 @@ No longer will you join a raid and embarrass yourself upon realizing that you've
 - Tooltip Hover: Hovering your mouse over an entry in the raid browser shows the original chat message, as well as how long it's been since the message was sent.
 - Create primary and secondary raid sets (Ex: Elemental 5641gs) for use in join messages. In the given example, your message will be formatted in a manner similar to "inv 5641gs Elemental Shaman <possible achievement link>". If you are pvping in WG while searching for raids, the addon will send information from the currently selected raidset to the raid host instead of your pvp (spec, gs).
 - Raid hosts that do not send a message after 1-2 minutes will have their entry expire in the raid browser. This ensures that the raid browser does not become cluttered.
+  
+# How to Download
+
+In order to download the latest stable version, click on "releases" which is in the repository statistics tab under the addon description (example: https://github.com/Ostoic/RaidBrowser/releases/tag/v1.2.1). The .zip file is the addon folder, so make sure you unzip that folder to one named "RaidBrowser", then follow the instructions below.
 
 # Installation and Usage
 As with any other addon, copy the RaidBrowser folder into your %WoW Root%/Interface/AddOns directory. When ingame, type /rb to activate
