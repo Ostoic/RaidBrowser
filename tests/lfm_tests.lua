@@ -1281,6 +1281,12 @@ local test_cases = {
 		
 	},
 	
+	{
+		message = '++++LFM EOE DPS 1 HEAL MOUNT RUN W ME ++++++++LFM EOE DPS 1 HEAL MOUNT RUN W ME ++++++++LFM EOE DPS 1 HEAL MOUNT RUN W ME ++++++++LFM EOE DPS 1 HEAL MOUNT RUN W ME ++++++++LFM EOE DPS 1 HEAL MOUNT RUN W ME ++++',
+		should_fail = false,
+		raid = 'eoe10'
+	},
+	
 	--[[{
 		message = 'NEED DPS and  FOR VOA LAST SPOTS 24/25 warlock needed',
 		should_fail = false,

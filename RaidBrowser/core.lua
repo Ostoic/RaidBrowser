@@ -285,14 +285,14 @@ local raid_list = {
 		size = 10,
 		patterns = {
 			'the fall of naxxramas %(10 player%)',
-			'noth the plaguebringer must die!',
-			'instructor razuvious must die!',
-			'naxx?ramm?as' .. csep .. 10,
-			'anub\'rekhan must die!',
+			'noth'..csep..'the'..csep..'plaguebringer'..csep..'must'..csep..'die!',
+			'instructor'..csep..'razuvious'..csep..'must'..csep..'die!',
+			'naxx?ramm?as'..csep..'10',
+			'anub\'rekhan'..csep..'must'..csep..'die!',
 			'patchwerk must die!',
-			'naxx?' .. csep .. 10,
+			'naxx?'..csep..'10',
 			'naxx'..sep..'weekly',
-			'patchwerk must die!',
+			'patchwerk'..csep..'must'..csep..'die!',
 		},
 	},
 	
@@ -302,8 +302,8 @@ local raid_list = {
 		size = 25,
 		patterns = {
 			'the fall of naxxramas %(25 player%)',
-			'naxx?ramm?as' .. csep .. 25,
-			'naxx?' .. csep .. 25,
+			'naxx?ramm?as'..csep..'25',
+			'naxx?'..csep..'25',
 		},
 	},
 	
@@ -437,11 +437,33 @@ local raid_list = {
 	
 	{
 		name = 'aq20',
-		instance_name = 'Ruins of Ahn\'Qiraj',
+		instance_name = "Ruins of Ahn'Qiraj",
 		size = 20,
 		patterns = {
 			'ruins?'..csep..'of?'..csep..'ahn\'?'..csep..'qiraj',
 			'aq'..csep..'20',
+		},
+	},
+	
+	{
+		name = 'eoe10',
+		instance_name = 'Eye of Eternity',
+		size = 10,
+		patterns = {
+			'eye'..csep..'of'..csep..'eter?ni?ty',
+			'malygos'..csep..'1?0?',
+			'eoe'..csep..'1?0?',
+		},
+	},
+	
+	{
+		name = 'eoe25',
+		instance_name = 'Eye of Eternity',
+		size = 10,
+		patterns = {
+			'eye'..csep..'of'..csep..'eter?ni?ty'..csep..'25',
+			'malygos'..csep..'25',
+			'eoe'..csep..'25',
 		},
 	},
 }
