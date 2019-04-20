@@ -23,7 +23,7 @@ function std.algorithm.max_of(t)
 	return index, result;
 end
 
--- Given a table of values, and a function, return a table of the transformed table
+-- Given a table of values and a function, return the transformed table
 function std.algorithm.transform_if(values, fn, pred)
 	local t = {}
 	 
@@ -39,7 +39,7 @@ end
 
 -- Given a table of values, and a function, return a table of the transformed table
 function std.algorithm.transform(values, fn)
-	return std.algorithm.transform_if(values, fn, std.algorithm.identity);
+	return std.algorithm.transform_if(values, fn, function(i) return true end);
 end
 
 function std.algorithm.filter(values, pred)
@@ -50,7 +50,7 @@ function std.algorithm.generate_n(n, gen)
 	local t = {};
 	
 	for i = 1, n do 
-		table.insert(t, gen);
+		table.insert(t, gen(i));
 	end
 	
 	return t;
