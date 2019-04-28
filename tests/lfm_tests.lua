@@ -1287,6 +1287,11 @@ local test_cases = {
 		raid = 'eoe10'
 	},
 	
+	{
+		message = 'BULGARSKI Guild <Only The Brave> Nabira novi populneniq za svoite raidove. Imame nujda ot redovni, otgovorni hora s poznaniq gotovi za Progres. Izpolzvame DKP System + Discord.RT na guild e 19:30BG Time. Minimalen GS za [inv] 5.7kgs +',
+		should_fail = true,
+	},
+	
 	--[[{
 		message = 'NEED DPS and  FOR VOA LAST SPOTS 24/25 warlock needed',
 		should_fail = false,
