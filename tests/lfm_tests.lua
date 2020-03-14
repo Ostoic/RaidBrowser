@@ -1292,22 +1292,43 @@ local test_cases = {
 		should_fail = true,
 	},
 	
-	--[[{
+	{
+		message = 'Die "Deutsche Wehrmacht" rekrutiert ab sofort neue deutschsprachige Mitglieder. Wöchtenlich ICC 10 und 25, bei genug Mitgliedern gerne auch Alt-Runs. TS und Discord ist verfügbar. Wir heißen jegliche Spieler aus dem deutschen Sprachraum herzlich willko',
+		should_fail = true,
+	},
+	
+	{
+		message = 'NEW RUN [Sartharion Must Die!] 25er w me info !!',
+		should_fail = false
+		raid = 'os25',
+		roles = { 'tank', 'dps', 'healer' },
+		gs = ' ',
+	},
+	
+	{
+		message = '*** RS 25N *** - LFM All (Discord required, 5.8k+, link ach) PM RageIssues your spec for [INV]!',
+		should_fail = false
+		
+		raid = 'rs25nm',
+		roles = { 'tank', 'healer', 'dps' },
+		gs = ' ',
+	},
+	
+	{
 		message = 'NEED DPS and  FOR VOA LAST SPOTS 24/25 warlock needed',
 		should_fail = false,
 		raid = 'voa25',
 		roles = { 'dps' },
 		gs = ' ',
-	},]]--
+	},
 	
-	--
-	--[[{
+	{
 		message = 'LFM  [Bane of the Fallen King] need dog and mans for tank',
 		should_fail = false,
 		raid = 'icc25hc',
 		roles = { 'tank' },
 		gs = ' ',
-	},]]-- TODO
+	},
 	
 	--'
 	-- Idea: Convert raid/roles/gs into intermediate text such as <role> <class> <raid> <gs> so that the following could

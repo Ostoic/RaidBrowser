@@ -24,11 +24,11 @@ local function set_selection(selection)
 	if selection == 'Active' then
 		text = 'Active';
 	else
-		local spec, gs = raid_browser.stats.get_raidset(selection);
+		local spec, gs = raid_browser.stats.get_raidset(selection)
 		if not spec then
 			text = 'Open';
-		else
-			text = spec .. ' ' .. gs .. 'gs';
+		elseif not gs then
+			text = spec;
 		end
 	end
 	
@@ -116,7 +116,7 @@ button:SetPoint("CENTER", LFRBrowseFrame, "CENTER", -53, 168)
 button:EnableMouse(true)
 button:RegisterForClicks("AnyUp")
 
-button:SetText("Save Raid Set");
+button:SetText("Save Raid Gear");
 button:SetWidth(110);
 button:SetScript("OnClick", on_raidset_save);
 button:Show();

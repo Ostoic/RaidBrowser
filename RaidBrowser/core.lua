@@ -329,7 +329,8 @@ local raid_list = {
 		instance_name = 'Onyxia\'s Lair',
 		size = 25,
 		patterns = {
-			'onyx?i?a?'..csep..'25'
+			"onyxia's lair (25 player)",
+			'onyx?i?a?'..csep..'25',
 		},
 	},
 	
@@ -338,7 +339,8 @@ local raid_list = {
 		instance_name = 'Onyxia\'s Lair',
 		size = 10,
 		patterns = {
-			'onyx?i?a?'..csep..'10'
+			"onyxia's lair (10 player)",
+			'onyx?i?a?'..csep..'10',
 		},
 	},
 	
@@ -357,8 +359,6 @@ local raid_list = {
 		instance_name = 'Zul\'Aman',
 		size = 10,
 		patterns = {
-			sep .. 'za',
-			'za' .. sep,
 			'zul' .. csep .. '\'?' .. csep .. 'aman',
 		},
 	},
@@ -907,7 +907,7 @@ function raid_browser:OnEnable()
 	raid_browser.lfm_messages = {}
 	raid_browser.timer = raid_browser.set_timer(10, refresh_lfm_messages, true)
 	for channel, listener in pairs(lfm_channel_listeners) do
-		channel_listeners[i] = raid_browser.add_event_listener(channel, event_handler)
+		table.insert(channel_listeners, raid_browser.add_event_listener(channel, event_handler))
 	end
 	
 	raid_browser.gui.raidset.initialize();
