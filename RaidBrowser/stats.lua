@@ -106,7 +106,7 @@ function raid_browser.stats.raid_lock_info(instance_name, size)
 	for i = 1, GetNumSavedInstances() do
 		local saved_name, _, reset, _, _, _, _, _, saved_size = GetSavedInstanceInfo(i);
 		
-		if saved_name == instance_name and saved_size == size then
+		if string.lower(saved_name) == string.lower(instance_name) and saved_size == size then
 			return true, reset;
 		end
 	end

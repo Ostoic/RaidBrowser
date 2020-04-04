@@ -1299,7 +1299,7 @@ local test_cases = {
 	
 	{
 		message = 'NEW RUN [Sartharion Must Die!] 25er w me info !!',
-		should_fail = false
+		should_fail = false,
 		raid = 'os25',
 		roles = { 'tank', 'dps', 'healer' },
 		gs = ' ',
@@ -1307,7 +1307,7 @@ local test_cases = {
 	
 	{
 		message = '*** RS 25N *** - LFM All (Discord required, 5.8k+, link ach) PM RageIssues your spec for [INV]!',
-		should_fail = false
+		should_fail = false,
 		
 		raid = 'rs25nm',
 		roles = { 'tank', 'healer', 'dps' },
@@ -1328,6 +1328,14 @@ local test_cases = {
 		raid = 'icc25hc',
 		roles = { 'tank' },
 		gs = ' ',
+	},
+	
+	{
+		message = 'Toc  25 need all gs 5.7 whisper me for invite & link achivment',
+		should_fail = false,
+		raid = 'toc25nm',
+		roles = {'tank', 'healer', 'dps'},
+		gs = '5.7'
 	},
 	
 	--'

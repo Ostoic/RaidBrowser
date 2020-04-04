@@ -313,7 +313,10 @@ local raid_list = {
 		size = 10,
 		patterns = std.algorithm.copy_back(
 			create_pattern_from_template('eoe', 10, 'simple'),
-			{ 'malygos must die!' }
+			{ 
+				'eoe',
+				'malygos must die!' 
+			} 
 		),
 	},
 	
@@ -345,7 +348,7 @@ local raid_list = {
 	},
 	
 	{
-		name = 'hyjal',
+		name = 'hyjal25',
 		instace_name = 'The Battle For Mount Hyjal',
 		size = 25,
 		patterns = {
@@ -355,7 +358,7 @@ local raid_list = {
 	},
 	
 	{
-		name = 'zul\'aman',
+		name = 'zul\'aman10',
 		instance_name = 'Zul\'Aman',
 		size = 10,
 		patterns = {
@@ -364,7 +367,7 @@ local raid_list = {
 	},
 	
 	{
-		name = 'tempest keep',
+		name = 'tempest keep25',
 		instance_name = 'Tempest Keep',
 		size = 25,
 		patterns = {
@@ -375,7 +378,7 @@ local raid_list = {
 	},
 	
 	{
-		name = 'karazhan',
+		name = 'karazhan10',
 		instance_name = 'Karazhan',
 		size = 10,
 		patterns = {
@@ -384,16 +387,34 @@ local raid_list = {
 	},
 	
 	{
-		name = 'mag\'s lair',
+		name = 'mag\'s lair25',
 		instance_name = 'Magtheridon\'s Lair',
-		size = 10,
+		size = 25,
 		patterns = {
-			'magtheridon\'s' .. csep .. 'lair',
+			'magt?h?e?r?i?d?o?n?\'*s*' .. csep .. 'l?a?i?r?',
 		},
 	},
 	
 	{
-		name = 'molten core',
+		name = 'gruul\'s lair25',
+		instance_name = 'Gruul\'s Lair',
+		size = 25,
+		patterns = {
+			'gruul\'*s*' .. csep .. 'l?a?i?r?',
+		},
+	},
+	
+	{
+		name = 'bwl40',
+		instance_name = 'Blackwing Lair',
+		size = 40,
+		patterns = {
+			'gruul\'*s*' .. csep .. 'l?a?i?r?',
+		},
+	},
+	
+	{
+		name = 'molten core40',
 		instance_name = 'Molten Core',
 		size = 40,
 		patterns = {
@@ -403,8 +424,8 @@ local raid_list = {
 	},
 	
 	{
-		name = 'black temple',
-		instance_name = 'The Black Temple',
+		name = 'black temple25',
+		instance_name = 'Black Temple',
 		size = 25,
 		patterns = {
 			'black'..csep..'temple',
@@ -413,8 +434,19 @@ local raid_list = {
 	},
 	
 	{
-		name = 'ssc',
-		instance_name = 'Serpentshrine Cavern',
+		name = 'sunwell25',
+		instance_name = 'The Sunwell',
+		size = 25,
+		patterns = {
+			'sunwell'..csep..'plateau',
+			'swp' .. sep,
+			sep .. 'swp',
+		},
+	},
+	
+	{
+		name = 'ssc25',
+		instance_name = 'Coilfang: Serpentshrine Cavern',
 		size = 25,
 		patterns = {
 			'^ssc',
@@ -442,28 +474,6 @@ local raid_list = {
 		patterns = {
 			'ruins?'..csep..'of?'..csep..'ahn\'?'..csep..'qiraj',
 			'aq'..csep..'20',
-		},
-	},
-	
-	{
-		name = 'eoe10',
-		instance_name = 'Eye of Eternity',
-		size = 10,
-		patterns = {
-			'eye'..csep..'of'..csep..'eter?ni?ty',
-			'malygos'..csep..'1?0?',
-			'eoe'..csep..'1?0?',
-		},
-	},
-	
-	{
-		name = 'eoe25',
-		instance_name = 'Eye of Eternity',
-		size = 10,
-		patterns = {
-			'eye'..csep..'of'..csep..'eter?ni?ty'..csep..'25',
-			'malygos'..csep..'25',
-			'eoe'..csep..'25',
 		},
 	},
 }
