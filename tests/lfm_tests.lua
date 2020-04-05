@@ -153,13 +153,13 @@ local test_cases = {
 	},
 	
 	-- Need to figure out how to do this without breaking other tests
-	--[[{
+	{
 		message = 'LFM 10m ICC NEED 1 TNAKS AND 1 HEALER 5.3GS MIN. WHISPER GS AND EXP. NO GS AND EXP=IGNORE',
 		should_fail = false,
 		raid = 'icc10nm',
 		roles = {'tank', 'healer'},
 		gs = '5.3',
-	},]]--
+	},
 	
 	{
 		message = 'LFM for OS 25   Need ALL! 4.8k GS ++++',
@@ -204,7 +204,7 @@ local test_cases = {
 	{
 		message = 'need dps for MC old raid',
 		should_fail = false,
-		raid = 'molten core',
+		raid = 'molten core40',
 		roles = {'dps'},
 		gs = ' ',
 	},
@@ -1072,7 +1072,7 @@ local test_cases = {
 	{
 		message = 'LFM [The Black Temple] Achievement and Transmog run',
 		should_fail = false,
-		raid = 'black temple',
+		raid = 'black temple25',
 		roles = { 'dps', 'healer', 'tank' },
 		gs = ' ',
 	},
@@ -1096,7 +1096,7 @@ local test_cases = {
 	{
 		message = 'LFM |cffffff00|Hachievement:697:07000000001CB65C:0:0:0:-1:0:0:0:0|h[The Black Temple]|h|r. Get some transmorg. 12/20',
 		should_fail = false,
-		raid = 'black temple',
+		raid = 'black temple25',
 		roles = { 'dps', 'tank', 'healer' },
 		gs = ' ',
 	},
@@ -1104,7 +1104,7 @@ local test_cases = {
 	{
 		message = 'lfm mount hyjal XMOG RUn need all lvl 80 only w me fast  [The Battle for Mount Hyjal] TOken Hand Pala res',
 		should_fail = false,
-		raid = 'hyjal',
+		raid = 'hyjal25',
 		roles = { 'dps', 'healer', 'tank' },
 		gs = ' ',
 	},
@@ -1112,7 +1112,7 @@ local test_cases = {
 	{
 		message = 'LFM  ALL TO [Zul\'Aman]/ TRANSMOG RUN ALL FREE!!',
 		should_fail = false,
-		raid = 'zul\'aman',
+		raid = 'zul\'aman10',
 		roles = { 'dps', 'healer', 'tank' },
 		gs = ' ',
 	},
@@ -1136,7 +1136,21 @@ local test_cases = {
 	},
 	
 	{
-		message = '<ICC25HC> Lfm Dps( War Boomy) W me Gs 6.2+ And link Hc Achive(Lady PP Sindy Lk Norm){B/P+Shard Res}  [Bane of the Fallen King]',
+		message = '<ICC10HC> Lfm Dps( War Boomy) and tree, W me Gs 6.2+ And link Hc Achive(Lady PP Sindy Lk Norm){B/P+Shard Res}',
+		raid = 'icc10hc',
+		roles = { 'dps', 'healer' },
+		gs = '6.2',
+	},
+	
+	{
+		message = 'Lfm Dps( War Boomy) W me Gs 6.2+ And link Hc Achive(Lady PP Sindy Lk Norm){B/P+Shard Res}  [Bane of the Fallen King]',
+		raid = 'icc10hc',
+		roles = { 'dps' },
+		gs = '6.2',
+	},
+	
+	{
+		message = 'Lfm Dps( War Boomy) W me Gs 6.2+ And link Hc Achive(Lady PP Sindy Lk Norm){B/P+Shard Res}  [The Light of Dawn]',
 		raid = 'icc25hc',
 		roles = { 'dps' },
 		gs = '6.2',
@@ -1145,7 +1159,7 @@ local test_cases = {
 	{
 		message = '<<<LFM NEED 1 TANK 3 HEALERS SOME DPS FOR SSC HUNTER TOKENS RESERVED [Serpentshrine Cavern]',
 		should_fail = false,
-		raid = 'ssc',
+		raid = 'ssc25',
 		roles = { 'tank', 'healer', 'dps' },
 		gs = ' ',
 	},
@@ -1182,7 +1196,7 @@ local test_cases = {
 	{
 		message = ' [Magtheridon\'s Lair] NEED ALL,  [Chestguard of the Fallen Defender] [Magtheridon\'s Head] RES ',
 		should_fail = false,
-		raid = 'mag\'s lair',
+		raid = 'mag\'s lair25',
 		roles = { 'dps', 'healer', 'tank' },
 		gs = ' ',
 	},
@@ -1211,7 +1225,7 @@ local test_cases = {
 	{
 		message = 'LFM [Tempest Keep] tank 5k+ mount run',
 		should_fail = false,
-		raid = 'tempest keep',
+		raid = 'tempest keep25',
 		roles = { 'tank' },
 		gs = '5.0',
 	},
@@ -1227,7 +1241,7 @@ local test_cases = {
 	{
 		message = 'LFM [Tempest Keep] MOUNT RUN (HEALS, DPS NEEDED) FREE ROLL 4 [Ashes of Al\'ar]',
 		should_fail = false,
-		raid = 'tempest keep',
+		raid = 'tempest keep25',
 		roles = { 'dps', 'healer' },
 		gs = ' ',
 	},
@@ -1284,7 +1298,9 @@ local test_cases = {
 	{
 		message = '++++LFM EOE DPS 1 HEAL MOUNT RUN W ME ++++++++LFM EOE DPS 1 HEAL MOUNT RUN W ME ++++++++LFM EOE DPS 1 HEAL MOUNT RUN W ME ++++++++LFM EOE DPS 1 HEAL MOUNT RUN W ME ++++++++LFM EOE DPS 1 HEAL MOUNT RUN W ME ++++',
 		should_fail = false,
-		raid = 'eoe10'
+		raid = 'eoe10',
+		roles = { 'dps', 'healer' },
+		gs = ' '
 	},
 	
 	{
@@ -1311,7 +1327,7 @@ local test_cases = {
 		
 		raid = 'rs25nm',
 		roles = { 'tank', 'healer', 'dps' },
-		gs = ' ',
+		gs = '5.8',
 	},
 	
 	{
@@ -1325,7 +1341,7 @@ local test_cases = {
 	{
 		message = 'LFM  [Bane of the Fallen King] need dog and mans for tank',
 		should_fail = false,
-		raid = 'icc25hc',
+		raid = 'icc10hc',
 		roles = { 'tank' },
 		gs = ' ',
 	},
@@ -1338,20 +1354,24 @@ local test_cases = {
 		gs = '5.7'
 	},
 	
-	--'
-	-- Idea: Convert raid/roles/gs into intermediate text such as <role> <class> <raid> <gs> so that the following could
-	-- be parsed as: <role> for <raid>/HC.. Gs Req <gs>... [The Frostwing Halls (10 player)]...9/10
-	-- This could be a more powerful technique for distinguishing between LFM messages and other messages
+	{
+		message = '[Heroic: Magister\'s Terrace] Need 1 heal, must have hc unlocked!',
+		should_fail = true,
+	},
 	
-	--[[
-		1. first discard non-lfm messages
-		2. discard raids without a mentioned raid
-		3. save raid, role, and gs info
-		4. convert string into (raid) (role) (gs) format for lfm parsing
-		5. parse string: e.g. (role) for (raid) (gs)?
-		
-	]]--
-} 
+	{
+		message = '<<<ANCESTROS DE LA ALIANZA>>> Recluta nuevos miembros para su core (5.7gs) Progress Guild - ICC10HC 12/12 , ICC 25HC 9/12 ,TOGC 10/25 , RS 10HC/25 Discord-Sistema DKP-Raid Time:01:30St /w Para mas Info',
+		should_fail = true
+	},
+	
+	{
+		message = 'LFM ICC25hc/nm NEED heal & dps /w me with 6,1+ 8/12 hc b + p ress (sfs free roll) /w me [Bane of the Fallen King] !!17/25',
+		should_fail = false,
+		raid = 'icc25hc',
+		roles = {'healer', 'dps'},
+		gs = '6.1'
+	},
+}
 
 local function array_contains(t, element)
 	for _, k in ipairs(t) do

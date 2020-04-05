@@ -46,7 +46,7 @@ local raid_patterns_template = {
 		'<raid>' .. csep .. '<size>' .. csep .. 'm?a?n?' .. csep .. 'hc?',
 		sep..'hc?' .. csep .. '<raid>' .. csep .. '<size>',
 		'<raid>' .. csep .. 'hc?' .. csep .. '<size>',
-		sep .. '<size>' .. csep .. '<raid>' .. sep,
+		sep .. '<size>' .. csep .. 'ma?n?' .. csep .. '<raid>' .. sep,
 		
 		'^<size>' .. csep .. '<raid>' .. sep,
 	},
@@ -55,7 +55,7 @@ local raid_patterns_template = {
 		'<raid>' .. csep .. '<size>' .. csep .. 'm?a?n?' .. csep .. 'n?m?' .. sep,
 		sep..'nm?' .. csep .. '<raid>' .. csep .. '<size>',
 		'<raid>' .. csep .. 'n?m?' .. csep .. '<size>',
-		sep .. '<size>' .. csep .. '<raid>' .. sep,
+		sep .. '<size>' .. csep .. 'ma?n?' .. csep .. '<raid>' .. sep,
 		
 		'^<size>' .. csep .. '<raid>' .. sep,
 	},
@@ -122,14 +122,20 @@ local raid_list = {
 		name = 'icc10hc',
 		instance_name = 'Icecrown Citadel',
 		size = 10,
-		patterns = create_pattern_from_template('icc', 10, 'hc'),
+		patterns = std.algorithm.copy_back(
+			create_pattern_from_template('icc', 10, 'hc'),
+			{ 'bane of the fallen king' }
+		)
 	},
 
 	{
 		name = 'icc25hc',
 		instance_name = 'Icecrown Citadel',
 		size = 25,
-		patterns = create_pattern_from_template('icc', 25, 'hc'),
+		patterns = std.algorithm.copy_back(
+			create_pattern_from_template('icc', 25, 'hc'),
+			{ 'the light of dawn' }
+		)
 	},
 
 	{
@@ -227,14 +233,17 @@ local raid_list = {
 		name = 'rs25nm',
 		instance_name = 'The Ruby Sanctum',
 		size = 25,
-		patterns = create_pattern_from_template('rs', 25, 'nm'),
+		patterns = std.algorithm.copy_back(
+			{ ' rs 25n ' },
+			create_pattern_from_template('rs', 25, 'nm')
+		)
 	},
 	
 	{
 		name = 'voa10',
 		instance_name = 'Vault of Archavon',
 		size = 10,
-		patterns = create_pattern_from_template('voa', 10, 'simple'),
+		patterns = create_pattern_from_template('voa', 10, 'simple')
 	},
 	
 	{
@@ -276,7 +285,13 @@ local raid_list = {
 		name = 'os25',
 		instance_name = 'The Obsidian Sanctum',
 		size = 25,
-		patterns = create_pattern_from_template('os', 25, 'simple'),
+		patterns = std.algorithm.copy_back(
+			create_pattern_from_template('os', 25, 'simple'),
+			{ 
+				'%[sartharion must die!%]' .. csep .. '25',
+				csep .. '25' .. '%[sartharion must die%!%]',
+			}
+		)
 	},
 	
 	{
@@ -314,7 +329,7 @@ local raid_list = {
 		patterns = std.algorithm.copy_back(
 			create_pattern_from_template('eoe', 10, 'simple'),
 			{ 
-				'eoe',
+				' eoe ',
 				'malygos must die!' 
 			} 
 		),
@@ -391,7 +406,7 @@ local raid_list = {
 		instance_name = 'Magtheridon\'s Lair',
 		size = 25,
 		patterns = {
-			'magt?h?e?r?i?d?o?n?\'*s*' .. csep .. 'l?a?i?r?',
+			'magt?h?e?r?i?d?o?n?\'*s*' .. csep .. 'lai?r',
 		},
 	},
 	
@@ -590,12 +605,12 @@ local lfm_patterns = {
 	
 	meta_raid .. non_meta .. sep .. '[0-9]+' .. non_meta .. meta_role,
    
-   'lf' .. csep .. '[0-9]*' .. csep .. meta_role .. non_meta .. meta_gs .. '.*' .. meta_raid,
-   'lf' .. csep .. 'all' .. non_meta .. meta_raid,
+   'lfm?' .. csep .. '[0-9]*' .. csep .. meta_role .. non_meta .. meta_gs .. '.*' .. meta_raid,
+   'lfm?' .. csep .. 'all' .. non_meta .. meta_raid,
    'need' .. csep .. 'all' .. non_meta .. meta_raid,
    'seek' .. csep .. 'all' .. non_meta .. meta_raid,
    
-	meta_raid .. non_meta .. 'lf' .. csep .. 'all',
+	meta_raid .. non_meta .. 'lfm?' .. csep .. 'all',
 	meta_raid .. non_meta .. 'need' .. csep .. 'all',
 	meta_raid .. non_meta .. meta_gs .. non_meta .. 'lf' .. csep .. 'all',
 	meta_raid .. non_meta .. meta_gs .. non_meta .. 'seek' .. csep .. 'all',
@@ -605,7 +620,7 @@ local lfm_patterns = {
 	meta_raid .. non_meta .. 'need' .. non_meta .. meta_role,
 	meta_raid .. non_meta .. 'seek' .. non_meta .. meta_role,
 	
-	meta_raid .. non_meta .. 'lf' .. non_meta .. meta_role,
+	meta_raid .. non_meta .. 'lfm?' .. non_meta .. meta_role,
 	meta_raid .. non_meta .. 'looki?ng' .. csep .. 'for' .. non_meta .. meta_role,
    
 	meta_raid .. non_meta .. 'need' .. csep .. 'all',
@@ -631,6 +646,7 @@ local lfm_patterns = {
 	'l[fm][fm]' .. non_meta .. meta_raid,
 	
 	meta_raid .. non_meta .. meta_role,
+   'new' .. csep .. 'run' .. meta_raid,
 }
 
 local guild_recruitment_metapatterns = {
