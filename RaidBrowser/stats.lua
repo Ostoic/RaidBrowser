@@ -103,12 +103,15 @@ function raid_browser.stats.active_spec()
 end
 
 function raid_browser.stats.raid_lock_info(instance_name, size)
+	if instance_name == nil or size == nil then return false, nil end
+	
 	for i = 1, GetNumSavedInstances() do
 		local saved_name, _, reset, _, _, _, _, _, saved_size = GetSavedInstanceInfo(i);
-		
-		if string.lower(saved_name) == string.lower(instance_name) and saved_size == size then
-			return true, reset;
-		end
+		if saved_name ~= nil then 
+			if string.lower(saved_name) == string.lower(instance_name) and saved_size == size then
+				return true, reset;
+			end
+		end		
 	end
 	
 	return false, nil;
