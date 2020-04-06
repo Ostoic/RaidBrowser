@@ -1371,6 +1371,30 @@ local test_cases = {
 		roles = {'healer', 'dps'},
 		gs = '6.1'
 	},
+	
+	{
+		message = '[Elori] yells: lfm 1 tank for icc 10 n/hc at sindy 6k+ [Bane of the Fallen King]',
+		should_fail = false,
+		raid = 'icc10nm',
+		roles = {'tank'},
+		gs = '6.0'
+	},
+	
+	{
+		message = 'LFM 10 man [Sartharion Must Die] - Need 1x Tank & 2x DPS - (Can share quest) Group Loot',
+		should_fail = false,
+		raid = 'icc10nm',
+		roles = {'tank'},
+		gs = '6.0'
+	},
+	
+	{
+		message = '[Magtheridon\'s Lair]Need Tank HEAL DPS (T4 Rogue RESERV) w/me [Magtheridon\'s Lair]',
+		should_fail = false,
+		raid = 'mag\'s lair25',
+		roles = {'tank', 'healer', 'dps'},
+		gs = ' '
+	},
 }
 
 local function array_contains(t, element)
