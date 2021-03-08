@@ -386,7 +386,7 @@ local raid_list = {
 		instance_name = 'Tempest Keep',
 		size = 25,
 		patterns = {
-			'tempest' .. csep .. 'keep',
+			'te*mpe*st' .. csep .. 'ke+p',
 			sep .. 'tk',
 			'tk' .. sep,
 		},
@@ -753,6 +753,7 @@ local function lex_gs_req(message)
 			-- Extract gs and replace it with the gearscore nonterminal
 			return 
 				format_gs_string(gs_text), 
+				-- TODO: Check for valid pattern
 				message:gsub(gs_text, meta_gs)
 		end
 	end

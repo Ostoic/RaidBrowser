@@ -1,4 +1,19 @@
 local test_cases = {
+	{
+		message = 'ICC 25N ALT LK RUN @LK NEED Only 1Rshaman/Tank 5.6K GS ++ REQ KS OR NO [INV] (B+P+SFS RESS) [The Light of Dawn]',
+		should_fail = false,
+		raid = 'icc25nm',
+		roles = {'tank', 'healer'},
+		gs = '5.6'
+	},
+	
+	{
+		message = 'LF [Lord Marrowgar Must Die!] NEED ALL',
+		should_fail = false,
+		raid = 'icc10nm',
+		roles = {'dps', 'tank', 'healer'},
+		gs = ' '
+	},
 
 	{
 		message = '1 GOOD TANK 2 HEALS AND A COUPLE DPS  [Anub\'Rekhan Must Die!] W/ GS AND ROLE EASY WEEKLY',
@@ -1394,6 +1409,30 @@ local test_cases = {
 		raid = 'mag\'s lair25',
 		roles = {'tank', 'healer', 'dps'},
 		gs = ' '
+	},
+	
+	}
+		message = 'LFM ICC10 full nm glory run NEED 1Rsham 1FDK 1SP 6.3k+ must have time and brain [Bane of the Fallen King] (discord required)',
+		should_fail = false,
+		raid = 'icc10nm',
+		roles = {'healer', 'tank', 'dps'},
+		gs = '6.3',		
+	},
+	
+	{
+		message = 'LFM [Sunwell Plateau] / [Equilibrium Epaulets] res only!',
+		should_fail = false,
+		raid = 'sunwell25',
+		roles = {'healer', 'tank', 'dps'},
+		gs = ' '		
+	},
+	
+	{
+		message = ' LFM ICC25 4/12 HC! Need heals + few rdps! 5.7k+ 12/12 25 nm achievement! [Fall of the Lich King (25 player)]',
+		should_fail = false,
+		raid = 'icc25hc',
+		roles = {'healer', 'dps'},
+		gs = '5.7',
 	},
 }
 
