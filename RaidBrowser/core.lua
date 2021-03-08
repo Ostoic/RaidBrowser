@@ -42,10 +42,14 @@ local raid_patterns_template = {
 };
 
 local function create_pattern_from_template(raid_name_pattern, size, difficulty, full_raid_name)
-	if not raid_name_pattern or not size or not difficulty or not full_raid_name then
+	if not raid_name_pattern or not size or not full_raid_name then
 		return;
 	end
-	
+
+    if not difficulty then
+        difficulty = 'nm'
+    end
+
 	full_raid_name = string.lower(full_raid_name);
 	
 	if size == 10 then
@@ -612,7 +616,7 @@ function raid_browser:OnEnable()
 	raid_browser.lfm_messages = {}
 	raid_browser.timer = raid_browser.set_timer(10, refresh_lfm_messages, true)
 	for channel, listener in pairs(lfm_channel_listeners) do
-		channel_listeners[i] = raid_browser.add_event_listener(channel, event_handler)
+	    table.insert(channel_listeners, raid_browser.add_event_listener(channel, event_handler))
 	end
 	
 	raid_browser.gui.raidset.initialize();
