@@ -806,7 +806,7 @@ local test_cases = {
 	{
 		message = ' LFM ICC 25 n/hcNEED boom gs+5.9[Heroic: The Frostwing Halls (25 player)]no achi no [inv]',
 		should_fail = false,
-		raid = 'icc25nm',
+		raid = 'icc25hc',
 		roles = { 'dps' },
 		gs = '5.9',
 	},
@@ -1063,7 +1063,7 @@ local test_cases = {
 	{
 		message = 'ICC 10 N/HC # LF   TANK # HEAL # DPS 5.8k+ LINK KS # BRING TIME #  B+P  Reserved',
 		should_fail = false,
-		raid = 'icc10nm',
+		raid = 'icc10hc',
 		roles = { 'tank', 'healer', 'dps' },
 		gs = '5.8',
 	},
@@ -1232,7 +1232,7 @@ local test_cases = {
 	{
 		message = ' ICC 25 N/HC 6k+NEED ALL ATM link BEST ACHV[Heroic: The Frostwing Halls (25 player)] ',
 		should_fail = false,
-		raid = 'icc25nm',
+		raid = 'icc25hc',
 		roles = { 'dps', 'tank', 'healer' },
 		gs = '6.0',
 	},
@@ -1272,7 +1272,7 @@ local test_cases = {
 	{
 		message = 'Icc 25 N / HC W/m Gs spec Achiv Boe + Primo Reserved [Fall of the Lich King (25 player)]',
 		should_fail = false,
-		raid = 'icc25nm',
+		raid = 'icc25hc',
 		roles = { 'dps', 'tank', 'healer' },
 		gs = ' ',
 	},
@@ -1390,7 +1390,7 @@ local test_cases = {
 	{
 		message = '[Elori] yells: lfm 1 tank for icc 10 n/hc at sindy 6k+ [Bane of the Fallen King]',
 		should_fail = false,
-		raid = 'icc10nm',
+		raid = 'icc10hc',
 		roles = {'tank'},
 		gs = '6.0'
 	},
@@ -1398,9 +1398,9 @@ local test_cases = {
 	{
 		message = 'LFM 10 man [Sartharion Must Die] - Need 1x Tank & 2x DPS - (Can share quest) Group Loot',
 		should_fail = false,
-		raid = 'icc10nm',
-		roles = {'tank'},
-		gs = '6.0'
+		raid = 'os10',
+		roles = {'tank', 'dps'},
+		gs = ' '
 	},
 	
 	{
@@ -1454,6 +1454,14 @@ local test_cases = {
 	{
 		message = 'LFG EoE or Naxx10 3.7k gs mm hunter ',
 		should_fail = true,
+	},
+	
+	{
+		message = 'LFM eoe10 need 1 tank & dps - /w gs & achievement. - boe res',
+		should_fail = false,
+		raid = 'eoe10',
+		roles = {'dps', 'tank'},
+		gs = ' ',
 	},
 }
 

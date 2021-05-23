@@ -3,7 +3,7 @@ raid_browser = LibStub('AceAddon-3.0'):NewAddon('RaidBrowser', 'AceConsole-3.0')
 
 --[[ Parsing and pattern matching ]]--
 -- Separator characters
-local sep_chars = '%s-_,.<>%*)(#+&x'
+local sep_chars = '%s-_,.<>%*)(/#+&x'
 
 -- Whitespace separator
 local sep = '[' .. sep_chars .. ']';
@@ -43,7 +43,7 @@ local meta_guild = make_meta('guild');
 -- Raid patterns template for a raid with 2 difficulties and 2 sizes
 local raid_patterns_template = {
 	hc = {
-		'<raid>' .. csep .. '<size>' .. csep .. 'm?a?n?' .. csep .. 'hc?',
+		'<raid>' .. csep .. '<size>' .. csep .. 'm?a?n?' .. csep .. 'f?u?l?l?' .. csep .. 'hc?',
 		sep..'hc?' .. csep .. '<raid>' .. csep .. '<size>',
 		'<raid>' .. csep .. 'hc?' .. csep .. '<size>',
 		sep .. '<size>' .. csep .. 'ma?n?' .. csep .. '<raid>' .. sep,
@@ -52,7 +52,7 @@ local raid_patterns_template = {
 	},
 	
 	nm = {
-		'<raid>' .. csep .. '<size>' .. csep .. 'm?a?n?' .. csep .. 'n?m?' .. sep,
+		'<raid>' .. csep .. '<size>' .. csep .. 'm?a?n?' .. csep .. 'f?u?l?l?' .. csep .. 'n?m?' .. csep,
 		sep..'nm?' .. csep .. '<raid>' .. csep .. '<size>',
 		'<raid>' .. csep .. 'n?m?' .. csep .. '<size>',
 		sep .. '<size>' .. csep .. 'ma?n?' .. csep .. '<raid>' .. sep,
@@ -61,9 +61,9 @@ local raid_patterns_template = {
 	},
 	
 	simple = {
-		'<raid>' .. csep .. '<size>' .. csep .. 'm[an][an]',
-		'<raid>' .. csep .. '<size>',
-		'^<size>' .. csep .. 'm?a?n?' .. csep .. '<raid>' .. sep,
+		'<raid>' .. csep .. '<size>' .. csep .. 'm[an][an]' .. csep .. 'f?u?l?l?',
+		'<raid>' .. csep .. '<size>' .. csep .. 'f?u?l?l?',
+		'^<size>' .. csep .. 'm?a?n?' .. csep .. 'f?u?l?l?' .. csep .. '<raid>' .. sep,
 		sep .. '<size>' .. csep .. 'm?a?n?' .. csep .. '<raid>' .. sep,
 	},
 };
@@ -77,6 +77,10 @@ local function create_pattern_from_template(raid_name_pattern, size, difficulty)
 		size = '1[0o]';
 	elseif size == 40 then
 		size = '4[0p]';
+	end
+	
+	if not difficulty then
+		difficulty = 'nm'
 	end
 	
 	-- Replace placeholders with the specified raid info
