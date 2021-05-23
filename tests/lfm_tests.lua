@@ -1411,7 +1411,7 @@ local test_cases = {
 		gs = ' '
 	},
 	
-	}
+	{
 		message = 'LFM ICC10 full nm glory run NEED 1Rsham 1FDK 1SP 6.3k+ must have time and brain [Bane of the Fallen King] (discord required)',
 		should_fail = false,
 		raid = 'icc10nm',
@@ -1428,11 +1428,32 @@ local test_cases = {
 	},
 	
 	{
-		message = ' LFM ICC25 4/12 HC! Need heals + few rdps! 5.7k+ 12/12 25 nm achievement! [Fall of the Lich King (25 player)]',
+		message = ' LFM ICC25 4/12! Need heals + few rdps! 5.7k+ 12/12 25 nm achievement! [Fall of the Lich King (25 player)]',
 		should_fail = false,
-		raid = 'icc25hc',
+		raid = 'icc25nm',
 		roles = {'healer', 'dps'},
 		gs = '5.7',
+	},
+	
+	{
+		message = 'LF healer and tank for malygos run',
+		should_fail = false,
+		raid = 'eoe10',
+		roles = {'healer', 'tank'},
+		gs = ' ',
+	},
+	
+	{
+		message = 'LF healer and tank for eoe run',
+		should_fail = false,
+		raid = 'eoe10',
+		roles = {'healer', 'tank'},
+		gs = ' ',
+	},
+	
+	{
+		message = 'LFG EoE or Naxx10 3.7k gs mm hunter ',
+		should_fail = true,
 	},
 }
 

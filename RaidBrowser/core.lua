@@ -329,8 +329,8 @@ local raid_list = {
 		patterns = std.algorithm.copy_back(
 			create_pattern_from_template('eoe', 10, 'simple'),
 			{ 
-				' eoe ',
-				'malygos must die!' 
+				' eoe'..csep..'1?0?',
+				'malygo?s'..csep..'1?0?',
 			} 
 		),
 	},
@@ -339,7 +339,12 @@ local raid_list = {
 		name = 'eoe25',
 		instance_name = 'The Eye of Eternity',
 		size = 25,
-		patterns = create_pattern_from_template('eoe', 25, 'simple'),
+		patterns = std.algorithm.copy_back(
+			create_pattern_from_template('eoe', 25, 'simple'),
+			{ 
+				'malygo?s'..csep..'25',
+			} 
+		),
 	},
 	
 	{
