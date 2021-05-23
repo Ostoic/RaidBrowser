@@ -12,7 +12,10 @@ gs_list_column:SetText('GS')
 raid_list_column:SetText('Raid')
 
 local function on_join()
-	local raid_name = raid_browser.lfm_messages[LFRBrowseFrame.selectedName].raid_info.name;
+	local raid_message = raid_browser.lfm_messages[LFRBrowseFrame.selectedName]
+	
+	if not raid_message then return end
+	local raid_name = raid_message.raid_info.name;
 	local message = raid_browser.stats.build_inv_string(raid_name);
 	SendChatMessage(message, 'WHISPER', nil, LFRBrowseFrame.selectedName);
 end
@@ -79,6 +82,7 @@ for i = 1, NUM_LFR_LIST_BUTTONS do
 		end
 	);
 	
+	-- Todo: This causes heavy lag for some reason
 	button:SetScript('OnEnter', 
 		function(button)
 			GameTooltip:SetOwner(button, 'ANCHOR_RIGHT');

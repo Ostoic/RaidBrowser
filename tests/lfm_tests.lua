@@ -1,5 +1,93 @@
 local test_cases = {
 	{
+		message = 'ICC 25N ALT LK RUN @LK NEED Only 1Rshaman/Tank 5.6K GS ++ REQ KS OR NO [INV] (B+P+SFS RESS) [The Light of Dawn]',
+		should_fail = false,
+		raid = 'icc25nm',
+		roles = {'tank', 'healer'},
+		gs = '5.6'
+	},
+	
+	{
+		message = 'LF [Lord Marrowgar Must Die!] NEED ALL',
+		should_fail = false,
+		raid = 'icc10nm',
+		roles = {'dps', 'tank', 'healer'},
+		gs = ' '
+	},
+
+	{
+		message = '1 GOOD TANK 2 HEALS AND A COUPLE DPS  [Anub\'Rekhan Must Die!] W/ GS AND ROLE EASY WEEKLY',
+		should_fail = false,
+		raid = 'naxx10',
+		roles = { 'dps', 'tank', 'healer' },
+		gs = ' ',
+	},
+	
+	{
+		message = 'LFM 1 GOOD TANK 2 HEALS 2 DPS  [Anub\'Rekhan Must Die!] EASY FAST WEEKLY W GS AND ROLE',
+		should_fail = false,
+		raid = 'naxx10',
+		roles = { 'dps', 'tank', 'healer' },
+		gs = ' ',
+	},
+	{
+		message = 'voa 25 wis me all gs 5.2+ {fire+frost }',
+		should_fail = false,
+		raid = 'voa25',
+		roles = { 'dps', 'tank', 'healer' },
+		gs = '5.2'
+	},
+
+	{
+		message = '4.7k heal looking for ICC rep/boe farm',
+		should_fail = true,
+	},
+	
+	{
+		message = 'OS 10 MOUNT RUN NEED ONLY 1 tank AND GO /W ME CLASS ROLE 6K GS MIN',
+		should_fail = false,
+		raid = 'os10',
+		roles = { 'tank' },
+		gs = '6.0',
+	},
+	
+	{
+		message = 'VoA 10 NEED ALL',
+		should_fail = false,
+		raid = 'voa10',
+		roles = { 'dps', 'tank', 'healer' },
+		gs = ' ',
+	},
+	
+	{
+		message = 'rdruid 5k3 LF toc25/10 icc 10nm w/me',
+		should_fail = true,
+	},
+	
+	{
+		message = '<<INFEST>> Potrebni su nam ozbiljni i aktivni igraci za formiranje MAIN GRUPE. GPROG: ICC10&25 12/12-RS10&25 4/4- Za vise info obratite se meni ili pogledajte na nasem sajtu [www.infest-icecrown.shivtr.com] Sve klase su nam trenutno potrebne!',
+		should_fail = true,
+	},
+	
+	{
+		message = '<<SOUTH PARK>>  Regrutuje ozbiljne clanove sa poznavanjem svoje klase ICC 25NM  12/12  ICC 25 HC 10/12 RS 25 4/4  ICC10NM  12/12  ICC 10HC 12/12/radimo i NAXX TOC ULDUAR. /w za vise informacija.',
+		should_fail = true,
+	},
+	
+	{
+		message = 'Just Dps  [Sartharion Must Die!] >>>Bag Satchel Resserved <<<Dps need',
+		should_fail = false,
+		raid = 'os10',
+		roles = { 'dps' },
+		gs = ' ',
+	},
+	
+	{
+		message = 'hello it\'s me dank man looking for an icc25',
+		should_fail = true,
+	},
+
+	{
 		message = 'LFM need kitty and dps for icc25manhc 5.5+',
 		should_fail = false,
 		raid = 'icc25hc',
@@ -80,13 +168,13 @@ local test_cases = {
 	},
 	
 	-- Need to figure out how to do this without breaking other tests
-	--[[{
+	{
 		message = 'LFM 10m ICC NEED 1 TNAKS AND 1 HEALER 5.3GS MIN. WHISPER GS AND EXP. NO GS AND EXP=IGNORE',
 		should_fail = false,
 		raid = 'icc10nm',
 		roles = {'tank', 'healer'},
 		gs = '5.3',
-	},]]--
+	},
 	
 	{
 		message = 'LFM for OS 25   Need ALL! 4.8k GS ++++',
@@ -131,7 +219,7 @@ local test_cases = {
 	{
 		message = 'need dps for MC old raid',
 		should_fail = false,
-		raid = 'molten core',
+		raid = 'molten core40',
 		roles = {'dps'},
 		gs = ' ',
 	},
@@ -445,7 +533,7 @@ local test_cases = {
 		message = 'ICC 10 nm wis me .....need all ..........gs up 5.5 ........and link me achive ..........{no B+P ress} ..... { com VH } ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++',
 		should_fail = false,
 		raid = 'icc10nm',
-		roles = {'tank', 'dps', 'healer'},
+		roles = { 'tank', 'dps', 'healer' },
 		gs = '5.5',
 	},	
 	
@@ -718,7 +806,7 @@ local test_cases = {
 	{
 		message = ' LFM ICC 25 n/hcNEED boom gs+5.9[Heroic: The Frostwing Halls (25 player)]no achi no [inv]',
 		should_fail = false,
-		raid = 'icc25nm',
+		raid = 'icc25hc',
 		roles = { 'dps' },
 		gs = '5.9',
 	},
@@ -736,37 +824,646 @@ local test_cases = {
 		gs = '5.0',
 	},
 	
-	--1 tank for ICC 10 Run - 9/10, aim 11/12
-	--TOC 10 NM 1 TANK 1 HEAL + 1 PRIEST DPS
-	--[[{
-		message = 'LFM  [Bane of the Fallen King] need dog and mans for tank',
+	{
+		message = '<Asperity> End game guild looking for exceptional players to join our roster. ICC10hc 12/12, ICC25hc 11/12, RS25N 4/4. Raid time: 10 PM ST. We use DKP+DISCORD 6.1k+ Apply @ [Asperity-ic.shivtr.com]',
+		should_fail = true,
+	},
+	
+	{
+		message = 'VOA 25  5k+ fire + frost need Mdps Dk/dudu/war',
 		should_fail = false,
-		raid = 'icc25hc',
+		raid = 'voa25',
+		roles = { 'dps' },
+		gs = '5.0',
+	},
+	
+	{
+		message = 'ICC10REP-FARM NEED heal MUST CAN FLY  boe ress',
+		should_fail = false,
+		raid = 'icc10rep',
+		roles = { 'healer' },
+		gs = ' ',
+	},
+	
+	{
+		message = ' lf icc 10 group',
+		should_fail = true,
+	},
+	
+	{
+		message = 'LF DPS VoA25, fast run, 5k gs+ (Feral pvp/pve legs res)',
+		should_fail = false,
+		raid = 'voa25',
+		roles = { 'dps' },
+		gs = '5.0',
+	},
+	
+	{
+		message = '10VOA NEED warri OT',
+		should_fail = false,
+		raid = 'voa10',
 		roles = { 'tank' },
 		gs = ' ',
-	},]]-- TODO
+	},
 	
-	--'
-	-- Idea: Convert raid/roles/gs into intermediate text such as <role> <class> <raid> <gs> so that the following could
-	-- be parsed as: <role> for <raid>/HC.. Gs Req <gs>... [The Frostwing Halls (10 player)]...9/10
-	-- This could be a more powerful technique for distinguishing between LFM messages and other messages
-	--[[{
+	{
+		message = 'LFG VOA 10/25 - rdps',
+		should_fail = true,
+	},
+	
+	{
+		message = 'VOA 25 DPS  /W CLASS AND GS (RESS ROGUE)',
+		should_fail = false,
+		raid = 'voa25',
+		roles = { 'dps' },
+		gs = ' ',
+	},
+	
+	{
+		message = 'TOC 10 NM semi grun 1x Main tank 5k+ 9/10',
+		should_fail = false,
+		raid = 'toc10nm',
+		roles = { 'tank' },
+		gs = '5.0',
+	},
+	
+	{
+		message = '5.9k ret pally / 5.3k holy LF VOA Group',
+		should_fail = true,
+	},
+	
+	{
+		message = '<TOC 25n> FAST SCROLL + EOT RUN (25MIN RAID)! 5,5K GS + [Call of the Crusade (25 player)]! B/P/O RESS!',
+		should_fail = false,
+		raid = 'toc25nm',
+		roles = { 'dps', 'healer', 'tank' },
+		gs = '5.5'
+	},
+	
+	{
+		message = 'VOA 25 1xheal 2xRdps /w me',
+		should_fail = false,
+		raid = 'voa25',
+		roles = { 'healer', 'dps' },
+		gs = ' '
+	},
+	
+	{
+		message = 'VOA10 Frost only, Class run need all /w me ',
+		should_fail = false,
+		raid = 'voa10',
+		roles = { 'dps', 'healer', 'tank' },
+		gs = ' ',
+	},
+	
+	{
+		message = 'VOA 10 NEED RSHAMY AND 1 TANK ',
+		should_fail = false,
+		raid = 'voa10',
+		roles = { 'healer', 'tank' },
+		gs = ' ',
+	},
+	
+	{
+		message = 'Tides of Azshara is a social PvE guild currently looking for members, all levels are welcome, We currently need all classes(Low on healers) for our building of a progression team for TOC/ICC 10!',
+		should_fail = true,
+	},
+	
+	{
+		message = 'PALA DPS 5.9 LFG ICC10 REP!!!!!! [INV] ME!!!!!!<3',
+		should_fail = true,
+	},
+	
+	{
+		message = ' <<Knuckles Deep>> LF 5.6K+ ACTIVE RAIDERS for ICC 10 HC + ICC 25 NM PROGRESSION!!--> LF DISC/HOLY PRIEST + RANGED DPS --> 4PM/6PM ST RAID TIMES!!',
+		should_fail = true, 
+	},
+	
+	{
+		message = 'LFM VOA 10  need  1 Heler,  clas run  min gs 5,1k 9/10',
+		should_fail = false,
+		raid = 'voa10',
+		roles = { 'healer', },
+		gs = '5.1'
+	},
+	
+	{
+		message = '5.1k prot pally LFG VOA 10/25',
+		should_fail = true,
+	},
+	
+	{
+		message = '[Sartharion Must Die!] OS 10 heal/dps 4.5k+',
+		should_fail = false,
+		raid = 'os10',
+		roles = { 'healer', 'dps' },
+		gs = '4.5',
+	},
+	
+	{
+		message = 'VOA 25 wiss me (DK item ress) DPS 24/25',
+		should_fail = false,
+		raid = 'voa25',
+		roles = { 'dps' },
+		gs = ' ',
+	},
+	
+	{
+		message = 'LF 2 Healers and dps VoA25 5k gs+ fast run! (Mage items res)',
+		should_fail = false,
+		raid = 'voa25',
+		roles = { 'healer', 'dps' },
+		gs = '5.0',
+	},
+	
+	{
+		message = 'druid tank 5.8 LF ICC 25',
+		should_fail = true
+	},
+	
+	{
+		message = '!!! Bulgarski Guild < BOMBASTIC  > nabira seriozni i opitni igrachi sus svobodno vreme i jelanie za igra za svoite raidove ICC / RS / Ulduar.   ICC 10 HC 10/12. !! RS  10 - 25  /  ICC 10 - 25 = CLEAR !.  Iziskvaniq 5,8 GS  ++ !',
+		should_fail = true
+	},
+	
+	{
+		message = 'INV FOR  ICC REP FARM',
+		should_fail = true,
+	},
+	
+	{
+		message = 'HUNT 5K8 LF ICC 10 N /H',
+		should_fail = true,
+	},
+	
+	{
+		message = ' Nova bulgarska guildiq < X A H O B E T E > tursi PVE IGRACHI za ICC 10 / 25 // TOC 10/25 ?? RS 10/25//',
+		should_fail = true,
+	},
+		      
+	{
+		message = '1 tank for ICC 10 Run - 9/10, aim 11/12',
+		should_fail = false,
+		raid = 'icc10nm',
+		roles = { 'tank' },
+		gs = ' ',
+	},
+		      
+	{
+		message = 'TOC 10 NM 1 TANK 1 HEAL + 1 PRIEST DPS',
+		should_fail = false,
+		raid = 'toc10nm',
+		roles = { 'tank', 'healer', 'dps' },
+		gs = ' ',
+	},
+	
+	{
 		message = '1 Lock for ICC 10 NM/HC.. Gs Req 5.7... [The Frostwing Halls (10 player)]...9/10',
 		should_fail = false,
 		raid = 'icc10nm',
 		roles = {'dps'},
 		gs = '5.7',
-	},]]--
+	},
 	
-	--[[
-		1. first discard non-lfm messages
-		2. discard raids without a mentioned raid
-		3. save raid, role, and gs info
-		4. convert string into (raid) (role) (gs) format for lfm parsing
-		5. parse string: e.g. (role) for (raid) (gs)?
+	{
+		message = 'some icc25',
+		should_fail = true,
+	},
+	
+	{
+		message = 'OS 10+3 systém  ---> WEEKLY quest ->> drop 100% fly mout -> ACHIEV -> drop bag 22sloth ->  need all +6K gs tank, dmg  /W me   [Reins of the Black Drake]',
+		should_fail = false,
+		raid = 'os10',
+		roles = { 'dps', 'healer', 'tank' },
+		gs = '6.0',
+	},
+	
+	-- meta_raid .. sep .. nonalpha .. meta_roles .. sep .. nonalpha .. gs
+	{
+		message = 'TOC 25NM NEED ** 1RESTO DRUID/SHAMAN  &  DPS** 5.5 GS + w/me gs spec and link achiv or NO [inv] !!! Throphy reserv [Call of the Crusade (25 player)]',
+		should_fail = false,
+		raid = 'toc25nm',
+		roles = { 'healer', 'dps' },
+		gs = '5.5',
+	},
+	
+	{
+		 message = 'lf icc10 5.5k rogue',
+		 should_fail = true,
+	},
+	
+	{
+		message = 'lf rogue icc10 5.5k',
+		should_fail = false,
+		raid = 'icc10nm',
+		roles = { 'dps' },
+		gs = '5.5'
+	},
+	
+	{
+		message = 'ICC 10 N/HC # LF   TANK # HEAL # DPS 5.8k+ LINK KS # BRING TIME #  B+P  Reserved',
+		should_fail = false,
+		raid = 'icc10hc',
+		roles = { 'tank', 'healer', 'dps' },
+		gs = '5.8',
+	},
+	
+	{
+		message = 'LFM  [Anub\'Rekhan Must Die!] NEED ALL',
+		should_fail = false,
+		raid = 'naxx10',
+		roles = { 'dps', 'healer', 'tank' },
+		gs = ' ',
+	},
+	
+	{
+		message = 'LFM ICC 10 N REP FARM NEED  2 HEAL 4.5 (BOE RESS)',
+		should_fail = false,
+		raid = 'icc10rep',
+		roles = { 'healer' },
+		gs = '4.5',
+	},
+	
+	{
+		message = 'LFM [The Black Temple] Achievement and Transmog run',
+		should_fail = false,
+		raid = 'black temple25',
+		roles = { 'dps', 'healer', 'tank' },
+		gs = ' ',
+	},
+	
+	{
+		message = 'LF tank ICC nm10',
+		should_fail = false,
+		raid = 'icc10nm',
+		roles = { 'tank' },
+		gs = ' ',
+	},
+	
+	{
+		message = 'LF tank ICC 10nm',
+		should_fail = false,
+		raid = 'icc10nm',
+		roles = { 'tank' },
+		gs = ' ',
+	},
+	
+	{
+		message = 'LFM |cffffff00|Hachievement:697:07000000001CB65C:0:0:0:-1:0:0:0:0|h[The Black Temple]|h|r. Get some transmorg. 12/20',
+		should_fail = false,
+		raid = 'black temple25',
+		roles = { 'dps', 'tank', 'healer' },
+		gs = ' ',
+	},
+	
+	{
+		message = 'lfm mount hyjal XMOG RUn need all lvl 80 only w me fast  [The Battle for Mount Hyjal] TOken Hand Pala res',
+		should_fail = false,
+		raid = 'hyjal25',
+		roles = { 'dps', 'healer', 'tank' },
+		gs = ' ',
+	},
+	
+	{
+		message = 'LFM  ALL TO [Zul\'Aman]/ TRANSMOG RUN ALL FREE!!',
+		should_fail = false,
+		raid = 'zul\'aman10',
+		roles = { 'dps', 'healer', 'tank' },
+		gs = ' ',
+	},
+	
+	{
+		message = 'LFM RS10 NM! Need 1 TANK - 2HEAL - 5DPS ! 5k8 + Link ACHIV or no inv ! ID in front of the boss ! {losange}',
+		should_fail = false,
+		raid = 'rs10nm',
+		roles = { 'tank', 'healer', 'dps' },
+		gs = '5.8',
+	},
+	
+	{
+		message = 'PVE guild <Abyssal> is recruiting serious and dedicated players. LF active players (6,2k GS) with decent HC knowledge.Our progress:ICC 10 12/12HC, ICC 25 11/12HC, RS 25 4/4.Raids @ 5PM ST (using Discord/DKPs).Apply on [http://abyssal.shivtr.blue/]',
+		should_fail = true,
+	},
+	
+	{
+		message = 'Guild ++ Virtual Experience ++ Trazi nove clanove za raidovanje. Radimo progres Guild-a! 12/12 NM, 11/12 HC, 25man 12/12 NM, 6/12 HC! Trazimo samo ozbiljne igrace koji ce biti aktivni! Za vise info /w me.',
+		should_fail = true,
+	},
+	
+	{
+		message = '<ICC10HC> Lfm Dps( War Boomy) and tree, W me Gs 6.2+ And link Hc Achive(Lady PP Sindy Lk Norm){B/P+Shard Res}',
+		raid = 'icc10hc',
+		roles = { 'dps', 'healer' },
+		gs = '6.2',
+	},
+	
+	{
+		message = 'Lfm Dps( War Boomy) W me Gs 6.2+ And link Hc Achive(Lady PP Sindy Lk Norm){B/P+Shard Res}  [Bane of the Fallen King]',
+		raid = 'icc10hc',
+		roles = { 'dps' },
+		gs = '6.2',
+	},
+	
+	{
+		message = 'Lfm Dps( War Boomy) W me Gs 6.2+ And link Hc Achive(Lady PP Sindy Lk Norm){B/P+Shard Res}  [The Light of Dawn]',
+		raid = 'icc25hc',
+		roles = { 'dps' },
+		gs = '6.2',
+	},
+	
+	{
+		message = '<<<LFM NEED 1 TANK 3 HEALERS SOME DPS FOR SSC HUNTER TOKENS RESERVED [Serpentshrine Cavern]',
+		should_fail = false,
+		raid = 'ssc25',
+		roles = { 'tank', 'healer', 'dps' },
+		gs = ' ',
+	},
+	
+	{
+		message = 'LFM RS 10 NM NEED 1MDPS GS MIN 5.8KGS+ACHIEV WISP ME ',
+		should_fail = false,
+		raid = 'rs10nm',
+		roles = { 'dps' },
+		gs = '5.8',
+	},
+	
+	{
+		message = 'Guild <Elites>  player irani mipazirad >>> Raid hai ICC 25/10 >>>Rs 25/10 . TS3 va DKp system  / RAid time 8 SHab >[The Light of Dawn]<',
+		should_fail = true,
+	},
+
+	{
+		message = 'LFM icc 10 nm/hc need 1tank(pala-dudu) [Heroic: The Frostwing Halls (25 player)] gs+6k fast run eof farm lk run',
+		should_fail = false,
+		raid = 'icc10nm',
+		roles = { 'tank' },
+		gs = '6.0',
+	},
+	
+	{
+		message = 'LF All, ICC Rep Farm, boe ress',
+		should_fail = false,
+		raid = 'icc10rep',
+		roles = { 'dps', 'healer', 'tank' },
+		gs = ' ',
+	},
+	
+	{
+		message = ' [Magtheridon\'s Lair] NEED ALL,  [Chestguard of the Fallen Defender] [Magtheridon\'s Head] RES ',
+		should_fail = false,
+		raid = 'mag\'s lair25',
+		roles = { 'dps', 'healer', 'tank' },
+		gs = ' ',
+	},
+	
+	{
+		message = 'TOC 25 N LF ALL b/p res W ME GS 5K+++++ [Call of the Crusade (25 player)]',
+		should_fail = false,
+		raid = 'toc25nm',
+		roles = { 'dps', 'healer', 'tank' },
+		gs = '5.0',
+	},
+	
+	{
+		message = 'Guild ++ Virtual Experience ++ Trazi nove clanve za radidovanje! Radimo progres Guild-a! Radimo ICC 10nm 12/12, HC 11/12, 25m, 12/12, HC 6/12, RS 4/4. Takodje radimo i Ulduar,TOC 10,25man.. Igraci sa 5.8+gs, akitvni i ozbilji nek se jave! /w me.',
+		should_fail = true,
+	},
+	
+	{
+		message = ' ICC 25 N/HC 6k+NEED ALL ATM link BEST ACHV[Heroic: The Frostwing Halls (25 player)] ',
+		should_fail = false,
+		raid = 'icc25hc',
+		roles = { 'dps', 'tank', 'healer' },
+		gs = '6.0',
+	},
+	
+	{
+		message = 'LFM [Tempest Keep] tank 5k+ mount run',
+		should_fail = false,
+		raid = 'tempest keep25',
+		roles = { 'tank' },
+		gs = '5.0',
+	},
+	
+	{
+		message = 'NEED ALL FOR TOC 10 (HC) W/ME UR GS CLASS AND SPEC ! LINK ACHIEV ! NO ACHIEV NO [INVITE] !(boes ress) NEED 21 TANK AND GO !',
+		should_fail = false,
+		raid = 'toc10hc',
+		roles = { 'dps', 'healer', 'tank' },
+		gs = ' ',
+	},
+	
+	{
+		message = 'LFM [Tempest Keep] MOUNT RUN (HEALS, DPS NEEDED) FREE ROLL 4 [Ashes of Al\'ar]',
+		should_fail = false,
+		raid = 'tempest keep25',
+		roles = { 'dps', 'healer' },
+		gs = ' ',
+	},
+	
+	{
+		message = 'LF1 OT 5.8gs+ icc10hc @plague!',
+		should_fail = false,
+		raid = 'icc10hc',
+		roles = { 'tank' },
+		gs = '5.8',
+	},
+	
+	{
+		message = 'Icc 25 N / HC W/m Gs spec Achiv Boe + Primo Reserved [Fall of the Lich King (25 player)]',
+		should_fail = false,
+		raid = 'icc25hc',
+		roles = { 'dps', 'tank', 'healer' },
+		gs = ' ',
+	},
+	
+	{
+		message = 'LFM REP FARM ICC 25 Need all GROUP LOOT',
+		should_fail = false,
+		raid = 'icc25rep',
+		roles = { 'dps', 'tank', 'healer' },
+		gs = ' ',
+	},
+	
+	{
+		message = 'LFM NAXX 25 FRESH AND FAST RUN| Need Tanks+DPS+hpal| 5k+ NEED DISCORD| Protector Mark RES| [The Fall of Naxxramas (10 player)] NEED DISCOR',
+		should_fail = false,
+		raid = 'naxx25',
+		roles = { 'dps', 'healer', 'tank' },
+		gs = '5.0',
+	},
+	
+	{
+		message = '>>>>LFM for ICC 25(nm/hc)Fresh Run Need 1xOT/healer /R/mdps  + 5500 /w me your gs & best achiv  [Heroic: The Frostwing Halls (25 player)] ',
+		should_fail = false,
+		raid = 'icc25nm',
+		roles = { 'dps', 'healer', 'tank' },
+		gs = '5.5',
+	},
+	
+	{
+		message = 'NEED  1 TANK  FOR ICC 10 {ONLY NORMAL FAST EOF RUN} LINK ME BEST ACH [The Light of Dawn] AND 6KGS LK RUN @ SINDRA 1000g for JOIN',
+		should_fail = false,
+		raid = 'icc10nm',
+		roles = { 'tank' },
+		gs = '6.0',
 		
-	]]--
-} 
+	},
+	
+	{
+		message = '++++LFM EOE DPS 1 HEAL MOUNT RUN W ME ++++++++LFM EOE DPS 1 HEAL MOUNT RUN W ME ++++++++LFM EOE DPS 1 HEAL MOUNT RUN W ME ++++++++LFM EOE DPS 1 HEAL MOUNT RUN W ME ++++++++LFM EOE DPS 1 HEAL MOUNT RUN W ME ++++',
+		should_fail = false,
+		raid = 'eoe10',
+		roles = { 'dps', 'healer' },
+		gs = ' '
+	},
+	
+	{
+		message = 'BULGARSKI Guild <Only The Brave> Nabira novi populneniq za svoite raidove. Imame nujda ot redovni, otgovorni hora s poznaniq gotovi za Progres. Izpolzvame DKP System + Discord.RT na guild e 19:30BG Time. Minimalen GS za [inv] 5.7kgs +',
+		should_fail = true,
+	},
+	
+	{
+		message = 'Die "Deutsche Wehrmacht" rekrutiert ab sofort neue deutschsprachige Mitglieder. Wöchtenlich ICC 10 und 25, bei genug Mitgliedern gerne auch Alt-Runs. TS und Discord ist verfügbar. Wir heißen jegliche Spieler aus dem deutschen Sprachraum herzlich willko',
+		should_fail = true,
+	},
+	
+	{
+		message = 'NEW RUN [Sartharion Must Die!] 25er w me info !!',
+		should_fail = false,
+		raid = 'os25',
+		roles = { 'tank', 'dps', 'healer' },
+		gs = ' ',
+	},
+	
+	{
+		message = '*** RS 25N *** - LFM All (Discord required, 5.8k+, link ach) PM RageIssues your spec for [INV]!',
+		should_fail = false,
+		
+		raid = 'rs25nm',
+		roles = { 'tank', 'healer', 'dps' },
+		gs = '5.8',
+	},
+	
+	{
+		message = 'NEED DPS and  FOR VOA LAST SPOTS 24/25 warlock needed',
+		should_fail = false,
+		raid = 'voa25',
+		roles = { 'dps' },
+		gs = ' ',
+	},
+	
+	{
+		message = 'LFM  [Bane of the Fallen King] need dog and mans for tank',
+		should_fail = false,
+		raid = 'icc10hc',
+		roles = { 'tank' },
+		gs = ' ',
+	},
+	
+	{
+		message = 'Toc  25 need all gs 5.7 whisper me for invite & link achivment',
+		should_fail = false,
+		raid = 'toc25nm',
+		roles = {'tank', 'healer', 'dps'},
+		gs = '5.7'
+	},
+	
+	{
+		message = '[Heroic: Magister\'s Terrace] Need 1 heal, must have hc unlocked!',
+		should_fail = true,
+	},
+	
+	{
+		message = '<<<ANCESTROS DE LA ALIANZA>>> Recluta nuevos miembros para su core (5.7gs) Progress Guild - ICC10HC 12/12 , ICC 25HC 9/12 ,TOGC 10/25 , RS 10HC/25 Discord-Sistema DKP-Raid Time:01:30St /w Para mas Info',
+		should_fail = true
+	},
+	
+	{
+		message = 'LFM ICC25hc/nm NEED heal & dps /w me with 6,1+ 8/12 hc b + p ress (sfs free roll) /w me [Bane of the Fallen King] !!17/25',
+		should_fail = false,
+		raid = 'icc25hc',
+		roles = {'healer', 'dps'},
+		gs = '6.1'
+	},
+	
+	{
+		message = '[Elori] yells: lfm 1 tank for icc 10 n/hc at sindy 6k+ [Bane of the Fallen King]',
+		should_fail = false,
+		raid = 'icc10hc',
+		roles = {'tank'},
+		gs = '6.0'
+	},
+	
+	{
+		message = 'LFM 10 man [Sartharion Must Die] - Need 1x Tank & 2x DPS - (Can share quest) Group Loot',
+		should_fail = false,
+		raid = 'os10',
+		roles = {'tank', 'dps'},
+		gs = ' '
+	},
+	
+	{
+		message = '[Magtheridon\'s Lair]Need Tank HEAL DPS (T4 Rogue RESERV) w/me [Magtheridon\'s Lair]',
+		should_fail = false,
+		raid = 'mag\'s lair25',
+		roles = {'tank', 'healer', 'dps'},
+		gs = ' '
+	},
+	
+	{
+		message = 'LFM ICC10 full nm glory run NEED 1Rsham 1FDK 1SP 6.3k+ must have time and brain [Bane of the Fallen King] (discord required)',
+		should_fail = false,
+		raid = 'icc10nm',
+		roles = {'healer', 'tank', 'dps'},
+		gs = '6.3',		
+	},
+	
+	{
+		message = 'LFM [Sunwell Plateau] / [Equilibrium Epaulets] res only!',
+		should_fail = false,
+		raid = 'sunwell25',
+		roles = {'healer', 'tank', 'dps'},
+		gs = ' '		
+	},
+	
+	{
+		message = ' LFM ICC25 4/12! Need heals + few rdps! 5.7k+ 12/12 25 nm achievement! [Fall of the Lich King (25 player)]',
+		should_fail = false,
+		raid = 'icc25nm',
+		roles = {'healer', 'dps'},
+		gs = '5.7',
+	},
+	
+	{
+		message = 'LF healer and tank for malygos run',
+		should_fail = false,
+		raid = 'eoe10',
+		roles = {'healer', 'tank'},
+		gs = ' ',
+	},
+	
+	{
+		message = 'LF healer and tank for eoe run',
+		should_fail = false,
+		raid = 'eoe10',
+		roles = {'healer', 'tank'},
+		gs = ' ',
+	},
+	
+	{
+		message = 'LFG EoE or Naxx10 3.7k gs mm hunter ',
+		should_fail = true,
+	},
+	
+	{
+		message = 'LFM eoe10 need 1 tank & dps - /w gs & achievement. - boe res',
+		should_fail = false,
+		raid = 'eoe10',
+		roles = {'dps', 'tank'},
+		gs = ' ',
+	},
+}
 
 local function array_contains(t, element)
 	for _, k in ipairs(t) do
@@ -778,7 +1475,7 @@ local function array_contains(t, element)
 	return false;
 end
 
-local function compare_arrays(table1, table2)
+local function subset_of(table1, table2)
 	if #table1 ~= #table2 then
 		return false;
 	end
@@ -795,16 +1492,17 @@ end
 
 local function display_test(test)
 	local roles_string = '';
-	for _, role in ipairs(test.roles) do
-		roles_string = role .. ' ' .. roles_string;
-	end
+	local raid_string = test.raid or '';
+	local gs_string = test.gs or '';
 	
-	if not test.message then
-		print(test.raid)
+	if (test.roles) then
+		for _, role in ipairs(test.roles) do
+			roles_string = role .. ' ' .. roles_string;
+		end
 	end
 	
 	raid_browser:Print('Original message: ' .. test.message);
-	raid_browser:Print('[Required]: ' .. test.raid .. ', ' .. roles_string .. ', ' .. test.gs);
+	raid_browser:Print('[Required]: ' .. raid_string .. ', ' .. roles_string .. ', ' .. gs_string);
 	raid_browser:Print('Should fail: ' .. tostring(test.should_fail));
 end
 
@@ -813,10 +1511,9 @@ local function test_failed(test, detected, message)
 	raid_browser:Print('Test failed: ' .. message);
 	
 	if detected then
-		local roles_string = '';
-		for _, role in ipairs(detected.roles) do
-			roles_string = role .. ' ' .. roles_string;
-		end
+		local roles_string = std.algorithm.fold(detected.roles, '', function(text, role)
+			return text .. role .. ' ';
+		end)
 		
 		raid_browser:Print('[Detected]: ' .. detected.raid .. ', ' .. roles_string .. ', ' .. detected.gs);
 	end
@@ -832,32 +1529,36 @@ local function run_test_case(test)
 		detected = {raid = raid_info.name, roles = roles, gs = gs};
 	end
 	
-	if raid_info and test.should_fail then
-		if test.raid == 'guild_message' then
-			test_failed(test, detected, 'guild recruitment message passed');
-			return false;
-		else
+	if test.should_fail then
+		-- If we found an lfm message, then the test failed
+		if raid_info then
 			test_failed(test, detected, 'test should have failed');
 			return false;
 		end
-		
-	elseif not raid_info then
-		if not test.should_fail then
+	else
+		-- No raid was found
+		if not raid_info then
 			test_failed(test, detected, 'no raid detected');
 			return false;
+		
+		elseif test.raid ~= raid_info.name then
+			test_failed(test, detected, 'detected raid name is incorrect');
+			return false;
+			
+		elseif test.gs ~= gs then 
+			test_failed(test, detected, 'detected gearscore is incorrect');
+			return false;
+		
+		-- Incorrect gearscore detected
+		elseif not (test.gs == gs) then 
+			test_failed(test, detected, 'detected gearscore is incorrect');
+			return false;
+			
+		-- Incorrect list of roles
+		elseif not subset_of(test.roles, roles) then
+			test_failed(test, detected, 'detected list of roles is not correct');
+			return false;
 		end
-		
-	elseif not (test.raid == raid_info.name) then
-		test_failed(test, detected, 'detected raid name is incorrect');
-		return false;
-		
-	elseif not (test.gs == gs) then 
-		test_failed(test, detected, 'detected gearscore is incorrect');
-		return false;
-		
-	elseif not compare_arrays(test.roles, roles) then
-		test_failed(test, detected, 'detected list of roles is not correct');
-		return false;
 	end
 	
 	return true;
@@ -867,7 +1568,7 @@ end
 local test_results = std.algorithm.transform(test_cases, run_test_case);
 
 -- Count the number of failed tests.
-local number_failed_tests = std.algorithm.count(test_results, false);
+local number_failed_tests = #test_cases - std.algorithm.count(test_results, true);
 
 raid_browser:Print('All unit tests executed.');
 raid_browser:Print('There were ' .. number_failed_tests .. '/' .. #test_cases .. ' failed unit tests!');
