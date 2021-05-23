@@ -69,10 +69,10 @@ local raid_patterns_template = {
 };
 
 local function create_pattern_from_template(raid_name_pattern, size, difficulty)
-	if not raid_name_pattern or not size or not difficulty then
-		return;
-	end
-		
+    if not difficulty then
+        difficulty = 'nm'
+    end
+  
 	if size == 10 then
 		size = '1[0o]';
 	elseif size == 40 then
