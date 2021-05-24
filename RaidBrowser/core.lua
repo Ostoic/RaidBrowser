@@ -407,6 +407,8 @@ local raid_list = {
 		size = 10,
 		patterns = {
 			'karaz?h?a?n?'..csep..'1?0?', -- karazhan 
+			'^kz'..csep..'10',
+			sep..'kz'..csep..'10',
 		},
 	},
 	
