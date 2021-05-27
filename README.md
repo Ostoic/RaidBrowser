@@ -20,7 +20,7 @@ No longer will you join a raid and embarrass yourself upon realizing that you've
   
 # How to Download
 
-In order to download the latest stable version, click on "releases" which is in the repository statistics tab under the addon description (example: https://github.com/Ostoic/RaidBrowser/releases/tag/v1.2.1). The .zip file is the addon folder, so make sure you unzip that folder to one named "RaidBrowser", then follow the instructions below.
+In order to download the latest stable version, click on "releases" which is in the repository statistics tab under the addon description (example: https://github.com/Ostoic/RaidBrowser/releases/latest). The .zip file is the addon folder, so make sure you unzip that folder to one named "RaidBrowser", then follow the instructions below.
 
 # Installation and Usage
 As with any other addon, copy the RaidBrowser folder into your %WoW Folder%/Interface/AddOns directory. 
