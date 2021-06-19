@@ -69,4 +69,4 @@ Thanks to the following people for feature ideas and bug reports:
 - Swenson
 - Imbued
 
-
+Support Me: 462GFN3ZpD9agmsuvqnSwg7czNVpgWteYMuqdKJ9NJBK3uyHFU7G7AxiwkvXxkNoJcHxsM9LTEuxcDYSciHCC3g5PD1XAW5 (XMR)
