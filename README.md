@@ -3,7 +3,7 @@ Bringing LFR to Wotlk.
 
 This addon replaces the unused (in 3.3.5a) LFR tab in the social menu with a working raid finder. RaidBrowser works similarly to Live WoW's group finder, except raid leaders do not need to interact with the addon to list their group. RaidBrowser searches for LFR messages sent in chat and /y channels and lists any found raids in the "Browse" tab of the raid browser. 
 
-When searching for a raid to join in Global, there can be large amounts of text (and meaningless spam) to read in order find anything. This addon does all the text processing work and lists all the raids in a coherent format. Each entry in the raid browser is formatted as follows to include raid leader name, raid name, gearscore requirements, and the list of needed roles (tank/healer/dps).
+When searching for a raid to join in Global, there can be large amounts of text (and meaningless spam) to read in order to find anything. This addon does all the text processing work and lists all the raids in a coherent format. Each entry in the raid browser is formatted as follows to include raid leader name, raid name, gearscore requirements, and the list of needed roles (tank/healer/dps).
 
 ![alt text](https://i.imgur.com/6aqE1TD.png)
 
