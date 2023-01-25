@@ -46,7 +46,7 @@ local function format_seconds(seconds)
    
    local days_text = '';
    local hours_text = '';
-   local mins_text = '';
+   local minutes_text = '';
    local seconds_text = '';
    
    if seconds >= 86400 then
@@ -69,47 +69,6 @@ local function format_seconds(seconds)
    return days_text .. hours_text .. minutes_text;
 end
 
--- Setup tooltip and LFR button entry functionality.
-for i = 1, NUM_LFR_LIST_BUTTONS do
-	local button = _G["LFRBrowseFrameListButton"..i];
-	button:SetScript("OnDoubleClick", on_join)
-	button:SetScript("OnClick", 
-		function(button) 
-			LFRBrowseFrame.selectedName = button.unitName;
-			clear_highlights();
-			button:LockHighlight();
-			LFRBrowse_UpdateButtonStates();
-		end
-	);
-	
-	-- Todo: This causes heavy lag for some reason
-	button:SetScript('OnEnter', 
-		function(button)
-			GameTooltip:SetOwner(button, 'ANCHOR_RIGHT');
-			
-			local seconds = time() - button.lfm_info.time;
-			local last_sent = string.format('Last sent: %d seconds ago', seconds);
-			GameTooltip:AddLine(button.lfm_info.message, 1, 1, 1, true);
-			GameTooltip:AddLine(last_sent);
-			
-			if button.raid_locked then
-				GameTooltip:AddLine('\nYou are |cffff0000saved|cffffd100 for ' .. button.raid_info.name);
-				local _, reset_time = raid_browser.stats.raid_lock_info(button.raid_info.instance_name, button.raid_info.size)
-				GameTooltip:AddLine('Lockout expires in ' .. format_seconds(reset_time));
-			else
-				GameTooltip:AddLine('\nYou are |cff00ffffnot saved|cffffd100 for ' .. button.raid_info.name);
-			end
-			
-			GameTooltip:Show();
-		end
-	)
-	
-	button:SetScript('OnLeave', 
-		function(self)
-			GameTooltip:Hide();
-		end
-	)
-end
 
 -- Hide unused dropdown menu
 LFRBrowseFrameRaidDropDown:Hide()
@@ -183,6 +142,33 @@ local function assign_lfr_button(button, host_name, lfm_info, index)
 	button.healerIcon:SetTexture("Interface\\LFGFrame\\LFGRole");
 	button.damageIcon:SetTexture("Interface\\LFGFrame\\LFGRole");
 	button.partyIcon:SetTexture("Interface\\LFGFrame\\LFGRole");
+
+	button:SetScript('OnEnter', 
+		function(button) 
+			GameTooltip:SetOwner(button, 'ANCHOR_RIGHT');
+			
+			local seconds = time() - button.lfm_info.time;
+			local last_sent = string.format('Last sent: %d seconds ago', seconds);
+			GameTooltip:AddLine(button.lfm_info.message, 1, 1, 1, true);
+			GameTooltip:AddLine(last_sent);
+			
+			if button.raid_locked then
+				GameTooltip:AddLine('\nYou are |cffff0000saved|cffffd100 for ' .. button.raid_info.name);
+				local _, reset_time = raid_browser.stats.raid_lock_info(button.raid_info.instance_name, button.raid_info.size)
+				GameTooltip:AddLine('Lockout expires in ' .. format_seconds(reset_time));
+			else
+				GameTooltip:AddLine('\nYou are |cff00ffffnot saved|cffffd100 for ' .. button.raid_info.name);
+			end
+			
+			GameTooltip:Show();
+		end
+	)
+	
+	button:SetScript('OnLeave', 
+		function(self)
+			GameTooltip:Hide();
+		end
+	)
 end
 
 local function insert_lfm_button(button, index)
