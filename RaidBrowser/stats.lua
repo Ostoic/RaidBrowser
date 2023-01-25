@@ -39,6 +39,58 @@ local raid_achievements = {
 	},
 };
 
+local full_spec_names = {
+	-- Warrior
+	WarriorArms = "Arms Warrior",
+	WarriorFury = "Fury Warrior",
+	WarriorProtection = "Protection Warrior",
+
+	-- Paladin
+	PaladinHoly = "Holy Paladin",
+	PaladinProtection = "Protection Paladin",
+	PaladinCombat = "Retribution Paladin",
+
+	-- Hunter
+	HunterBeastMastery = "Beastmaster Hunter",
+	HunterMarksmanshop = "Marksman Hunter",
+	HunterSurvival = "Survival Hunter",
+
+	-- Rogue
+	RogueAssassination = "Assassination Rogue",
+	RogueCombat = "Combat Rogue",
+	RogueSubtlety = "Subtlety Rogue",
+
+	-- Priest
+	PriestDiscipline = "Discipline Priest",
+	PriestHoly = "Holy Priest",
+	PriestShadow = "Shadow Priest",
+
+	-- DK
+	DeathKnightBlood = "Blood DK",
+	DeathKnightFrost = "Frost DK",
+	DeathKnightUnholy = "Unholy DK",
+
+	-- Shaman
+	ShamanElementalCombat = "Elemental Shaman",
+	ShamanEnhancement = "Enhancement Shaman",
+	ShamanRestoration = "Restoration Shaman",
+
+	-- Mage
+	MageArcane = "Arcane Mage",
+	MageFire = "Fire Mage",
+	MageFrost = "Frost Mage",
+
+	-- Warlock
+	WarlockCurses = "Affliction Warlock",
+	WarlockSummoning = "Demo Warlock",
+	WarlockDestruction = "Destruction Warlock",
+
+	-- Druid
+	DruidBalance = "Balance Druid",
+	DruidFeralCombat = "Feral Druid",
+	DruidRestoration = "Restroration Druid"
+}
+
 local function find_best_achievement(raid)
 	local ids = raid_achievements[raid];
 	if not ids then
@@ -86,20 +138,20 @@ end
 
 function raid_browser.stats.active_spec()
 	local active_tab = raid_browser.stats.active_spec_index()
-	local tab_name = GetTalentTabInfo(active_tab);
+	local localized_tab_name, path, points, spec_name = GetTalentTabInfo(active_tab);
 	
 	-- If we're a feral druid, then we need to distinguish between tank and cat feral.
-	if tab_name == 'Feral Combat' then
+	if spec_name == 'DruidFeralCombat' then
 		local protector_of_pack_talent = 22;
 		local _, _, _, _, points = GetTalentInfo(active_tab, protector_of_pack_talent)
 		if points > 0 then
-			return 'Feral (Bear)'
+			return 'Feral Druid (Bear)'
 		else
-			return 'Feral (Cat)'
+			return 'Feral Druid (Cat)'
 		end
 	end
 	
-	return tab_name;
+	return full_spec_names[spec_name] or spec_name;
 end
 
 function raid_browser.stats.raid_lock_info(instance_name, size)
@@ -163,7 +215,10 @@ function raid_browser.stats.build_inv_string(raid_name)
 	local class = UnitClass("player");
 	
 	local spec, gs = raid_browser.stats.current_raidset();
-	message = message .. gs .. 'gs ' .. spec .. ' ' .. class;
+
+	--message = message .. gs .. 'gs ' .. spec .. ' ' .. class;
+	message = "LFG " .. raid_name .. " - " .. gs .. 'gs ' .. spec;
+	
 	
 	-- Remove difficulty and raid_name size from the string
 	raid_name = string.gsub(raid_name, '[1|2][0|5](%w+)', '');
