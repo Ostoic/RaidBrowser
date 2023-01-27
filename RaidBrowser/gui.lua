@@ -8,8 +8,57 @@ local name_column = LFRBrowseFrameColumnHeader1
 local gs_list_column = LFRBrowseFrameColumnHeader2
 local raid_list_column = LFRBrowseFrameColumnHeader3
 
+local sort_column
+local sort_ascending = false
+
+local function compare(a, b)
+	if sort_ascending then
+		return a > b
+	else
+		return a < b
+	end
+end
+
+local sort_function = function(a, b)
+	if sort_column == "name" then
+		return compare(a.sender, b.sender)
+	elseif sort_column == "gs" then
+		return compare(a.gs, b.gs)
+	elseif sort_column == "raid" then
+		return compare(a.raid_info.name, b.raid_info.name)
+	else
+		return compare(a.time, b.time)
+	end
+end
+
+local function set_sort(column) 
+	if sort_column == column then
+		sort_ascending = not sort_ascending
+	else
+		sort_column = column
+	end
+
+	if raid_browser.gui then
+		raid_browser.gui.update_list()
+	end
+end
+
+local function get_sorted_messages()
+	local keys = {}
+  	for key,info in pairs(raid_browser.lfm_messages) do
+  	  table.insert(keys, info)
+  	end
+
+  	table.sort(keys, sort_function)
+
+  	return keys
+end
+
+name_column:SetScript('OnClick', function() set_sort('name') end)
 gs_list_column:SetText('GS')
+gs_list_column:SetScript('OnClick', function() set_sort('gs') end)
 raid_list_column:SetText('Raid')
+raid_list_column:SetScript('OnClick', function() set_sort('raid') end)
 
 local function on_join()
 	local raid_message = raid_browser.lfm_messages[LFRBrowseFrame.selectedName]
@@ -17,6 +66,7 @@ local function on_join()
 	if not raid_message then return end
 	local raid_name = raid_message.raid_info.name;
 	local message = raid_browser.stats.build_inv_string(raid_name);
+	--print(LFRBrowseFrame.selectedName.." -> "..message)
 	SendChatMessage(message, 'WHISPER', nil, LFRBrowseFrame.selectedName);
 end
 
@@ -174,10 +224,12 @@ end
 local function insert_lfm_button(button, index)
 	local host_name = nil;
 	local count = 1;
+
+	local sortedMessages = get_sorted_messages()
 	
-	for n, lfm_info in pairs(raid_browser.lfm_messages) do
+	for n, lfm_info in pairs(sortedMessages) do
 		if count == index then
-			assign_lfr_button(button, n, lfm_info, index);
+			assign_lfr_button(button, lfm_info.sender, lfm_info, index);
 			break;
 		end
 
