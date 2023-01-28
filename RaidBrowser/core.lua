@@ -1014,7 +1014,8 @@ local function event_handler(self, event, message, sender)
 				roles = roles, 
 				gs = gs, 
 				time = time(), 
-				message = message
+				message = message,
+				sender = sender
 			};
 			
 			raid_browser.gui.update_list();
