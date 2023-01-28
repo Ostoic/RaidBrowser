@@ -1,5 +1,10 @@
 raid_browser.stats = {};
 
+local raid_translations
+if GetLocale() ~= "enUS" then
+	raid_translations = LibStub("LibBabble-Zone-3.0")
+end
+
 local raid_achievements = {
 	icc = {
 		4531, -- Storming the Citadel 10-man
@@ -91,8 +96,6 @@ local full_spec_names = {
 	DruidRestoration = "Restroration Druid"
 }
 
-local locale = GetLocale()
-
 local function find_best_achievement(raid)
 	local ids = raid_achievements[raid];
 	if not ids then
@@ -157,9 +160,9 @@ function raid_browser.stats.active_spec()
 end
 
 function raid_browser.stats.raid_lock_info(raid_info)
-	local instance_name = raid_info.instace_name
-	if raid_info.localized_names and raid_info.localized_names[locale] then
-		instance_name = raid_info.localized_names[locale]
+	local instance_name = raid_info.instance_name
+	if raid_translations then
+		instance_name = raid_translations:GetUnstrictLookupTable()[raid_info.instance_name] or raid_info.instance_name
 	end
 
 	if instance_name == nil or raid_info.size == nil then return false, nil end
