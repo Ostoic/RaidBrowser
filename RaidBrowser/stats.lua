@@ -57,7 +57,7 @@ local full_spec_names = {
 
 	-- Hunter
 	HunterBeastMastery = "Beastmaster Hunter",
-	HunterMarksmanshop = "Marksman Hunter",
+	HunterMarksmanship = "Marksman Hunter",
 	HunterSurvival = "Survival Hunter",
 
 	-- Rogue
@@ -221,13 +221,10 @@ function raid_browser.stats.save_secondary_raidset()
 end
 
 function raid_browser.stats.build_inv_string(raid_name)
-	local message = 'inv ';
-	local class = UnitClass("player");
-	
 	local spec, gs = raid_browser.stats.current_raidset();
 
-	--message = message .. gs .. 'gs ' .. spec .. ' ' .. class;
-	message = "LFG " .. raid_name .. " - " .. gs .. 'gs ' .. spec;
+	-- local message = 'inv ' .. gs .. 'gs ' .. spec;
+	local message = 'LFG ' .. raid_name .. " - " .. gs .. 'gs ' .. spec;
 	
 	
 	-- Remove difficulty and raid_name size from the string
