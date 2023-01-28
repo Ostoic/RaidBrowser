@@ -91,6 +91,8 @@ local full_spec_names = {
 	DruidRestoration = "Restroration Druid"
 }
 
+local locale = GetLocale()
+
 local function find_best_achievement(raid)
 	local ids = raid_achievements[raid];
 	if not ids then
@@ -154,13 +156,18 @@ function raid_browser.stats.active_spec()
 	return full_spec_names[spec_name] or spec_name;
 end
 
-function raid_browser.stats.raid_lock_info(instance_name, size)
-	if instance_name == nil or size == nil then return false, nil end
+function raid_browser.stats.raid_lock_info(raid_info)
+	local instance_name = raid_info.instace_name
+	if raid_info.localized_names and raid_info.localized_names[locale] then
+		instance_name = raid_info.localized_names[locale]
+	end
+
+	if instance_name == nil or raid_info.size == nil then return false, nil end
 	for i = 1, GetNumSavedInstances() do
-		local saved_name, _, reset, _, locked, _, _, _, saved_size = GetSavedInstanceInfo(i);
+		local saved_name, id, reset, difficulty, locked, _, _, _, saved_size = GetSavedInstanceInfo(i);
 		if saved_name ~= nil then
 			-- @napnapnap lockout fix (c8207076730d04f41b881dea3dd9f6ca32655372)
-			if string.lower(saved_name) == string.lower(instance_name) and saved_size == size and locked then
+			if string.lower(saved_name) == string.lower(instance_name) and saved_size == raid_info.size and locked then
 				return true, reset;
 			end
 		end		

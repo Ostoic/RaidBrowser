@@ -98,6 +98,9 @@ local raid_list = {
 	{
 		name = 'icc25rep',
 		instance_name = 'Icecrown Citadel',
+		localized_names = {
+			deDE = 'Eiskronenzitadelle'
+		},
 		size = 25,
 		patterns = {
 			'icc'..csep..'25'..csep..'m?a?n?'..csep..'repu?t?a?t?i?o?n?'..csep..'',
@@ -110,6 +113,9 @@ local raid_list = {
 	{
 		name = 'icc10rep',
 		instance_name = 'Icecrown Citadel',
+		localized_names = {
+			deDE = 'Eiskronenzitadelle'
+		},
 		size = 10,
 		patterns = {
 			'icc' .. csep .. '10' .. csep .. 'm?a?n?' .. csep .. 'repu?t?a?t?i?o?n?' .. csep,
@@ -125,6 +131,9 @@ local raid_list = {
 	{
 		name = 'icc10hc',
 		instance_name = 'Icecrown Citadel',
+		localized_names = {
+			deDE = 'Eiskronenzitadelle'
+		},
 		size = 10,
 		patterns = std.algorithm.copy_back(
 			create_pattern_from_template('icc', 10, 'hc'),
@@ -135,6 +144,9 @@ local raid_list = {
 	{
 		name = 'icc25hc',
 		instance_name = 'Icecrown Citadel',
+		localized_names = {
+			deDE = 'Eiskronenzitadelle'
+		},
 		size = 25,
 		patterns = std.algorithm.copy_back(
 			create_pattern_from_template('icc', 25, 'hc'),
@@ -145,6 +157,9 @@ local raid_list = {
 	{
 		name = 'icc10nm',
 		instance_name = 'Icecrown Citadel',
+		localized_names = {
+			deDE = 'Eiskronenzitadelle'
+		},
 		size = 10,
 		patterns = create_pattern_from_template('icc', 10, 'nm'),
 	},
@@ -152,6 +167,9 @@ local raid_list = {
 	{
 		name = 'icc25nm',
 		instance_name = 'Icecrown Citadel',
+		localized_names = {
+			deDE = 'Eiskronenzitadelle'
+		},
 		size = 25,
 		patterns = create_pattern_from_template('icc', 25, 'nm'),
 	},
@@ -159,6 +177,9 @@ local raid_list = {
 	{
 		name = 'toc10hc',
 		instance_name = 'Trial of the Crusader',
+		localized_names = {
+			deDE = 'Prüfung des Kreuzfahrers'
+		},
 		size = 10,
 		patterns = std.algorithm.copy_back(
 			create_pattern_from_template('toc', 10, 'hc'),
@@ -172,6 +193,9 @@ local raid_list = {
 	{
 		name = 'toc25hc',
 		instance_name = 'Trial of the Crusader',
+		localized_names = {
+			deDE = 'Prüfung des Kreuzfahrers'
+		},
 		size = 25,
 		patterns = std.algorithm.copy_back(
 			create_pattern_from_template('toc', 25, 'hc'),
@@ -185,6 +209,9 @@ local raid_list = {
 	{
 		name = 'toc10nm',
 		instance_name = 'Trial of the Crusader',
+		localized_names = {
+			deDE = 'Prüfung des Kreuzfahrers'
+		},
 		size = 10,
 		patterns = std.algorithm.copy_back(
 			create_pattern_from_template('toc', 10, 'nm'),
@@ -195,6 +222,9 @@ local raid_list = {
 	{
 		name = 'toc25nm',
 		instance_name = 'Trial of the Crusader',
+		localized_names = {
+			deDE = 'Prüfung des Kreuzfahrers'
+		},
 		size = 25,
 		patterns = std.algorithm.copy_back(
 			create_pattern_from_template('toc', 25, 'nm'),
@@ -205,6 +235,9 @@ local raid_list = {
 	{
 		name = 'rs10hc',
 		instance_name = 'The Ruby Sanctum',
+		localized_names = {
+			deDE = 'Das Rubinsanktum'
+		},
 		size = 10,
 		patterns = create_pattern_from_template('rs', 10, 'hc')
 	},
@@ -212,6 +245,9 @@ local raid_list = {
 	{
 		name = 'rs25hc',
 		instance_name = 'The Ruby Sanctum',
+		localized_names = {
+			deDE = 'Das Rubinsanktum'
+		},
 		size = 25,
 		patterns = std.algorithm.copy_back(
 			create_pattern_from_template('rs', 25, 'hc'),
@@ -224,6 +260,9 @@ local raid_list = {
 	{
 		name = 'rs10nm',
 		instance_name = 'The Ruby Sanctum',
+		localized_names = {
+			deDE = 'Das Rubinsanktum'
+		},
 		size = 10,
 		patterns = std.algorithm.copy_back(
 			create_pattern_from_template('rs', 10, 'nm'),
@@ -236,6 +275,9 @@ local raid_list = {
 	{
 		name = 'rs25nm',
 		instance_name = 'The Ruby Sanctum',
+		localized_names = {
+			deDE = 'Das Rubinsanktum'
+		},
 		size = 25,
 		patterns = std.algorithm.copy_back(
 			{ ' rs 25n ' },
@@ -246,6 +288,9 @@ local raid_list = {
 	{
 		name = 'voa10',
 		instance_name = 'Vault of Archavon',
+		localized_names = {
+			deDE = 'Archavons Kammer'
+		},
 		size = 10,
 		patterns = create_pattern_from_template('voa', 10, 'simple')
 	},
@@ -253,6 +298,9 @@ local raid_list = {
 	{
 		name = 'voa25',
 		instance_name = 'Vault of Archavon',
+		localized_names = {
+			deDE = 'Archavons Kammer'
+		},
 		size = 25,
 		patterns = create_pattern_from_template('voa', 25, 'simple'),
 	},
@@ -260,6 +308,8 @@ local raid_list = {
 	{
 		name = 'ulduar10',
 		instance_name = 'Ulduar',
+		localized_names = {
+		},
 		size = 10,
 		patterns = {
 			'ull?a?d[au]?[au]?r?'..csep..'10',
@@ -269,6 +319,8 @@ local raid_list = {
 	{
 		name = 'ulduar25',
 		instance_name = 'Ulduar',
+		localized_names = {
+		},
 		size = 25,
 		patterns = {
 			'ull?a?d[au]?[au]?r?'..csep..'25',
@@ -278,6 +330,9 @@ local raid_list = {
 	{
 		name = 'os10',
 		instance_name = 'The Obsidian Sanctum',
+		localized_names = {
+			deDE = 'Das Obsidiansanktum'
+		},
 		size = 10,
 		patterns = std.algorithm.copy_back(
 			create_pattern_from_template('os', 10, 'simple'),
@@ -288,6 +343,9 @@ local raid_list = {
 	{
 		name = 'os25',
 		instance_name = 'The Obsidian Sanctum',
+		localized_names = {
+			deDE = 'Das Obsidiansanktum'
+		},
 		size = 25,
 		patterns = std.algorithm.copy_back(
 			create_pattern_from_template('os', 25, 'simple'),
@@ -301,6 +359,8 @@ local raid_list = {
 	{
 		name = 'naxx10',
 		instance_name = 'Naxxramas',
+		localized_names = {
+		},
 		size = 10,
 		patterns = {
 			'the fall of naxxramas %(10 player%)',
@@ -318,6 +378,8 @@ local raid_list = {
 	{
 		name = 'naxx25',
 		instance_name = 'Naxxramas',
+		localized_names = {
+		},
 		size = 25,
 		patterns = {
 			'the fall of naxxramas %(25 player%)',
@@ -329,6 +391,9 @@ local raid_list = {
 	{
 		name = 'eoe10',
 		instance_name = 'The Eye of Eternity',
+		localized_names = {
+			deDE = 'Das Auge der Ewigkeit'
+		},
 		size = 10,
 		patterns = std.algorithm.copy_back(
 			create_pattern_from_template('eoe', 10, 'simple'),
@@ -342,6 +407,9 @@ local raid_list = {
 	{
 		name = 'eoe25',
 		instance_name = 'The Eye of Eternity',
+		localized_names = {
+			deDE = 'Das Auge der Ewigkeit'
+		},
 		size = 25,
 		patterns = std.algorithm.copy_back(
 			create_pattern_from_template('eoe', 25, 'simple'),
@@ -354,6 +422,9 @@ local raid_list = {
 	{
 		name = 'onyxia25',
 		instance_name = 'Onyxia\'s Lair',
+		localized_names = {
+			deDE = 'Onyxias Hort'
+		},
 		size = 25,
 		patterns = {
 			"onyxia's lair (25 player)",
@@ -364,6 +435,9 @@ local raid_list = {
 	{
 		name = 'onyxia10',
 		instance_name = 'Onyxia\'s Lair',
+		localized_names = {
+			deDE = 'Onyxias Hort'
+		},
 		size = 10,
 		patterns = {
 			"onyxia's lair (10 player)",
@@ -374,6 +448,9 @@ local raid_list = {
 	{
 		name = 'hyjal25',
 		instace_name = 'The Battle For Mount Hyjal',
+		localized_names = {
+			deDE = 'Die Schlacht um den Berg Hyjal'
+		},
 		size = 25,
 		patterns = {
 			'mount' .. csep .. 'hyjal',
@@ -384,6 +461,8 @@ local raid_list = {
 	{
 		name = 'zul\'aman10',
 		instance_name = 'Zul\'Aman',
+		localized_names = {
+		},
 		size = 10,
 		patterns = {
 			'zul' .. csep .. '\'?' .. csep .. 'aman',
@@ -393,6 +472,9 @@ local raid_list = {
 	{
 		name = 'tempest keep25',
 		instance_name = 'Tempest Keep',
+		localized_names = {
+			deDE = "Festung der Stürme"
+		},
 		size = 25,
 		patterns = {
 			'te*mpe*st' .. csep .. 'ke+p',
@@ -404,6 +486,8 @@ local raid_list = {
 	{
 		name = 'karazhan10',
 		instance_name = 'Karazhan',
+		localized_names = {
+		},
 		size = 10,
 		patterns = {
 			'karaz?h?a?n?'..csep..'1?0?', -- karazhan 
@@ -415,6 +499,9 @@ local raid_list = {
 	{
 		name = 'mag\'s lair25',
 		instance_name = 'Magtheridon\'s Lair',
+		localized_names = {
+			deDE = "Magtheridons Kammer"
+		},
 		size = 25,
 		patterns = {
 			'magt?h?e?r?i?d?o?n?\'*s*' .. csep .. 'lai?r',
@@ -424,6 +511,9 @@ local raid_list = {
 	{
 		name = 'gruul\'s lair25',
 		instance_name = 'Gruul\'s Lair',
+		localized_names = {
+			deDE = "Gruuls Unterschlupf"
+		},
 		size = 25,
 		patterns = {
 			'gruul\'*s*' .. csep .. 'l?a?i?r?',
@@ -433,6 +523,9 @@ local raid_list = {
 	{
 		name = 'bwl40',
 		instance_name = 'Blackwing Lair',
+		localized_names = {
+			deDE = "Pechschwingenhort"
+		},
 		size = 40,
 		patterns = {
 			'gruul\'*s*' .. csep .. 'l?a?i?r?',
@@ -442,6 +535,9 @@ local raid_list = {
 	{
 		name = 'molten core40',
 		instance_name = 'Molten Core',
+		localized_names = {
+			deDE = "Geschmolzener Kern"
+		},
 		size = 40,
 		patterns = {
 			'molte?n'..csep..'core?',
@@ -452,6 +548,9 @@ local raid_list = {
 	{
 		name = 'black temple25',
 		instance_name = 'Black Temple',
+		localized_names = {
+			deDE = "Der Schwarze Tempel"
+		},
 		size = 25,
 		patterns = {
 			'black'..csep..'temple',
@@ -462,6 +561,9 @@ local raid_list = {
 	{
 		name = 'sunwell25',
 		instance_name = 'The Sunwell',
+		localized_names = {
+			deDE = "Der Sonnenbrunnen"
+		},
 		size = 25,
 		patterns = {
 			'sunwell'..csep..'plateau',
@@ -473,6 +575,9 @@ local raid_list = {
 	{
 		name = 'ssc25',
 		instance_name = 'Coilfang: Serpentshrine Cavern',
+		localized_names = {
+			deDE = "Echsenkessel: Höhle des Schlangenschreins"
+		},
 		size = 25,
 		patterns = {
 			'^ssc',
@@ -486,6 +591,9 @@ local raid_list = {
 	{
 		name = 'aq40',
 		instance_name = 'Ahn\'Qiraj Temple',
+		localized_names = {
+			deDE = "Tempel von Ahn'Qiraj"
+		},
 		size = 40,
 		patterns = {
 			'temple?'..csep..'of?'..csep..'ahn\'?'..csep..'qiraj',
@@ -496,6 +604,9 @@ local raid_list = {
 	{
 		name = 'aq20',
 		instance_name = "Ruins of Ahn'Qiraj",
+		localized_names = {
+			deDE = "Ruinen von Ahn'Qiraj"
+		},
 		size = 20,
 		patterns = {
 			'ruins?'..csep..'of?'..csep..'ahn\'?'..csep..'qiraj',
