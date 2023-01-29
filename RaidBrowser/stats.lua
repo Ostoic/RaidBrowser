@@ -224,7 +224,7 @@ function raid_browser.stats.build_inv_string(raid_name)
 	local spec, gs = raid_browser.stats.current_raidset();
 
 	-- local message = 'inv ' .. gs .. 'gs ' .. spec;
-	local message = 'LFG ' .. raid_name .. " - " .. gs .. 'gs ' .. spec;
+	local message = 'inv for ' .. raid_name .. " - " .. gs .. 'gs ' .. spec;
 	
 	
 	-- Remove difficulty and raid_name size from the string
