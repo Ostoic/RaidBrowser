@@ -157,7 +157,7 @@ local raid_list = {
 	},
 
 	{
-		name = 'toc10hc',
+		name = 'togc10hc',
 		instance_name = 'Trial of the Crusader',
 		size = 10,
 		patterns = std.algorithm.copy_back(
@@ -170,7 +170,7 @@ local raid_list = {
 	},
 
 	{
-		name = 'toc25hc',
+		name = 'togc25hc',
 		instance_name = 'Trial of the Crusader',
 		size = 25,
 		patterns = std.algorithm.copy_back(
@@ -884,12 +884,13 @@ end
 lfm_channel_listeners = {
 	['CHAT_MSG_CHANNEL'] = {},
 	['CHAT_MSG_YELL'] = {},
+	['CHAT_MSG_SAY'] = {},
 };
 
 local channel_listeners = {};
 
 local function is_lfm_channel(channel)
-	return channel == 'CHAT_MSG_CHANNEL' or channel == 'CHAT_MSG_YELL';
+	return channel == 'CHAT_MSG_CHANNEL' or channel == 'CHAT_MSG_YELL' or channel == 'CHAT_MSG_SAY';
 end
 
 local function event_handler(self, event, message, sender)
@@ -927,7 +928,7 @@ local function refresh_lfm_messages()
 end
 
 function raid_browser:OnEnable()
-	raid_browser:Print('loaded. Type /rb to toggle the raid browser.')
+	-- raid_browser:Print('loaded. Type /rb to toggle the raid browser.')
 	
 	if not raid_browser_character_current_raidset then
 		raid_browser_character_current_raidset = 'Active';
@@ -935,13 +936,13 @@ function raid_browser:OnEnable()
 	
 	if not raid_browser_character_raidsets then
 		raid_browser_character_raidsets = {
-			primary = {},
-			secondary = {},
+			Primary = {},
+			Secondary = {},
 		};
 	end
 
 	-- LFM messages expire after 60 seconds
-	raid_browser.expiry_time = 60;
+	raid_browser.expiry_time = 120;
 
 	raid_browser.lfm_messages = {}
 	raid_browser.timer = raid_browser.set_timer(10, refresh_lfm_messages, true)
@@ -950,6 +951,7 @@ function raid_browser:OnEnable()
 	end
 	
 	raid_browser.gui.raidset.initialize();
+	raid_browser.check_button()
 end
 
 function raid_browser:OnDisable()
