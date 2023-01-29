@@ -152,7 +152,7 @@ local function assign_lfr_button(button, host_name, lfm_info, index)
 	-- Raid name
 	button.class:SetText(button.raid_info.name); 
 
-	button.raid_locked = raid_browser.stats.raid_lock_info(button.raid_info.instance_name, button.raid_info.size);
+	button.raid_locked, button.raid_reset_time = raid_browser.stats.raid_lock_info(button.raid_info);
 	button.type = "party";
 
 	button.partyIcon:Show();
@@ -204,8 +204,7 @@ local function assign_lfr_button(button, host_name, lfm_info, index)
 			
 			if button.raid_locked then
 				GameTooltip:AddLine('\nYou are |cffff0000saved|cffffd100 for ' .. button.raid_info.name);
-				local _, reset_time = raid_browser.stats.raid_lock_info(button.raid_info.instance_name, button.raid_info.size)
-				GameTooltip:AddLine('Lockout expires in ' .. format_seconds(reset_time));
+				GameTooltip:AddLine('Lockout expires in ' .. format_seconds(button.raid_reset_time));
 			else
 				GameTooltip:AddLine('\nYou are |cff00ffffnot saved|cffffd100 for ' .. button.raid_info.name);
 			end
