@@ -53,9 +53,7 @@ See the common issues section for further help.
 A fairly common issue when unzipping the addon is that your zip program puts the addon at RaidBrowser/RaidBrowser. Make sure that when you open the folder in the Addons directory (in %WoW Folder%/Interface/AddOns), you see all the .lua files (core.lua, RaidBrowser.toc, etc). Make sure you can see RaidBrowser.toc by going to %WoW Folder%/Interface/AddOns/RaidBrowser/RaidBrowser.toc.
 
 # Todo
-- Add more raids and achievements. Icc, toc, naxx, rs, ulduar, and os are currently the only supported raids.
 - Further improve pattern matching for better detection of LFM messages.
-- Sort raid entries by gs/name/etc
 - Raid host tab where "Inv x gs [achieve]" messages are parsed similarly to how LFM messages are parsed. Can select raid to host, GS min req, achievement requirement, etc which will be formatted into an auto-barked message sent to the specified channel.
 - If you run into any bugs, such as incorrect information being reported by the addon, send me a screenshot/copy of the original message and the incorrect information the addon displayed.
 - Suggestions?? Open up an issue or send me a message ingame/in discord.
@@ -70,5 +68,3 @@ Thanks to the following people for feature ideas and bug reports:
 - Adidi
 - Swenson
 - Imbued
-
-Support Me: 83RC32Rk2BuhLHA9MWmeheXPkNLYLervNQW3ce3zrGoq6sZsdpjoa5vBbt2sBxrpboPjiqkXd4AjTeGR6E2HEcNNNdxtPCR (XMR)
