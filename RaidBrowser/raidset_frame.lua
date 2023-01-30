@@ -6,14 +6,17 @@ frame:SetWidth(90);
 
 local current_selection = nil;
 
+---@return boolean
 local function is_active_selected(_)
 	return ('Active' == current_selection);
 end
 
+---@return boolean
 local function is_primary_selected(_)
 	return ('Primary' == current_selection);
 end
 
+---@return boolean
 local function is_secondary_selected(_)
 	return ('Secondary' == current_selection);
 end
