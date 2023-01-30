@@ -28,12 +28,12 @@
         "GameTooltip",
         "SlashCmdList",
         "hash_SlashCmdList",
-        "raid_browser_character_current_raidset",
         "LFRParentFrameTab1",
         "LFRParentFrameTab2",
         "RaidBrowserRaidSetMenuButton",
         "RaidBrowserRaidSetMenu",
-        "raid_browser",
-        "raid_browser_character_raidsets"
+        "RaidBrowser",
+        "RaidBrowserCharacterRaidsets",
+        "RaidBrowserCharacterCurrentRaidset",
     ]
 }
