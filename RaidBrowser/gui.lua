@@ -15,6 +15,7 @@ local sort_ascending = false
 ---@param a any
 ---@param b any
 ---@return boolean
+---@nodiscard
 local function compare(a, b)
 	if sort_ascending then
 		return a > b
@@ -26,6 +27,7 @@ end
 ---@param a table
 ---@param b table
 ---@return boolean
+---@nodiscard
 local sort_function = function(a, b)
 	if sort_column == "name" then
 		return compare(a.sender, b.sender)
@@ -52,6 +54,7 @@ local function set_sort(column)
 end
 
 ---@return table
+---@nodiscard
 local function get_sorted_messages()
 	local keys = {}
 	for _, info in pairs(RaidBrowser.lfm_messages) do
@@ -203,19 +206,19 @@ local function assign_lfr_button(button, host_name, lfm_info, index)
 	button.partyIcon:SetTexture("Interface\\LFGFrame\\LFGRole");
 
 	button:SetScript('OnEnter',
-		function(button)
-			GameTooltip:SetOwner(button, 'ANCHOR_RIGHT');
+		function(lfr_button)
+			GameTooltip:SetOwner(lfr_button, 'ANCHOR_RIGHT');
 
-			local seconds = time() - button.lfm_info.time;
+			local seconds = time() - lfr_button.lfm_info.time;
 			local last_sent = string.format('Last sent: %d seconds ago', seconds);
-			GameTooltip:AddLine(button.lfm_info.message, 1, 1, 1, true);
+			GameTooltip:AddLine(lfr_button.lfm_info.message, 1, 1, 1, true);
 			GameTooltip:AddLine(last_sent);
 
-			if button.raid_locked then
-				GameTooltip:AddLine('\nYou are |cffff0000saved|cffffd100 for ' .. button.raid_info.name);
-				GameTooltip:AddLine('Lockout expires in ' .. format_seconds(button.raid_reset_time));
+			if lfr_button.raid_locked then
+				GameTooltip:AddLine('\nYou are |cffff0000saved|cffffd100 for ' .. lfr_button.raid_info.name);
+				GameTooltip:AddLine('Lockout expires in ' .. format_seconds(lfr_button.raid_reset_time));
 			else
-				GameTooltip:AddLine('\nYou are |cff00ffffnot saved|cffffd100 for ' .. button.raid_info.name);
+				GameTooltip:AddLine('\nYou are |cff00ffffnot saved|cffffd100 for ' .. lfr_button.raid_info.name);
 			end
 
 			GameTooltip:Show();

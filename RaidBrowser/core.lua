@@ -71,25 +71,32 @@ local raid_patterns_template = {
 	},
 };
 
+---@param raid_name_pattern string
+---@param size integer
+---@param difficulty string|nil
+---@return table
+---@nodiscard
 local function create_pattern_from_template(raid_name_pattern, size, difficulty)
 	if not difficulty then
 		difficulty = 'nm'
 	end
 
+	local size_pattern = '1[0p]'
 	if size == 10 then
-		size = '1[0o]';
+		size_pattern = '1[0o]';
 	elseif size == 40 then
-		size = '4[0p]';
+		size_pattern = '4[0p]';
 	end
 
+	local difficulty_pattern = 'hc'
 	if not difficulty then
-		difficulty = 'nm'
+		difficulty_pattern = 'nm'
 	end
 
 	-- Replace placeholders with the specified raid info
-	return std.algorithm.transform(raid_patterns_template[difficulty], function(pattern)
+	return std.algorithm.transform(raid_patterns_template[difficulty_pattern], function(pattern)
 		pattern = pattern:gsub('<raid>', raid_name_pattern);
-		pattern = pattern:gsub('<size>', size);
+		pattern = pattern:gsub('<size>', size_pattern);
 		return pattern;
 	end);
 end
@@ -684,6 +691,7 @@ local lfg_patterns = {
 ---@param message string
 ---@param patterns table
 ---@return boolean
+---@nodiscard
 local function matches_any_pattern(message, patterns)
 	return std.algorithm.find_if(patterns, function(pattern)
 		return message:find(pattern);
@@ -692,24 +700,28 @@ end
 
 ---@param message string
 ---@return boolean
+---@nodiscard
 local function is_lfm_message(message)
 	return matches_any_pattern(message, lfm_patterns);
 end
 
 ---@param message string
 ---@return boolean
+---@nodiscard
 local function is_guild_recruitment(message)
 	return matches_any_pattern(message, guild_recruitment_patterns);
 end
 
 ---@param message string
 ---@return boolean
+---@nodiscard
 local function is_lfg_message(message)
 	return matches_any_pattern(message, lfg_patterns);
 end
 
 ---@param message string
 ---@return boolean
+---@nodiscard
 local function is_trade_message(message)
 	return matches_any_pattern(message, trade_message_patterns);
 end
@@ -717,6 +729,7 @@ end
 -- Basic http pattern matching for streaming sites and etc.
 ---@param message string
 ---@return string, integer?
+---@nodiscard
 local function remove_http_links(message)
 	local http_pattern = 'https?://*[%a]*.[%a]*.[%a]*/?[%a%-%%0-9_]*/?';
 	return message:gsub(http_pattern, '');
@@ -724,6 +737,7 @@ end
 
 ---@param message string
 ---@return string, integer?
+---@nodiscard
 local function lex_achievements(message)
 	local achievement_pattern = '\124cffffff00\124h.*\124h(%[.*%])\124h\124r';
 	return message:gsub(achievement_pattern, '%1');
@@ -731,6 +745,7 @@ end
 
 ---@param message string
 ---@return string
+---@nodiscard
 local function lex_guild_recruitments(message)
 	for _, pattern in ipairs(guild_patterns) do
 		message = message:gsub(pattern, meta_guild);
@@ -743,6 +758,7 @@ end
 ---@param message string
 ---@param role "healer"|"dps"|"tank"
 ---@return table, string
+---@nodiscard
 local function lex_roles(roles, message, role)
 	local found = false;
 
@@ -761,6 +777,7 @@ end
 
 ---@param gs_str string
 ---@return string
+---@nodiscard
 local function format_gs_string(gs_str)
 	local formatted = gs_str:gsub(sep .. '*%+?', ''); -- Trim whitespace
 	formatted = formatted:gsub('[kgs]', '')
@@ -785,6 +802,7 @@ end
 
 ---@param message string
 ---@return string?, string, integer?
+---@nodiscard
 local function lex_gs_req(message)
 	for _, pattern in pairs(gearscore_patterns) do
 		local gs_text = message:match(pattern);
@@ -801,6 +819,7 @@ end
 
 ---@param message string
 ---@return table?, string?, integer?
+---@nodiscard
 function RaidBrowser.lex_raid_info(message)
 
 	local raid;
@@ -829,11 +848,14 @@ end
 
 ---@param message string
 ---@return boolean
+---@nodiscard
 local function has_guild_recruitment_production(message)
 	return matches_any_pattern(message, guild_recruitment_metapatterns)
 end
 
 ---@param message string
+---@return string
+---@nodiscard
 local function reduce_rolelists(message)
 	local sub_count = 0;
 
@@ -851,9 +873,9 @@ local function reduce_rolelists(message)
 	return message;
 end
 
----comment
 ---@param message any
 ---@return string?, table?, table?, string?
+---@nodiscard
 function RaidBrowser.lex_and_extract(message)
 	if not message then return end
 	message = message:lower();
@@ -903,6 +925,7 @@ end
 
 ---@param message string
 ---@return table?, table?, string?
+---@nodiscard
 function RaidBrowser.raid_info(message)
 	local lexed_message, raid_info, roles, gs = RaidBrowser.lex_and_extract(message);
 
@@ -927,6 +950,7 @@ local channel_listeners = {};
 
 ---@param channel string
 ---@return boolean
+---@nodiscard
 local function is_lfm_channel(channel)
 	return channel == 'CHAT_MSG_CHANNEL' or channel == 'CHAT_MSG_YELL';
 end
