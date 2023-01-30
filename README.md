@@ -1,7 +1,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 # RaidBrowser
-Bringing LFR to Wotlk.
+Bringing LFR to Wotlk (Non-Classic).
 
 This addon replaces the unused (in 3.3.5a) LFR tab in the social menu with a working raid finder. RaidBrowser works similarly to Live WoW's group finder, except raid leaders do not need to interact with the addon to list their group. RaidBrowser searches for LFR messages sent in chat and /y channels and lists any found raids in the "Browse" tab of the raid browser. 
 
