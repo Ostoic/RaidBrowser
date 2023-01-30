@@ -1,4 +1,4 @@
-raid_browser.gui.raidset = {};
+RaidBrowser.gui.raidset = {};
 
 local frame = CreateFrame("Frame", "RaidBrowserRaidSetMenu", LFRBrowseFrame, "UIDropDownMenuTemplate")
 UIDropDownMenu_SetWidth(RaidBrowserRaidSetMenu, 150)
@@ -6,25 +6,26 @@ frame:SetWidth(90);
 
 local current_selection = nil;
 
-local function is_active_selected(option)
+local function is_active_selected(_)
 	return ('Active' == current_selection);
 end
 
-local function is_primary_selected(option)
+local function is_primary_selected(_)
 	return ('Primary' == current_selection);
 end
 
-local function is_secondary_selected(option)
+local function is_secondary_selected(_)
 	return ('Secondary' == current_selection);
 end
 
+---@param selection string
 local function set_selection(selection)
 	local text = '';
 
 	if selection == 'Active' then
 		text = 'Active';
 	else
-		local spec, gs = raid_browser.stats.get_raidset(selection)
+		local spec, gs = RaidBrowser.stats.get_raidset(selection)
 		if not spec then
 			text = 'Open';
 		elseif not gs then
@@ -38,17 +39,17 @@ end
 
 local function on_active()
 	set_selection('Active');
-	raid_browser.stats.select_current_raidset('Active');
+	RaidBrowser.stats.select_current_raidset('Active');
 end
 
 local function on_primary()
 	set_selection('Primary');
-	raid_browser.stats.select_current_raidset('Primary');
+	RaidBrowser.stats.select_current_raidset('Primary');
 end
 
 local function on_secondary()
 	set_selection('Secondary');
-	raid_browser.stats.select_current_raidset('Secondary');
+	RaidBrowser.stats.select_current_raidset('Secondary');
 end
 
 local menu = {
@@ -73,7 +74,7 @@ local menu = {
 
 -- Get the menu option text
 local function get_option_text(option)
-	local spec = raid_browser.stats.get_raidset(option);
+	local spec = RaidBrowser.stats.get_raidset(option);
 	if not spec then
 		return (option .. ': Open');
 	end
@@ -95,21 +96,21 @@ RaidBrowserRaidSetMenuButton:SetScript('OnClick', show_menu)
 
 local function on_raidset_save()
 	if current_selection == 'Primary' then
-		raid_browser.stats.save_primary_raidset();
+		RaidBrowser.stats.save_primary_raidset();
 
 	elseif current_selection == 'Secondary' then
-		raid_browser.stats.save_secondary_raidset();
+		RaidBrowser.stats.save_secondary_raidset();
 	end
 
-	local spec, gs = raid_browser.stats.current_raidset();
+	local spec, gs = RaidBrowser.stats.current_raidset();
 
 	---@diagnostic disable-next-line: undefined-field
-	raid_browser:Print('Raidset saved: ' .. spec .. ' ' .. gs .. 'gs');
+	RaidBrowser:Print('Raidset saved: ' .. spec .. ' ' .. gs .. 'gs');
 	set_selection(current_selection);
 end
 
-function raid_browser.gui.raidset.initialize()
-	set_selection(raid_browser_character_current_raidset);
+function RaidBrowser.gui.raidset.initialize()
+	set_selection(RaidBrowserCharacterCurrentRaidset);
 end
 
 -- Create raidset save button

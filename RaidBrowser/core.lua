@@ -1,5 +1,5 @@
 -- Register addon
-raid_browser = LibStub('AceAddon-3.0'):NewAddon('RaidBrowser', 'AceConsole-3.0')
+RaidBrowser = LibStub('AceAddon-3.0'):NewAddon('RaidBrowser', 'AceConsole-3.0')
 
 --[[ Parsing and pattern matching ]] --
 -- Separator characters
@@ -17,6 +17,7 @@ local csep = sep .. '*';
 local psep = sep .. '+';
 
 -- Separator characters + any text
+---@diagnostic disable-next-line: unused-local
 local wtext = '[%w' .. sep_chars .. ']*'
 
 local meta_char = '¿';
@@ -30,11 +31,13 @@ local function make_meta(text)
 end
 
 -- Not needed?
+---@diagnostic disable-next-line: unused-function, unused-local
 local function meta_raid_n(n)
 	return make_meta('raid' .. n);
 end
 
 local meta_role = make_meta('role');
+---@diagnostic disable-next-line: unused-local
 local meta_roles = make_meta('roles');
 local meta_raid = make_meta('raid');
 local meta_gs = make_meta('gs');
@@ -678,39 +681,56 @@ local lfg_patterns = {
 	'^' .. csep .. meta_role .. non_meta .. meta_gs .. non_meta .. 'lf' .. non_meta .. meta_raid,
 };
 
+---@param message string
+---@param patterns table
+---@return boolean
 local function matches_any_pattern(message, patterns)
 	return std.algorithm.find_if(patterns, function(pattern)
 		return message:find(pattern);
 	end) ~= nil;
 end
 
+---@param message string
+---@return boolean
 local function is_lfm_message(message)
 	return matches_any_pattern(message, lfm_patterns);
 end
 
+---@param message string
+---@return boolean
 local function is_guild_recruitment(message)
 	return matches_any_pattern(message, guild_recruitment_patterns);
 end
 
+---@param message string
+---@return boolean
 local function is_lfg_message(message)
 	return matches_any_pattern(message, lfg_patterns);
 end
 
+---@param message string
+---@return boolean
 local function is_trade_message(message)
 	return matches_any_pattern(message, trade_message_patterns);
 end
 
 -- Basic http pattern matching for streaming sites and etc.
+---@param message string
+---@return string, integer?
 local function remove_http_links(message)
 	local http_pattern = 'https?://*[%a]*.[%a]*.[%a]*/?[%a%-%%0-9_]*/?';
 	return message:gsub(http_pattern, '');
 end
 
+---@param message string
+---@return string, integer?
 local function lex_achievements(message)
 	local achievement_pattern = '\124cffffff00\124h.*\124h(%[.*%])\124h\124r';
 	return message:gsub(achievement_pattern, '%1');
 end
 
+---@param message string
+---@return string
 local function lex_guild_recruitments(message)
 	for _, pattern in ipairs(guild_patterns) do
 		message = message:gsub(pattern, meta_guild);
@@ -719,6 +739,10 @@ local function lex_guild_recruitments(message)
 	return message;
 end
 
+---@param roles table
+---@param message string
+---@param role "healer"|"dps"|"tank"
+---@return table, string
 local function lex_roles(roles, message, role)
 	local found = false;
 
@@ -735,11 +759,13 @@ local function lex_roles(roles, message, role)
 	return roles, message;
 end
 
-local function format_gs_string(gs)
-	local formatted = gs:gsub(sep .. '*%+?', ''); -- Trim whitespace
+---@param gs_str string
+---@return string
+local function format_gs_string(gs_str)
+	local formatted = gs_str:gsub(sep .. '*%+?', ''); -- Trim whitespace
 	formatted = formatted:gsub('[kgs]', '')
 	formatted = formatted:gsub(sep, '.');
-	gs = tonumber(formatted);
+	local gs = tonumber(formatted);
 
 	-- Convert ex: 5800 into 5.8 for display
 	if gs > 1000 then
@@ -757,6 +783,8 @@ local function format_gs_string(gs)
 	return string.format('%.1f', gs);
 end
 
+---@param message string
+---@return string?, string, integer?
 local function lex_gs_req(message)
 	for _, pattern in pairs(gearscore_patterns) do
 		local gs_text = message:match(pattern);
@@ -771,12 +799,13 @@ local function lex_gs_req(message)
 	return nil, message;
 end
 
-function raid_browser.lex_raid_info(message)
+---@param message string
+---@return table?, string?, integer?
+function RaidBrowser.lex_raid_info(message)
 
 	local raid;
 	local num_unique_raids = 0;
-	for i, r in ipairs(raid_list) do
-
+	for _, r in ipairs(raid_list) do
 		local index = std.algorithm.find_if(r.patterns, function(pattern)
 			local m, result = message:gsub(pattern, meta_raid);
 
@@ -798,12 +827,14 @@ function raid_browser.lex_raid_info(message)
 	return raid, message, num_unique_raids;
 end
 
+---@param message string
+---@return boolean
 local function has_guild_recruitment_production(message)
 	return matches_any_pattern(message, guild_recruitment_metapatterns)
 end
 
+---@param message string
 local function reduce_rolelists(message)
-
 	local sub_count = 0;
 
 	repeat
@@ -811,7 +842,8 @@ local function reduce_rolelists(message)
 			local t = { message:gsub(pattern, meta_role) };
 			message = t[1];
 			return t[2];
-		end);
+		end
+		);
 
 		sub_count = std.algorithm.find_if(results, function(x) return x > 0 end) or 0;
 	until sub_count == 0
@@ -819,7 +851,10 @@ local function reduce_rolelists(message)
 	return message;
 end
 
-function raid_browser.lex_and_extract(message)
+---comment
+---@param message any
+---@return string?, table?, table?, string?
+function RaidBrowser.lex_and_extract(message)
 	if not message then return end
 	message = message:lower();
 	message = remove_http_links(message);
@@ -835,23 +870,23 @@ function raid_browser.lex_and_extract(message)
 	message = lex_guild_recruitments(message);
 
 	-- Get the raid_info from the message
-	local raid_info, message, num_unique_raids = raid_browser.lex_raid_info(message);
-	if not raid_info then return end
+	local raid_info, raid_lexed_message, num_unique_raids = RaidBrowser.lex_raid_info(message);
+	if not raid_info or not raid_lexed_message or not num_unique_raids then return end
 
-	if has_guild_recruitment_production(message) then return end
+	if has_guild_recruitment_production(raid_lexed_message) then return end
 
 	-- If there are multiple distinct raids, then it is most likely a recruitment message.
 	if num_unique_raids > 1 then return end
 
-	message = lex_achievements(message);
+	raid_lexed_message = lex_achievements(raid_lexed_message);
 
 	-- Get any roles that are needed
 	local roles = {};
 
-	if not message:find('lfm? all ') and not message:find('need all ') then
-		roles, message = lex_roles(roles, message, 'dps');
-		roles, message = lex_roles(roles, message, 'tank');
-		roles, message = lex_roles(roles, message, 'healer');
+	if not raid_lexed_message:find('lfm? all ') and not raid_lexed_message:find('need all ') then
+		roles, raid_lexed_message = lex_roles(roles, raid_lexed_message, 'dps');
+		roles, raid_lexed_message = lex_roles(roles, raid_lexed_message, 'tank');
+		roles, raid_lexed_message = lex_roles(roles, raid_lexed_message, 'healer');
 	end
 
 	-- If there is only an LFM message, then it is assumed that all roles are needed
@@ -860,14 +895,16 @@ function raid_browser.lex_and_extract(message)
 	end
 
 	-- Search for a gearscore requirement.
-	local gs, message = lex_gs_req(message);
-	message = reduce_rolelists(message);
+	local gs, gs_lexed_message = lex_gs_req(raid_lexed_message);
+	gs_lexed_message = reduce_rolelists(gs_lexed_message);
 
-	return message, raid_info, roles, gs or ' ';
+	return gs_lexed_message, raid_info, roles, gs or ' ';
 end
 
-function raid_browser.raid_info(message)
-	local lexed_message, raid_info, roles, gs = raid_browser.lex_and_extract(message);
+---@param message string
+---@return table?, table?, string?
+function RaidBrowser.raid_info(message)
+	local lexed_message, raid_info, roles, gs = RaidBrowser.lex_and_extract(message);
 
 	if not lexed_message then return end
 
@@ -881,24 +918,31 @@ function raid_browser.raid_info(message)
 end
 
 --[[ Event handlers and listeners ]] --
-lfm_channel_listeners = {
+RaidBrowserLfmChannelListeners = {
 	['CHAT_MSG_CHANNEL'] = {},
 	['CHAT_MSG_YELL'] = {},
 };
 
 local channel_listeners = {};
 
+---@param channel string
+---@return boolean
 local function is_lfm_channel(channel)
 	return channel == 'CHAT_MSG_CHANNEL' or channel == 'CHAT_MSG_YELL';
 end
 
+---@diagnostic disable-next-line: unused-local
+---@param self any
+---@param event string
+---@param message string
+---@param sender string
 local function event_handler(self, event, message, sender)
 	if is_lfm_channel(event) then
-		local raid_info, roles, gs = raid_browser.raid_info(message)
+		local raid_info, roles, gs = RaidBrowser.raid_info(message)
 		if raid_info and roles and gs then
 
 			-- Put the sender in the table of active raids
-			raid_browser.lfm_messages[sender] = {
+			RaidBrowser.lfm_messages[sender] = {
 				raid_info = raid_info,
 				roles = roles,
 				gs = gs,
@@ -907,7 +951,7 @@ local function event_handler(self, event, message, sender)
 				sender = sender
 			};
 
-			raid_browser.gui.update_list();
+			RaidBrowser.gui.update_list();
 		end
 	end
 end
@@ -917,46 +961,46 @@ local function refresh_lfm_messages()
 	-- This is a better alternative
 	RequestRaidInfo();
 
-	for name, info in pairs(raid_browser.lfm_messages) do
+	for name, info in pairs(RaidBrowser.lfm_messages) do
 		-- If the last message from the sender was too long ago, then
 		-- remove his raid from lfm_messages.
-		if time() - info.time > raid_browser.expiry_time then
-			raid_browser.lfm_messages[name] = nil;
+		if time() - info.time > RaidBrowser.expiry_time then
+			RaidBrowser.lfm_messages[name] = nil;
 		end
 	end
 end
 
-function raid_browser:OnEnable()
+function RaidBrowser:OnEnable()
 	---@diagnostic disable-next-line: undefined-field
-	raid_browser:Print('loaded. Type /rb to toggle the raid browser.')
+	RaidBrowser:Print('loaded. Type /rb to toggle the raid browser.')
 
-	if not raid_browser_character_current_raidset then
-		raid_browser_character_current_raidset = 'Active';
+	if not RaidBrowserCharacterCurrentRaidset then
+		RaidBrowserCharacterCurrentRaidset = 'Active';
 	end
 
-	if not raid_browser_character_raidsets then
-		raid_browser_character_raidsets = {
-			primary = {},
-			secondary = {},
+	if not RaidBrowserCharacterRaidsets then
+		RaidBrowserCharacterRaidsets = {
+			Primary = {},
+			Secondary = {},
 		};
 	end
 
 	-- LFM messages expire after 60 seconds
-	raid_browser.expiry_time = 60;
+	RaidBrowser.expiry_time = 60;
 
-	raid_browser.lfm_messages = {}
-	raid_browser.timer = raid_browser.set_timer(10, refresh_lfm_messages, true)
-	for channel, listener in pairs(lfm_channel_listeners) do
-		table.insert(channel_listeners, raid_browser.add_event_listener(channel, event_handler))
+	RaidBrowser.lfm_messages = {}
+	RaidBrowser.timer = RaidBrowser.set_timer(10, refresh_lfm_messages, true)
+	for channel, _ in pairs(RaidBrowserLfmChannelListeners) do
+		table.insert(channel_listeners, RaidBrowser.add_event_listener(channel, event_handler))
 	end
 
-	raid_browser.gui.raidset.initialize();
+	RaidBrowser.gui.raidset.initialize();
 end
 
-function raid_browser:OnDisable()
-	for channel, listener in pairs(lfm_channel_listeners) do
-		raid_browser.remove_event_listener(channel, listener)
+function RaidBrowser:OnDisable()
+	for channel, listener in pairs(RaidBrowserLfmChannelListeners) do
+		RaidBrowser.remove_event_listener(channel, listener)
 	end
 
-	raid_browser.kill_timer(raid_browser.timer)
+	RaidBrowser.kill_timer(RaidBrowser.timer)
 end

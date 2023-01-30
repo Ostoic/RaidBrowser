@@ -1,4 +1,4 @@
-raid_browser.stats = {};
+RaidBrowser.stats = {};
 
 local raid_translations
 if GetLocale() ~= "enUS" then
@@ -96,6 +96,7 @@ local full_spec_names = {
 	DruidRestoration = "Restroration Druid"
 }
 
+---@param raid string The name of the achievement ids table
 local function find_best_achievement(raid)
 	local ids = raid_achievements[raid];
 	if not ids then
@@ -130,20 +131,23 @@ local function find_best_achievement(raid)
 end
 
 -- Function wrapper around GetTalentTabInfo
+---@param i integer
+---@return integer
 local function GetTalentTabPoints(i)
 	local _, _, pts = GetTalentTabInfo(i)
 	return pts;
 end
 
-function raid_browser.stats.active_spec_index()
+function RaidBrowser.stats.active_spec_index()
 	local indices = std.algorithm.transform({ 1, 2, 3 }, GetTalentTabPoints)
-	local i, v = std.algorithm.max_of(indices);
+	local i, _ = std.algorithm.max_of(indices);
 	return i;
 end
 
-function raid_browser.stats.active_spec()
-	local active_tab = raid_browser.stats.active_spec_index()
-	local localized_tab_name, path, points, spec_name = GetTalentTabInfo(active_tab);
+---@return string
+function RaidBrowser.stats.active_spec()
+	local active_tab = RaidBrowser.stats.active_spec_index()
+	local _, _, _, spec_name = GetTalentTabInfo(active_tab);
 
 	-- If we're a feral druid, then we need to distinguish between tank and cat feral.
 	if spec_name == 'DruidFeralCombat' then
@@ -159,7 +163,10 @@ function raid_browser.stats.active_spec()
 	return full_spec_names[spec_name] or spec_name;
 end
 
-function raid_browser.stats.raid_lock_info(raid_info)
+---Return if the given raid is locked, and if so its reset time left (in seconds)
+---@param raid_info any
+---@return boolean, integer | nil
+function RaidBrowser.stats.raid_lock_info(raid_info)
 	local instance_name = raid_info.instance_name
 	if raid_translations then
 		instance_name = raid_translations:GetUnstrictLookupTable()[raid_info.instance_name] or raid_info.instance_name
@@ -167,7 +174,7 @@ function raid_browser.stats.raid_lock_info(raid_info)
 
 	if instance_name == nil or raid_info.size == nil then return false, nil end
 	for i = 1, GetNumSavedInstances() do
-		local saved_name, id, reset, difficulty, locked, _, _, _, saved_size = GetSavedInstanceInfo(i);
+		local saved_name, _, reset, _, locked, _, _, _, saved_size = GetSavedInstanceInfo(i);
 		if saved_name ~= nil then
 			-- @napnapnap lockout fix (c8207076730d04f41b881dea3dd9f6ca32655372)
 			if string.lower(saved_name) == string.lower(instance_name) and saved_size == raid_info.size and locked then
@@ -179,7 +186,9 @@ function raid_browser.stats.raid_lock_info(raid_info)
 	return false, nil;
 end
 
-function raid_browser.stats.get_active_raidset()
+---Returns for the currently active raidset, the spec name and its gearscore.
+---@return string, integer
+function RaidBrowser.stats.get_active_raidset()
 	local spec = nil;
 	local gs = nil;
 
@@ -188,44 +197,50 @@ function raid_browser.stats.get_active_raidset()
 		gs = GearScore_GetScore(UnitName('player'), 'player');
 	end
 
-	spec = raid_browser.stats.active_spec();
+	spec = RaidBrowser.stats.active_spec();
 	return spec, gs;
 end
 
-function raid_browser.stats.get_raidset(set)
-	local raidset = raid_browser_character_raidsets[set];
+---@param set string
+---@return string?, integer?
+function RaidBrowser.stats.get_raidset(set)
+	local raidset = RaidBrowserCharacterRaidsets[set];
 	if not raidset then return end
 	return raidset.spec, raidset.gs;
 end
 
-function raid_browser.stats.current_raidset()
-	if raid_browser_character_current_raidset == 'Active' then
-		return raid_browser.stats.get_active_raidset();
+---@return string?, integer?
+function RaidBrowser.stats.current_raidset()
+	if RaidBrowserCharacterCurrentRaidset == 'Active' then
+		return RaidBrowser.stats.get_active_raidset();
 	end
 
-	return raid_browser.stats.get_raidset(raid_browser_character_current_raidset);
+	return RaidBrowser.stats.get_raidset(RaidBrowserCharacterCurrentRaidset);
 end
 
-function raid_browser.stats.select_current_raidset(set)
-	raid_browser_character_current_raidset = set;
+---@param set string
+function RaidBrowser.stats.select_current_raidset(set)
+	RaidBrowserCharacterCurrentRaidset = set;
 end
 
-function raid_browser.stats.save_primary_raidset()
-	local spec, gs = raid_browser.stats.get_active_raidset();
-	raid_browser_character_raidsets['Primary'] = { spec = spec, gs = gs };
+function RaidBrowser.stats.save_primary_raidset()
+	local spec, gs = RaidBrowser.stats.get_active_raidset();
+	RaidBrowserCharacterRaidsets['Primary'] = { spec = spec, gs = gs };
 end
 
-function raid_browser.stats.save_secondary_raidset()
-	local spec, gs = raid_browser.stats.get_active_raidset();
-	raid_browser_character_raidsets['Secondary'] = { spec = spec, gs = gs };
+function RaidBrowser.stats.save_secondary_raidset()
+	local spec, gs = RaidBrowser.stats.get_active_raidset();
+	RaidBrowserCharacterRaidsets['Secondary'] = { spec = spec, gs = gs };
 end
 
-function raid_browser.stats.build_inv_string(raid_name)
-	local spec, gs = raid_browser.stats.current_raidset();
+---Returns join message string
+---@param raid_name string
+---@return string
+function RaidBrowser.stats.build_join_message(raid_name)
+	local spec, gs = RaidBrowser.stats.current_raidset();
 
 	-- local message = 'inv ' .. gs .. 'gs ' .. spec;
 	local message = 'inv for ' .. raid_name .. " - " .. gs .. 'gs ' .. spec;
-
 
 	-- Remove difficulty and raid_name size from the string
 	raid_name = string.gsub(raid_name, '[1|2][0|5](%w+)', '');

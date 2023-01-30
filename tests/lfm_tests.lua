@@ -1490,6 +1490,7 @@ local function subset_of(table1, table2)
 	return true;
 end
 
+---@param test table
 local function display_test(test)
 	local roles_string = '';
 	local raid_string = test.raid or '';
@@ -1501,28 +1502,32 @@ local function display_test(test)
 		end
 	end
 
-	raid_browser:Print('Original message: ' .. test.message);
-	raid_browser:Print('[Required]: ' .. raid_string .. ', ' .. roles_string .. ', ' .. gs_string);
-	raid_browser:Print('Should fail: ' .. tostring(test.should_fail));
+	RaidBrowser:Print('Original message: ' .. test.message);
+	RaidBrowser:Print('[Required]: ' .. raid_string .. ', ' .. roles_string .. ', ' .. gs_string);
+	RaidBrowser:Print('Should fail: ' .. tostring(test.should_fail));
 end
 
+---@param test table
+---@param detected table
+---@param message string
 local function test_failed(test, detected, message)
 	display_test(test);
-	raid_browser:Print('Test failed: ' .. message);
+	RaidBrowser:Print('Test failed: ' .. message);
 
 	if detected then
 		local roles_string = std.algorithm.fold(detected.roles, '', function(text, role)
 			return text .. role .. ' ';
 		end)
 
-		raid_browser:Print('[Detected]: ' .. detected.raid .. ', ' .. roles_string .. ', ' .. detected.gs);
+		RaidBrowser:Print('[Detected]: ' .. detected.raid .. ', ' .. roles_string .. ', ' .. detected.gs);
 	end
 
 	print('');
 end
 
+---@param test table
 local function run_test_case(test)
-	local raid_info, roles, gs = raid_browser.raid_info(test.message)
+	local raid_info, roles, gs = RaidBrowser.raid_info(test.message)
 
 	local detected = nil;
 	if raid_info and roles and gs then
@@ -1570,5 +1575,5 @@ local test_results = std.algorithm.transform(test_cases, run_test_case);
 -- Count the number of failed tests.
 local number_failed_tests = #test_cases - std.algorithm.count(test_results, true);
 
-raid_browser:Print('All unit tests executed.');
-raid_browser:Print('There were ' .. number_failed_tests .. '/' .. #test_cases .. ' failed unit tests!');
+RaidBrowser:Print('All unit tests executed.');
+RaidBrowser:Print('There were ' .. number_failed_tests .. '/' .. #test_cases .. ' failed unit tests!');

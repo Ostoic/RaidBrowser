@@ -2,14 +2,16 @@ local function printf(...) DEFAULT_CHAT_FRAME:AddMessage('|cff0061ff[RaidBrowser
 
 local function script_error(type, err)
 	local name, line, msg = err:match('%[string (".-")%]:(%d+): (.*)')
-	printf('%s error%s:\n %s', type,
+	printf('%s error%s:\n %s',
+		type,
 		name and format(' in %s at line %d', name, line, msg) or '',
-		err)
+		err
+	)
 end
 
 local timers = {}
 
-function raid_browser.set_timer(interval, callback, recur, ...)
+function RaidBrowser.set_timer(interval, callback, recur, ...)
 	local timer = {
 		interval = interval,
 		callback = callback,
@@ -21,7 +23,7 @@ function raid_browser.set_timer(interval, callback, recur, ...)
 	return timer
 end
 
-function raid_browser.kill_timer(timer)
+function RaidBrowser.kill_timer(timer)
 	timers[timer] = nil
 end
 
@@ -29,14 +31,21 @@ end
 local granularity = 0.1
 
 local totalElapsed = 0
+
+---@param self any
+---@param elapsed integer
+---@diagnostic disable-next-line: unused-local
 local function OnUpdate(self, elapsed)
 	totalElapsed = totalElapsed + elapsed
+
 	if totalElapsed > granularity then
-		for k, t in pairs(timers) do
+		for _, t in pairs(timers) do
 			t.update = t.update + totalElapsed
+
 			if t.update > t.interval then
 				---@diagnostic disable-next-line: deprecated
 				local success, rv = pcall(t.callback, unpack(t))
+
 				if not rv and t.recur then
 					t.update = 0
 				else

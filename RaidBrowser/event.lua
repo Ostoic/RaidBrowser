@@ -16,7 +16,7 @@ local function UnregisterOrphanedEvent(event)
 end
 
 local function OnEvent(...)
-	local self, event = ...
+	local _, event = ...
 	for listener, val in pairs(registry[event]) do
 		-- try-catch
 		local success, rv = pcall(listener[1], listener[2], select(2, ...))
@@ -32,7 +32,11 @@ frame:SetScript('OnEvent', OnEvent)
 
 -- INTERFACE
 
-function raid_browser.add_event_listener(event, callback, userparam)
+---@param event string
+---@param callback function
+---@param userparam any|nil
+---@return table
+function RaidBrowser.add_event_listener(event, callback, userparam)
 	assert(callback, 'invalid callback')
 	if not registry[event] then
 		registry[event] = {}
@@ -44,7 +48,9 @@ function raid_browser.add_event_listener(event, callback, userparam)
 	return listener
 end
 
-function raid_browser.remove_event_listener(event, listener)
+---@param event string
+---@param listener table
+function RaidBrowser.remove_event_listener(event, listener)
 	registry[event][listener] = nil
 	UnregisterOrphanedEvent(event)
 end
