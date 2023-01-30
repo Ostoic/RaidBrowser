@@ -97,6 +97,7 @@ local full_spec_names = {
 }
 
 ---@param raid string The name of the achievement ids table
+---@nodiscard
 local function find_best_achievement(raid)
 	local ids = raid_achievements[raid];
 	if not ids then
@@ -133,6 +134,7 @@ end
 -- Function wrapper around GetTalentTabInfo
 ---@param i integer
 ---@return integer
+---@nodiscard
 local function GetTalentTabPoints(i)
 	local _, _, pts = GetTalentTabInfo(i)
 	return pts;
@@ -145,6 +147,7 @@ function RaidBrowser.stats.active_spec_index()
 end
 
 ---@return string
+---@nodiscard
 function RaidBrowser.stats.active_spec()
 	local active_tab = RaidBrowser.stats.active_spec_index()
 	local _, _, _, spec_name = GetTalentTabInfo(active_tab);
@@ -166,6 +169,7 @@ end
 ---Return if the given raid is locked, and if so its reset time left (in seconds)
 ---@param raid_info any
 ---@return boolean, integer | nil
+---@nodiscard
 function RaidBrowser.stats.raid_lock_info(raid_info)
 	local instance_name = raid_info.instance_name
 	if raid_translations then
@@ -188,6 +192,7 @@ end
 
 ---Returns for the currently active raidset, the spec name and its gearscore.
 ---@return string, integer
+---@nodiscard
 function RaidBrowser.stats.get_active_raidset()
 	local spec = nil;
 	local gs = nil;
@@ -201,8 +206,9 @@ function RaidBrowser.stats.get_active_raidset()
 	return spec, gs;
 end
 
----@param set string
+---@param set 'Primary'|'Secondary'
 ---@return string?, integer?
+---@nodiscard
 function RaidBrowser.stats.get_raidset(set)
 	local raidset = RaidBrowserCharacterRaidsets[set];
 	if not raidset then return end
@@ -211,14 +217,16 @@ end
 
 ---@return string?, integer?
 function RaidBrowser.stats.current_raidset()
+	local x = 0
 	if RaidBrowserCharacterCurrentRaidset == 'Active' then
 		return RaidBrowser.stats.get_active_raidset();
 	end
 
+	---@diagnostic disable-next-line: param-type-mismatch
 	return RaidBrowser.stats.get_raidset(RaidBrowserCharacterCurrentRaidset);
 end
 
----@param set string
+---@param set 'Active' | 'Primary' | 'Secondary'
 function RaidBrowser.stats.select_current_raidset(set)
 	RaidBrowserCharacterCurrentRaidset = set;
 end
@@ -236,6 +244,7 @@ end
 ---Returns join message string
 ---@param raid_name string
 ---@return string
+---@nodiscard
 function RaidBrowser.stats.build_join_message(raid_name)
 	local spec, gs = RaidBrowser.stats.current_raidset();
 

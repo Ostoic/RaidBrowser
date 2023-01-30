@@ -8,29 +8,30 @@ local current_selection = nil;
 
 ---@return boolean
 local function is_active_selected(_)
-	return ('Active' == current_selection);
+	return 'Active' == current_selection;
 end
 
 ---@return boolean
 local function is_primary_selected(_)
-	return ('Primary' == current_selection);
+	return 'Primary' == current_selection;
 end
 
 ---@return boolean
 local function is_secondary_selected(_)
-	return ('Secondary' == current_selection);
+	return 'Secondary' == current_selection;
 end
 
----@param selection string
+---@param selection 'Active'|'Primary'|'Secondary'
 local function set_selection(selection)
 	local text = '';
 
 	if selection == 'Active' then
 		text = 'Active';
 	else
+		---@diagnostic disable-next-line: param-type-mismatch
 		local spec, gs = RaidBrowser.stats.get_raidset(selection)
 		if not spec then
-			text = 'Open';
+			text = 'Free slot';
 		elseif not gs then
 			text = spec;
 		end
@@ -76,13 +77,15 @@ local menu = {
 }
 
 -- Get the menu option text
+---@param option 'Primary'|'Secondary'
+---@return string
 local function get_option_text(option)
-	local spec = RaidBrowser.stats.get_raidset(option);
+	local spec, _ = RaidBrowser.stats.get_raidset(option);
 	if not spec then
-		return (option .. ': Open');
+		return option .. ': Free slot';
 	end
 
-	return (option .. ': ' .. spec);
+	return option .. ': ' .. spec;
 end
 
 -- Setup dropdown menu for the raidset selection
