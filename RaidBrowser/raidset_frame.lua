@@ -20,7 +20,7 @@ end
 
 local function set_selection(selection)
 	local text = '';
-	
+
 	if selection == 'Active' then
 		text = 'Active';
 	else
@@ -31,17 +31,17 @@ local function set_selection(selection)
 			text = spec;
 		end
 	end
-	
+
 	UIDropDownMenu_SetText(RaidBrowserRaidSetMenu, text)
 	current_selection = selection;
 end
 
-local function on_active() 	
+local function on_active()
 	set_selection('Active');
 	raid_browser.stats.select_current_raidset('Active');
 end
 
-local function on_primary()	
+local function on_primary()
 	set_selection('Primary');
 	raid_browser.stats.select_current_raidset('Primary');
 end
@@ -52,21 +52,21 @@ local function on_secondary()
 end
 
 local menu = {
-	{ 
+	{
 		text = 'Active',
 		func = on_active,
 		checked = is_active_selected,
 	},
-	
-	{ 
-		text = "Primary", 
+
+	{
+		text = "Primary",
 		func = on_primary,
 		checked = is_primary_selected,
 	},
-	
-	{ 
-		text = "Secondary", 
-		func = on_secondary, 
+
+	{
+		text = "Secondary",
+		func = on_secondary,
 		checked = is_secondary_selected,
 	},
 }
@@ -77,7 +77,7 @@ local function get_option_text(option)
 	if not spec then
 		return (option .. ': Open');
 	end
-	
+
 	return (option .. ': ' .. spec);
 end
 
@@ -88,7 +88,7 @@ UIDropDownMenu_Initialize(frame, EasyMenu_Initialize, nil, nil, menu);
 local function show_menu()
 	menu[2].text = get_option_text('Primary');
 	menu[3].text = get_option_text('Secondary');
-	ToggleDropDownMenu(1, nil, frame, frame, 25, 10, menu);	 
+	ToggleDropDownMenu(1, nil, frame, frame, 25, 10, menu);
 end
 
 RaidBrowserRaidSetMenuButton:SetScript('OnClick', show_menu)
@@ -96,13 +96,13 @@ RaidBrowserRaidSetMenuButton:SetScript('OnClick', show_menu)
 local function on_raidset_save()
 	if current_selection == 'Primary' then
 		raid_browser.stats.save_primary_raidset();
-		
+
 	elseif current_selection == 'Secondary' then
 		raid_browser.stats.save_secondary_raidset();
 	end
-	
+
 	local spec, gs = raid_browser.stats.current_raidset();
-	
+
 	---@diagnostic disable-next-line: undefined-field
 	raid_browser:Print('Raidset saved: ' .. spec .. ' ' .. gs .. 'gs');
 	set_selection(current_selection);
@@ -113,7 +113,7 @@ function raid_browser.gui.raidset.initialize()
 end
 
 -- Create raidset save button
-local button = CreateFrame("BUTTON","RaidBrowserRaidSetSaveButton", LFRBrowseFrame, "OptionsButtonTemplate")
+local button = CreateFrame("BUTTON", "RaidBrowserRaidSetSaveButton", LFRBrowseFrame, "OptionsButtonTemplate")
 button:SetPoint("CENTER", LFRBrowseFrame, "CENTER", -53, 168)
 button:EnableMouse(true)
 button:RegisterForClicks("AnyUp")
@@ -122,4 +122,3 @@ button:SetText("Save Raid Gear");
 button:SetWidth(110);
 button:SetScript("OnClick", on_raidset_save);
 button:Show();
-

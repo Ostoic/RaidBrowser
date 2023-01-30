@@ -17,14 +17,14 @@ end
 
 local function OnEvent(...)
 	local self, event = ...
-	for listener,val in pairs(registry[event]) do
+	for listener, val in pairs(registry[event]) do
 		-- try-catch
-		local success, rv = pcall(listener[1], listener[2], select(2,...))
+		local success, rv = pcall(listener[1], listener[2], select(2, ...))
 		if rv then
 			if not success then script_error('event callback', rv) end
 		end
-	end		  
-	
+	end
+
 	UnregisterOrphanedEvent(event)
 end
 
@@ -38,13 +38,13 @@ function raid_browser.add_event_listener(event, callback, userparam)
 		registry[event] = {}
 		frame:RegisterEvent(event)
 	end
-	
+
 	local listener = { callback, userparam }
 	registry[event][listener] = true
 	return listener
 end
 
-function raid_browser.remove_event_listener (event, listener)
+function raid_browser.remove_event_listener(event, listener)
 	registry[event][listener] = nil
 	UnregisterOrphanedEvent(event)
 end

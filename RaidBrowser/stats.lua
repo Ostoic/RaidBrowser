@@ -28,14 +28,14 @@ local raid_achievements = {
 		4583, -- Bane of the Fallen King (LK10 HC)
 		4584, -- The Light of Dawn (LK25 HC)
 	},
-	
+
 	toc = {
-		3917, -- Call of the Crusade 10-man	
+		3917, -- Call of the Crusade 10-man
 		3916, -- Call of the Crusade 25-man
 		3918, -- Call of the Grand Crusade (10 HC)
 		3812, -- Call of the Grand Crusade (25 HC)
 	},
-	
+
 	rs = {
 		4817, -- The Twilight Destroyer 10
 		4815, -- The Twilight Destroyer 25
@@ -101,30 +101,30 @@ local function find_best_achievement(raid)
 	if not ids then
 		return nil;
 	end
-	
+
 	local max_achievement = nil;
-	
+
 	-- Find the highest ranking completed achievement
 	for i, id in ipairs(ids) do
 		local _, _, _, completed = GetAchievementInfo(id);
 		if completed and (not max_achievement or max_achievement[1] <= i) then
-			max_achievement = {i, id};
-		end		 
+			max_achievement = { i, id };
+		end
 	end
-	
+
 	-- Find the highest ranking completed achievement criterion
 	for i, id in ipairs(ids) do
 		for j = 1, GetAchievementNumCriteria(id) do
 			local _, _, completed = GetAchievementCriteriaInfo(id, j)
 			if completed and (not max_achievement or max_achievement[1] <= i) then
-				max_achievement = {i, id};
-			end		 
+				max_achievement = { i, id };
+			end
 		end
 	end
-	
+
 	if max_achievement then
 		return max_achievement[2];
-	else 
+	else
 		return nil;
 	end
 end
@@ -136,7 +136,7 @@ local function GetTalentTabPoints(i)
 end
 
 function raid_browser.stats.active_spec_index()
-	local indices = std.algorithm.transform({1, 2, 3}, GetTalentTabPoints)
+	local indices = std.algorithm.transform({ 1, 2, 3 }, GetTalentTabPoints)
 	local i, v = std.algorithm.max_of(indices);
 	return i;
 end
@@ -144,7 +144,7 @@ end
 function raid_browser.stats.active_spec()
 	local active_tab = raid_browser.stats.active_spec_index()
 	local localized_tab_name, path, points, spec_name = GetTalentTabInfo(active_tab);
-	
+
 	-- If we're a feral druid, then we need to distinguish between tank and cat feral.
 	if spec_name == 'DruidFeralCombat' then
 		local protector_of_pack_talent = 22;
@@ -155,7 +155,7 @@ function raid_browser.stats.active_spec()
 			return 'Feral Druid (Cat)'
 		end
 	end
-	
+
 	return full_spec_names[spec_name] or spec_name;
 end
 
@@ -173,28 +173,28 @@ function raid_browser.stats.raid_lock_info(raid_info)
 			if string.lower(saved_name) == string.lower(instance_name) and saved_size == raid_info.size and locked then
 				return true, reset;
 			end
-		end		
+		end
 	end
-	
+
 	return false, nil;
 end
 
 function raid_browser.stats.get_active_raidset()
 	local spec = nil;
 	local gs = nil;
-	
+
 	-- Retrieve gearscore if GearScoreLite is installed
-	if GearScore_GetScore then 
+	if GearScore_GetScore then
 		gs = GearScore_GetScore(UnitName('player'), 'player');
 	end
-	
+
 	spec = raid_browser.stats.active_spec();
 	return spec, gs;
 end
 
 function raid_browser.stats.get_raidset(set)
 	local raidset = raid_browser_character_raidsets[set];
-	if not raidset then return end;
+	if not raidset then return end
 	return raidset.spec, raidset.gs;
 end
 
@@ -202,7 +202,7 @@ function raid_browser.stats.current_raidset()
 	if raid_browser_character_current_raidset == 'Active' then
 		return raid_browser.stats.get_active_raidset();
 	end
-	
+
 	return raid_browser.stats.get_raidset(raid_browser_character_current_raidset);
 end
 
@@ -212,12 +212,12 @@ end
 
 function raid_browser.stats.save_primary_raidset()
 	local spec, gs = raid_browser.stats.get_active_raidset();
-	raid_browser_character_raidsets['Primary'] = {spec = spec, gs = gs};
+	raid_browser_character_raidsets['Primary'] = { spec = spec, gs = gs };
 end
 
 function raid_browser.stats.save_secondary_raidset()
 	local spec, gs = raid_browser.stats.get_active_raidset();
-	raid_browser_character_raidsets['Secondary'] = {spec = spec, gs = gs};
+	raid_browser_character_raidsets['Secondary'] = { spec = spec, gs = gs };
 end
 
 function raid_browser.stats.build_inv_string(raid_name)
@@ -225,16 +225,16 @@ function raid_browser.stats.build_inv_string(raid_name)
 
 	-- local message = 'inv ' .. gs .. 'gs ' .. spec;
 	local message = 'inv for ' .. raid_name .. " - " .. gs .. 'gs ' .. spec;
-	
-	
+
+
 	-- Remove difficulty and raid_name size from the string
 	raid_name = string.gsub(raid_name, '[1|2][0|5](%w+)', '');
-	
+
 	-- Find the best possible achievement for the given raid_name.
 	local achieve_id = find_best_achievement(raid_name);
 	if achieve_id then
 		message = message .. ' ' .. GetAchievementLink(achieve_id);
 	end
-	
+
 	return message;
 end
