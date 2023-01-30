@@ -35,6 +35,7 @@ local function OnUpdate(self, elapsed)
 		for k,t in pairs(timers) do
 			t.update = t.update + totalElapsed
 			if t.update > t.interval then
+				---@diagnostic disable-next-line: deprecated
 				local success, rv = pcall(t.callback, unpack(t))
 				if not rv and t.recur then
 					t.update = 0

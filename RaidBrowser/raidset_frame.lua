@@ -102,6 +102,8 @@ local function on_raidset_save()
 	end
 	
 	local spec, gs = raid_browser.stats.current_raidset();
+	
+	---@diagnostic disable-next-line: undefined-field
 	raid_browser:Print('Raidset saved: ' .. spec .. ' ' .. gs .. 'gs');
 	set_selection(current_selection);
 end

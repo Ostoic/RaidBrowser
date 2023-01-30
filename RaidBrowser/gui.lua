@@ -132,7 +132,6 @@ local function clear_highlights()
 	end	
 end
 
-
 -- Assignment operator for LFR buttons
 local function assign_lfr_button(button, host_name, lfm_info, index)
 	local offset = FauxScrollFrame_GetOffset(LFRBrowseFrameListScrollFrame);

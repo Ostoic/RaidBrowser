@@ -927,6 +927,7 @@ local function refresh_lfm_messages()
 end
 
 function raid_browser:OnEnable()
+	---@diagnostic disable-next-line: undefined-field
 	raid_browser:Print('loaded. Type /rb to toggle the raid browser.')
 	
 	if not raid_browser_character_current_raidset then
