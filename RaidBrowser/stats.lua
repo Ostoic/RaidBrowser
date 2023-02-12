@@ -44,56 +44,100 @@ local raid_achievements = {
 	},
 };
 
-local full_spec_names = {
-	-- Warrior
-	WarriorArms = "Arms Warrior",
-	WarriorFury = "Fury Warrior",
-	WarriorProtection = "Protection Warrior",
+local spec_names = {
+	full = {
+		-- Warrior
+		WarriorArms = "Arms Warrior",
+		WarriorFury = "Fury Warrior",
+		WarriorProtection = "Protection Warrior",
 
-	-- Paladin
-	PaladinHoly = "Holy Paladin",
-	PaladinProtection = "Protection Paladin",
-	PaladinCombat = "Retribution Paladin",
+		-- Paladin
+		PaladinHoly = "Holy Paladin",
+		PaladinProtection = "Protection Paladin",
+		PaladinCombat = "Retribution Paladin",
 
-	-- Hunter
-	HunterBeastMastery = "Beastmaster Hunter",
-	HunterMarksmanship = "Marksman Hunter",
-	HunterSurvival = "Survival Hunter",
+		-- Hunter
+		HunterBeastMastery = "Beastmaster Hunter",
+		HunterMarksmanship = "Marksman Hunter",
+		HunterSurvival = "Survival Hunter",
 
-	-- Rogue
-	RogueAssassination = "Assassination Rogue",
-	RogueCombat = "Combat Rogue",
-	RogueSubtlety = "Subtlety Rogue",
+		-- Rogue
+		RogueAssassination = "Assassination Rogue",
+		RogueCombat = "Combat Rogue",
+		RogueSubtlety = "Subtlety Rogue",
 
-	-- Priest
-	PriestDiscipline = "Discipline Priest",
-	PriestHoly = "Holy Priest",
-	PriestShadow = "Shadow Priest",
+		-- Priest
+		PriestDiscipline = "Discipline Priest",
+		PriestHoly = "Holy Priest",
+		PriestShadow = "Shadow Priest",
 
-	-- DK
-	DeathKnightBlood = "Blood DK",
-	DeathKnightFrost = "Frost DK",
-	DeathKnightUnholy = "Unholy DK",
+		-- DK
+		DeathKnightBlood = "Blood Death Knight",
+		DeathKnightFrost = "Frost Death Knight",
+		DeathKnightUnholy = "Unholy Death Knight",
 
-	-- Shaman
-	ShamanElementalCombat = "Elemental Shaman",
-	ShamanEnhancement = "Enhancement Shaman",
-	ShamanRestoration = "Restoration Shaman",
+		-- Shaman
+		ShamanElementalCombat = "Elemental Shaman",
+		ShamanEnhancement = "Enhancement Shaman",
+		ShamanRestoration = "Restoration Shaman",
 
-	-- Mage
-	MageArcane = "Arcane Mage",
-	MageFire = "Fire Mage",
-	MageFrost = "Frost Mage",
+		-- Mage
+		MageArcane = "Arcane Mage",
+		MageFire = "Fire Mage",
+		MageFrost = "Frost Mage",
 
-	-- Warlock
-	WarlockCurses = "Affliction Warlock",
-	WarlockSummoning = "Demo Warlock",
-	WarlockDestruction = "Destruction Warlock",
+		-- Warlock
+		WarlockCurses = "Affliction Warlock",
+		WarlockSummoning = "Demolition Warlock",
+		WarlockDestruction = "Destruction Warlock",
 
-	-- Druid
-	DruidBalance = "Balance Druid",
-	DruidFeralCombat = "Feral Druid",
-	DruidRestoration = "Restroration Druid"
+		-- Druid
+		DruidBalance = "Balance Druid",
+		DruidFeralCombat = "Feral Druid",
+		DruidRestoration = "Restoration Druid"
+	},
+
+	short = {
+		WarriorArms = "Arms Warri",
+		WarriorFury = "Fury Warri",
+		WarriorProtection = "Prot Warri",
+
+		PaladinHoly = "Holy Pala",
+		PaladinProtection = "Prot Pala",
+		PaladinCombat = "Retri Pala",
+
+		HunterBeastMastery = "BM Hunt",
+		HunterMarksmanship = "MM Hunt",
+		HunterSurvival = "Surv Hunt",
+
+		RogueAssassination = "Assa Rog",
+		RogueCombat = "Combat Rog",
+		RogueSubtlety = "Sub Rog",
+
+		PriestDiscipline = "Disco Heal",
+		PriestHoly = "Holy Priest",
+		PriestShadow = "Shadow",
+
+		DeathKnightBlood = "Blood DK",
+		DeathKnightFrost = "Frost DK",
+		DeathKnightUnholy = "Uh DK",
+
+		ShamanElementalCombat = "Ele Shamy",
+		ShamanEnhancement = "Enh Shamy",
+		ShamanRestoration = "Resto Shamy",
+
+		MageArcane = "Arcane Mage",
+		MageFire = "Fire Mage",
+		MageFrost = "Frost Mage",
+
+		WarlockCurses = "Affli Lock",
+		WarlockSummoning = "Demo Lock",
+		WarlockDestruction = "Destro Lock",
+
+		DruidBalance = "Boomy",
+		DruidFeralCombat = "Feral",
+		DruidRestoration = "Tree"
+	}
 }
 
 ---@param raid string The name of the achievement ids table
@@ -163,7 +207,8 @@ function RaidBrowser.stats.active_spec()
 		end
 	end
 
-	return full_spec_names[spec_name] or spec_name;
+	-- make config to toggle using full or short spec names
+	return spec_names["full"][spec_name] or spec_name;
 end
 
 ---Return if the given raid is locked, and if so its reset time left (in seconds)
