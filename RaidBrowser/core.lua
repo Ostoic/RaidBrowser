@@ -681,18 +681,6 @@ local raid_list = {
 			create_achievement_pattern(689),
 		},
 	},
-
-	-- WEEKLY raid fallback
-	{
-		name = 'weekly',
-		instance_name = 'Weekly Quest',
-		size = 10,
-		patterns = {
-			'weekly',
-			'we?ek?l?y?' .. csep .. 'raid',
-			'we?ek?l?y?' .. csep .. 'qu?e?s?t?',
-		},
-	},
 }
 
 local role_patterns = {
