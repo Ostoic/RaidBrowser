@@ -252,7 +252,7 @@ function RaidBrowser.stats.build_join_message(raid_name)
 	local message = 'inv for ' .. raid_name .. " - " .. gs .. 'gs ' .. spec;
 
 	-- Remove difficulty and raid_name size from the string
-	raid_name = string.gsub(raid_name, '[1|2][0|5](%w+)', '');
+	raid_name = RaidBrowser.get_short_raid_name(raid_name)
 
 	-- Find the best possible achievement for the given raid_name.
 	local achieve_id = find_best_achievement(raid_name);

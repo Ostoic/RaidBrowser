@@ -1109,6 +1109,10 @@ function RaidBrowser.raid_info(message)
 	return raid_info, roles, gs or ' ';
 end
 
+function RaidBrowser.get_short_raid_name(raid_name)
+	return string.gsub(raid_name, '[1|2][0|5](%w+)', '');
+end
+
 --[[ Event handlers and listeners ]] --
 RaidBrowserLfmChannelListeners = {
 	['CHAT_MSG_CHANNEL'] = {},
