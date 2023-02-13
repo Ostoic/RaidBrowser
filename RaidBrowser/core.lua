@@ -177,6 +177,17 @@ local raid_list = {
 	},
 
 	{
+        name = 'icc10wq',
+        instance_name = 'Icecrown Citadel',
+        size = 10,
+        patterns = {
+            'icc1?0?' .. csep .. 'weekly',
+            'Lord Marrowgar' .. wtext .. '!',
+            create_quest_pattern(24590),
+        },
+    },
+
+	{
 		name = 'icc10nm',
 		instance_name = 'Icecrown Citadel',
 		size = 10,
@@ -189,11 +200,6 @@ local raid_list = {
 				create_achievement_pattern(4530),
 				'Fall of the Lich King %(10 player%)',
 				create_achievement_pattern(4532),
-
-				-- weekly
-				'icc1?0?' .. csep .. 'weekly',
-				'Lord Marrowgar' .. wtext .. '!',
-				create_quest_pattern(24590),
 			}
 		)
 	},
@@ -244,6 +250,17 @@ local raid_list = {
 	},
 
 	{
+		name = 'toc10wq',
+		instance_name = 'Trial of the Crusader',
+		size = 10,
+		patterns = {
+			'tog?c1?0?' .. csep .. 'weekly',
+			'Lord Jaraxxus' .. wtext .. '!',
+			create_quest_pattern(24589),
+		},
+	},
+
+	{
 		name = 'toc10nm',
 		instance_name = 'Trial of the Crusader',
 		size = 10,
@@ -252,11 +269,6 @@ local raid_list = {
 			{ 
 				'Call of the Crusade %(10 player%)',
 				create_achievement_pattern(3917),
-
-				-- weekly
-				'tog?c1?0?' .. csep .. 'weekly',
-				'Lord Jaraxxus' .. wtext .. '!',
-				create_quest_pattern(24589),
 			}
 		),
 	},
@@ -281,7 +293,7 @@ local raid_list = {
 		patterns = std.algorithm.copy_back(
 			create_pattern_from_template('rs', 10, 'hc'),
 			{
-				'ruby' .. csep .. 'sanctum' .. csep .. 10,
+				'ruby' .. csep .. 'sanctum' .. csep .. '10' .. wtext .. 'hc',
 				'Heroic: The Twilight Destroyer %(10 player%)',
 				create_achievement_pattern(4818),
 			}
@@ -295,6 +307,7 @@ local raid_list = {
 		patterns = std.algorithm.copy_back(
 			create_pattern_from_template('rs', 25, 'hc'),
 			{
+				'ruby' .. csep .. 'sanctum' .. csep .. '25' .. wtext .. 'hc',
 				'Heroic: The Twilight Destroyer %(25 player%)',
 				create_achievement_pattern(4816),
 			}
@@ -308,7 +321,7 @@ local raid_list = {
 		patterns = std.algorithm.copy_back(
 			create_pattern_from_template('rs', 10, 'nm'),
 			{
-				'ruby' .. csep .. 'sanctum' .. csep .. 10,
+				'ruby' .. csep .. 'sanctum' .. csep .. '10',
 				'The Twilight Destroyer %(10 player%)',
 				create_achievement_pattern(4817),
 			}
@@ -322,7 +335,7 @@ local raid_list = {
 		patterns = std.algorithm.copy_back(
 			create_pattern_from_template('rs', 25, 'nm'),
 			{
-				'ruby' .. csep .. 'sanctum' .. csep .. 25,
+				'ruby' .. csep .. 'sanctum' .. csep .. '25',
 				'The Twilight Destroyer %(25 player%)',
 				create_achievement_pattern(4815),
 			}
@@ -344,15 +357,10 @@ local raid_list = {
 	},
 
 	{
-		name = 'ulduar10',
+		name = 'ulduar10wq',
 		instance_name = 'Ulduar',
 		size = 10,
 		patterns = {
-			'ull?a?d[au]?[au]?r?' .. csep .. '10',
-			'The Siege of Ulduar %(10 player%)',
-			create_achievement_pattern(2886),
-
-			-- weekly
 			'ull?a?d[au]?[au]?r?1?0?' .. csep .. 'weekly',
 			'Flame Leviathan' .. wtext .. '!',
 			create_quest_pattern(24585),
@@ -362,6 +370,17 @@ local raid_list = {
 			create_quest_pattern(24586),
 			'XT-002' .. wtext .. '!',
 			create_quest_pattern(24588),
+		},
+	},
+
+	{
+		name = 'ulduar10',
+		instance_name = 'Ulduar',
+		size = 10,
+		patterns = {
+			'ull?a?d[au]?[au]?r?' .. csep .. '10',
+			'The Siege of Ulduar %(10 player%)',
+			create_achievement_pattern(2886),
 		},
 	},
 
@@ -377,6 +396,17 @@ local raid_list = {
 	},
 
 	{
+		name = 'os10wq',
+		instance_name = 'The Obsidian Sanctum',
+		size = 10,
+		patterns = {
+			'os1?0?' .. csep .. 'weekly',
+			'Sartharion' .. wtext .. '!',
+			create_quest_pattern(24579),
+		}
+	},
+
+	{
 		name = 'os10',
 		instance_name = 'The Obsidian Sanctum',
 		size = 10,
@@ -385,11 +415,6 @@ local raid_list = {
 			{ 
 				'Besting the Black Dragonflight %(10 player%)',
 				create_achievement_pattern(1876),
-
-				-- weekly
-				'os1?0?' .. csep .. 'weekly',
-				'Sartharion' .. wtext .. '!',
-				create_quest_pattern(24579),
 			}
 		),
 	},
@@ -408,16 +433,10 @@ local raid_list = {
 	},
 
 	{
-		name = 'naxx10',
+		name = 'naxx10wq',
 		instance_name = 'Naxxramas',
 		size = 10,
 		patterns = {
-			'The Fall of Naxxramas %(10 player%)',
-			create_achievement_pattern(576),
-			'naxx?ramm?as' .. csep .. '10',
-			'naxx?' .. csep .. '10',
-
-			-- weekly
 			'naxx?1?0?' .. csep .. 'weekly',
 			'Anub\'Rekhan' .. wtext .. '!',
 			create_quest_pattern(24580),
@@ -427,6 +446,18 @@ local raid_list = {
 			create_quest_pattern(24582),
 			'Patchwerk' .. wtext .. '!',
 			create_quest_pattern(24583),
+		},
+	},
+
+	{
+		name = 'naxx10',
+		instance_name = 'Naxxramas',
+		size = 10,
+		patterns = {
+			'The Fall of Naxxramas %(10 player%)',
+			create_achievement_pattern(576),
+			'naxx?ramm?as' .. csep .. '10',
+			'naxx?' .. csep .. '10',
 		},
 	},
 
@@ -443,6 +474,17 @@ local raid_list = {
 	},
 
 	{
+		name = 'eoe10wq',
+		instance_name = 'The Eye of Eternity',
+		size = 10,
+		patterns = {
+			'eoe1?0?' .. csep .. 'weekly',
+			'Malygos' .. wtext .. '!',
+			create_quest_pattern(24584),
+		},
+	},
+
+	{
 		name = 'eoe10',
 		instance_name = 'The Eye of Eternity',
 		size = 10,
@@ -453,11 +495,6 @@ local raid_list = {
 				'eoe' .. csep .. '10',
 				'A Poke In The Eye %(10 player%)',
 				create_achievement_pattern(1869),
-
-				-- weekly
-				'eoe1?0?' .. csep .. 'weekly',
-				'Malygos' .. wtext .. '!',
-				create_quest_pattern(24584),
 			}
 		),
 	},
@@ -650,16 +687,12 @@ local raid_list = {
 local role_patterns = {
 	dps = {
 
-		'feral' .. csep .. 'cat' .. sep,
-		'feral' .. csep .. 'd?p?s?',
+		're?t?r?i?b?u?t?i?o?n?' .. csep .. 'pal[al]?[dy]?i?n?',
+		'fury',
 
-		'ret' .. csep .. 'pal[al]?[dy]?i?n?',
-
-		'shadow' .. csep .. 'pri?e?st',
+		'sh?a?d?o?w?' .. csep .. 'pri?e?st',
 		'pri?e?st' .. csep .. 'dps',
 		'sp',
-
-		'balance' .. '[ru][ud][iu]d?',
 
 		'elem?e?n?t?a?l?' .. csep .. 'shamm?[iy]?',
 		'mage',
@@ -669,18 +702,18 @@ local role_patterns = {
 		'boo?mi',
 		'boo?my',
 		'owl',
+		'ba?l?a?n?c?e?' .. csep .. 'd[ru][ud][iu]d?',
 
-		'b[ru][ud][iu]d?',
-
-		'rogue' .. meta_or_sep,
-		'rouge' .. meta_or_sep,
+		'rogu?e?' .. meta_or_sep,
+		'roug?e?' .. meta_or_sep,
 
 		'kitt?y',
 		'cat',
+		'feral' .. csep .. 'cat' .. sep,
+		'feral' .. csep .. 'd?p?s?',
 
 		'w?a?r?lock',
-
-		'spri?e?st',
+		'demol?i?t?i?o?n?',
 
 		'hunte?r?s?',
 
@@ -690,26 +723,21 @@ local role_patterns = {
 	},
 
 	healer = {
-		'h[ea][ea]l[ers]*', -- LF healer
-		'heler',
+		'h[ea][ea]?l[ers]*', -- LF healer
 
-		'resto' .. csep .. 'd[ru][ud][iu]d?', -- LF rdruid/rdudu
-		'rd[ru][ud][iu]d?', -- LF rdruid/rdudu
+		're?s?t?o?' .. csep .. 'd[ru][ud][iu]d?', -- LF rdruid/rdudu
 		meta_or_sep .. 'r' .. csep .. 'd[ru][ud][iu]d?', -- LF rdruid/rdudu
-
 		'tree', -- LF tree
 
-		'resto' .. csep .. 'shamm?y?', -- LF rsham
-		'rshamm?y?', -- LF rsham
+		're?s?t?o?' .. csep .. 'shamm?y?', -- LF rsham
 		meta_or_sep .. 'r' .. csep .. 'shamm?y?', -- LF rsham
 
 		'disco?' .. csep .. 'pri?e?st', -- disc priest
 		'dpri?e?st', -- disc priest
 		meta_or_sep .. 'd' .. csep .. 'pri?e?st', -- disc priest
 
-		'holl?y' .. csep .. 'palad?i?n?', -- LF holy pala
-		'hpala?d?i?n?', -- LF hpala
-		meta_or_sep .. 'h' .. csep .. 'palad?i?n?', -- LF hpala
+		'ho?l?l?y?' .. csep .. 'pala?d?i?n?', -- LF holy pala
+		meta_or_sep .. 'h' .. csep .. 'pala?d?i?n?', -- LF hpala
 	},
 
 	tank = {
@@ -717,7 +745,7 @@ local role_patterns = {
 		role_sep .. '[mo]t' .. csep .. '$', -- Need MT/OT
 		'ta*n+a?k+s?', -- NEED TANKS
 		'b[ea]*rs?',
-		'prot' .. csep .. 'pal[al]?[dy]?i?n?',
+		'prote?c?t?i?o?n?', -- NEED PROT PALA/WARRI
 	},
 }
 
@@ -975,8 +1003,11 @@ function RaidBrowser.lex_raid_info(message)
 		end);
 
 		if index then
-			num_unique_raids = num_unique_raids + 1;
-			raid = r;
+			-- only count as new unique raid, if previously found raid was a different size or zone
+			if not raid or (raid.size ~= r.size or RaidBrowser.get_short_raid_name(r.name) ~= RaidBrowser.get_short_raid_name(raid.name)) then
+				num_unique_raids = num_unique_raids + 1;
+				raid = r;
+			end
 		end
 	end
 
