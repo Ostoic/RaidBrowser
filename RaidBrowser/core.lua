@@ -177,17 +177,6 @@ local raid_list = {
 	},
 
 	{
-		name = 'icc10wq',
-		instance_name = 'Icecrown Citadel',
-		size = 10,
-		patterns = {
-			'icc1?0?' .. csep .. 'weekly',
-			'Lord Marrowgar' .. wtext .. '!',
-			create_quest_pattern(24590),
-		},
-	},
-
-	{
 		name = 'icc10nm',
 		instance_name = 'Icecrown Citadel',
 		size = 10,
@@ -200,6 +189,11 @@ local raid_list = {
 				create_achievement_pattern(4530),
 				'Fall of the Lich King %(10 player%)',
 				create_achievement_pattern(4532),
+
+				-- weekly
+				'icc1?0?' .. csep .. 'weekly',
+				'Lord Marrowgar' .. wtext .. '!',
+				create_quest_pattern(24590),
 			}
 		)
 	},
@@ -250,17 +244,6 @@ local raid_list = {
 	},
 
 	{
-		name = 'toc10wq',
-		instance_name = 'Trial of the Crusader',
-		size = 10,
-		patterns = {
-			'tog?c1?0?' .. csep .. 'weekly',
-			'Lord Jaraxxus' .. wtext .. '!',
-			create_quest_pattern(24589),
-		},
-	},
-
-	{
 		name = 'toc10nm',
 		instance_name = 'Trial of the Crusader',
 		size = 10,
@@ -269,6 +252,11 @@ local raid_list = {
 			{ 
 				'Call of the Crusade %(10 player%)',
 				create_achievement_pattern(3917),
+
+				-- weekly
+				'tog?c1?0?' .. csep .. 'weekly',
+				'Lord Jaraxxus' .. wtext .. '!',
+				create_quest_pattern(24589),
 			}
 		),
 	},
@@ -356,10 +344,15 @@ local raid_list = {
 	},
 
 	{
-		name = 'ulduar10wq',
+		name = 'ulduar10',
 		instance_name = 'Ulduar',
 		size = 10,
 		patterns = {
+			'ull?a?d[au]?[au]?r?' .. csep .. '10',
+			'The Siege of Ulduar %(10 player%)',
+			create_achievement_pattern(2886),
+
+			-- weekly
 			'ull?a?d[au]?[au]?r?1?0?' .. csep .. 'weekly',
 			'Flame Leviathan' .. wtext .. '!',
 			create_quest_pattern(24585),
@@ -369,17 +362,6 @@ local raid_list = {
 			create_quest_pattern(24586),
 			'XT-002' .. wtext .. '!',
 			create_quest_pattern(24588),
-		},
-	},
-
-	{
-		name = 'ulduar10',
-		instance_name = 'Ulduar',
-		size = 10,
-		patterns = {
-			'ull?a?d[au]?[au]?r?' .. csep .. '10',
-			'The Siege of Ulduar %(10 player%)',
-			create_achievement_pattern(2886),
 		},
 	},
 
@@ -395,17 +377,6 @@ local raid_list = {
 	},
 
 	{
-		name = 'os10wq',
-		instance_name = 'The Obsidian Sanctum',
-		size = 10,
-		patterns = {
-			'os1?0?' .. csep .. 'weekly',
-			'Sartharion' .. wtext .. '!',
-			create_quest_pattern(24579),
-		}
-	},
-
-	{
 		name = 'os10',
 		instance_name = 'The Obsidian Sanctum',
 		size = 10,
@@ -414,6 +385,11 @@ local raid_list = {
 			{ 
 				'Besting the Black Dragonflight %(10 player%)',
 				create_achievement_pattern(1876),
+
+				-- weekly
+				'os1?0?' .. csep .. 'weekly',
+				'Sartharion' .. wtext .. '!',
+				create_quest_pattern(24579),
 			}
 		),
 	},
@@ -432,10 +408,16 @@ local raid_list = {
 	},
 
 	{
-		name = 'naxx10wq',
+		name = 'naxx10',
 		instance_name = 'Naxxramas',
 		size = 10,
 		patterns = {
+			'The Fall of Naxxramas %(10 player%)',
+			create_achievement_pattern(576),
+			'naxx?ramm?as' .. csep .. '10',
+			'naxx?' .. csep .. '10',
+
+			-- weekly
 			'naxx?1?0?' .. csep .. 'weekly',
 			'Anub\'Rekhan' .. wtext .. '!',
 			create_quest_pattern(24580),
@@ -445,18 +427,6 @@ local raid_list = {
 			create_quest_pattern(24582),
 			'Patchwerk' .. wtext .. '!',
 			create_quest_pattern(24583),
-		},
-	},
-
-	{
-		name = 'naxx10',
-		instance_name = 'Naxxramas',
-		size = 10,
-		patterns = {
-			'The Fall of Naxxramas %(10 player%)',
-			create_achievement_pattern(576),
-			'naxx?ramm?as' .. csep .. '10',
-			'naxx?' .. csep .. '10',
 		},
 	},
 
@@ -473,17 +443,6 @@ local raid_list = {
 	},
 
 	{
-		name = 'eoe10wq',
-		instance_name = 'The Eye of Eternity',
-		size = 10,
-		patterns = {
-			'eoe1?0?' .. csep .. 'weekly',
-			'Malygos' .. wtext .. '!',
-			create_quest_pattern(24584),
-		},
-	},
-
-	{
 		name = 'eoe10',
 		instance_name = 'The Eye of Eternity',
 		size = 10,
@@ -494,6 +453,11 @@ local raid_list = {
 				'eoe' .. csep .. '10',
 				'A Poke In The Eye %(10 player%)',
 				create_achievement_pattern(1869),
+
+				-- weekly
+				'eoe1?0?' .. csep .. 'weekly',
+				'Malygos' .. wtext .. '!',
+				create_quest_pattern(24584),
 			}
 		),
 	},
@@ -518,9 +482,9 @@ local raid_list = {
 		instance_name = 'Onyxia\'s Lair',
 		size = 25,
 		patterns = {
+			'onyx?i?a?' .. csep .. '25',
 			'Onyxia\'s Lair %(25 player%)',
 			create_achievement_pattern(4397),
-			'onyx?i?a?' .. csep .. '25',
 		},
 	},
 
@@ -529,9 +493,9 @@ local raid_list = {
 		instance_name = 'Onyxia\'s Lair',
 		size = 10,
 		patterns = {
+			'onyx?i?a?' .. csep .. '10',
 			'Onyxia\'s Lair %(10 player%)',
 			create_achievement_pattern(4396),
-			'onyx?i?a?' .. csep .. '10',
 		},
 	},
 
