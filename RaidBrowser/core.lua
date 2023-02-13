@@ -542,6 +542,7 @@ local raid_list = {
 		patterns = {
 			'mount' .. csep .. 'hyjal',
 			'the' .. csep .. 'battle' .. csep .. 'for' .. csep .. 'mount' .. csep .. 'hyjal',
+			create_achievement_pattern(695),
 		},
 	},
 
@@ -551,6 +552,7 @@ local raid_list = {
 		size = 10,
 		patterns = {
 			'zul' .. csep .. '\'?' .. csep .. 'aman',
+			create_achievement_pattern(691),
 		},
 	},
 
@@ -562,6 +564,7 @@ local raid_list = {
 			'te*mpe*st' .. csep .. 'ke+p',
 			sep .. 'tk',
 			'tk' .. sep,
+			create_achievement_pattern(696),
 		},
 	},
 
@@ -573,6 +576,7 @@ local raid_list = {
 			'karaz?h?a?n?' .. csep .. '1?0?', -- karazhan
 			'^kz' .. csep .. '10',
 			sep .. 'kz' .. csep .. '10',
+			create_achievement_pattern(690),
 		},
 	},
 
@@ -582,6 +586,7 @@ local raid_list = {
 		size = 25,
 		patterns = {
 			'magt?h?e?r?i?d?o?n?\'*s*' .. csep .. 'lai?r',
+			create_achievement_pattern(693),
 		},
 	},
 
@@ -591,6 +596,7 @@ local raid_list = {
 		size = 25,
 		patterns = {
 			'gruul\'*s*' .. csep .. 'l?a?i?r?',
+			create_achievement_pattern(692),
 		},
 	},
 
@@ -599,7 +605,10 @@ local raid_list = {
 		instance_name = 'Blackwing Lair',
 		size = 40,
 		patterns = {
-			'gruul\'*s*' .. csep .. 'l?a?i?r?',
+			sep .. 'bwl4?0?',
+			'blackwing' .. csep .. 'l?a?i?r?',
+			'blackwi?n?g?' .. csep .. 'la?i?r?',
+			create_achievement_pattern(685),
 		},
 	},
 
@@ -610,6 +619,7 @@ local raid_list = {
 		patterns = {
 			'molte?n' .. csep .. 'core?',
 			sep .. 'mc' .. csep .. '4?0?' .. sep,
+			create_achievement_pattern(686),
 		},
 	},
 
@@ -620,6 +630,7 @@ local raid_list = {
 		patterns = {
 			'black' .. csep .. 'temple',
 			'[%s-_,.]+bt' .. csep .. '25[%s-_,.]+',
+			create_achievement_pattern(697),
 		},
 	},
 
@@ -631,6 +642,7 @@ local raid_list = {
 			'sunwell' .. csep .. 'plateau',
 			'swp' .. sep,
 			sep .. 'swp',
+			create_achievement_pattern(698),
 		},
 	},
 
@@ -644,6 +656,7 @@ local raid_list = {
 			'ssc' .. sep,
 			'ssc' .. csep .. '$',
 			'serpent' .. csep .. 'shrine' .. csep .. 'cavern',
+			create_achievement_pattern(694),
 		},
 	},
 
@@ -654,6 +667,7 @@ local raid_list = {
 		patterns = {
 			'temple?' .. csep .. 'of?' .. csep .. 'ahn\'?' .. csep .. 'qiraj',
 			sep .. '*aq' .. csep .. '40' .. csep .. '',
+			create_achievement_pattern(687),
 		},
 	},
 
@@ -664,6 +678,7 @@ local raid_list = {
 		patterns = {
 			'ruins?' .. csep .. 'of?' .. csep .. 'ahn\'?' .. csep .. 'qiraj',
 			'aq' .. csep .. '20',
+			create_achievement_pattern(689),
 		},
 	},
 
