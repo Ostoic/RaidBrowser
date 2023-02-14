@@ -150,6 +150,7 @@ local raid_list = {
 				'Heroic: Storming the Citadel %(10 player%)',
 				create_achievement_pattern(4628),
 				'Bane of the Fallen King',
+				'[^a-z]Bane[^a-z]',
 				create_achievement_pattern(4583),
 				'Heroic: Fall of the Lich King %(10 player%)',
 				create_achievement_pattern(4636),
@@ -167,6 +168,7 @@ local raid_list = {
 				'Heroic: Storming the Citadel %(25 player%)',
 				create_achievement_pattern(4632),
 				'The Light of Dawn',
+				'[^a-z]LoD[^a-z]',
 				create_achievement_pattern(4584),
 				'Heroic: Fall of the Lich King %(25 player%)',
 				create_achievement_pattern(4637),
@@ -792,23 +794,23 @@ local lfm_patterns = {
 
 	lfm .. csep .. '[0-9]*' .. csep .. meta_role .. non_meta .. meta_gs .. '.*' .. meta_raid,
 	lfm .. csep .. 'all' .. non_meta .. meta_raid,
-	'need' .. csep .. 'all' .. non_meta .. meta_raid,
+	'nee?d' .. csep .. 'all' .. non_meta .. meta_raid,
 	'seek' .. csep .. 'all' .. non_meta .. meta_raid,
 
 	meta_raid .. non_meta .. lfm .. csep .. 'all',
-	meta_raid .. non_meta .. 'need' .. csep .. 'all',
+	meta_raid .. non_meta .. 'nee?d' .. csep .. 'all',
 	meta_raid .. non_meta .. meta_gs .. non_meta .. 'lf' .. csep .. 'all',
 	meta_raid .. non_meta .. meta_gs .. non_meta .. 'seek' .. csep .. 'all',
-	meta_raid .. non_meta .. meta_gs .. non_meta .. 'need' .. csep .. 'all',
+	meta_raid .. non_meta .. meta_gs .. non_meta .. 'nee?d' .. csep .. 'all',
 
 	meta_raid .. non_meta .. meta_role .. non_meta .. meta_gs,
-	meta_raid .. non_meta .. 'need' .. non_meta .. meta_role,
+	meta_raid .. non_meta .. 'nee?d' .. non_meta .. meta_role,
 	meta_raid .. non_meta .. 'seek' .. non_meta .. meta_role,
 
 	meta_raid .. non_meta .. lfm .. non_meta .. meta_role,
 	meta_raid .. non_meta .. 'looki?ng' .. csep .. 'for' .. non_meta .. meta_role,
 
-	meta_raid .. non_meta .. 'need' .. csep .. 'all',
+	meta_raid .. non_meta .. 'nee?d' .. csep .. 'all',
 
 	meta_raid .. non_meta .. meta_gs .. non_meta .. meta_role,
 
@@ -1073,7 +1075,7 @@ function RaidBrowser.lex_and_extract(message)
 	-- Get any roles that are needed
 	local roles = {};
 
-	if not raid_lexed_message:find('lfm? all ') and not raid_lexed_message:find('need all ') then
+	if not raid_lexed_message:find('lfm? all ') and not raid_lexed_message:find('nee?d all ') then
 		roles, raid_lexed_message = lex_roles(roles, raid_lexed_message, 'dps');
 		roles, raid_lexed_message = lex_roles(roles, raid_lexed_message, 'tank');
 		roles, raid_lexed_message = lex_roles(roles, raid_lexed_message, 'healer');
