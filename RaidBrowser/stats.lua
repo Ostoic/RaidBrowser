@@ -200,6 +200,13 @@ function RaidBrowser.stats.get_active_raidset()
 	-- Retrieve gearscore if GearScoreLite is installed
 	if GearScore_GetScore then
 		gs = GearScore_GetScore(UnitName('player'), 'player');
+
+		-- older GearScore version does not return gs on method call
+		if gs == nil and GS_Data then
+			if GS_Data[GetRealmName()] and GS_Data[GetRealmName()].Players[UnitName("player")] then
+				gs = GS_Data[GetRealmName()].Players[UnitName("player")]["GearScore"]
+			end
+		end
 	end
 
 	spec = RaidBrowser.stats.active_spec();
