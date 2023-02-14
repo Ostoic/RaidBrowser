@@ -177,17 +177,6 @@ local raid_list = {
 	},
 
 	{
-        name = 'icc10wq',
-        instance_name = 'Icecrown Citadel',
-        size = 10,
-        patterns = {
-            'icc1?0?' .. csep .. 'weekly',
-            'Lord Marrowgar' .. wtext .. '!',
-            create_quest_pattern(24590),
-        },
-    },
-
-	{
 		name = 'icc10nm',
 		instance_name = 'Icecrown Citadel',
 		size = 10,
@@ -222,6 +211,17 @@ local raid_list = {
 	},
 
 	{
+        name = 'icc10wq',
+        instance_name = 'Icecrown Citadel',
+        size = 10,
+        patterns = {
+            'icc1?0?' .. csep .. 'weekly',
+            'Lord Marrowgar' .. wtext .. '!',
+            create_quest_pattern(24590),
+        },
+    },
+
+	{
 		name = 'toc10hc',
 		instance_name = 'Trial of the Crusader',
 		size = 10,
@@ -250,17 +250,6 @@ local raid_list = {
 	},
 
 	{
-		name = 'toc10wq',
-		instance_name = 'Trial of the Crusader',
-		size = 10,
-		patterns = {
-			'tog?c1?0?' .. csep .. 'weekly',
-			'Lord Jaraxxus' .. wtext .. '!',
-			create_quest_pattern(24589),
-		},
-	},
-
-	{
 		name = 'toc10nm',
 		instance_name = 'Trial of the Crusader',
 		size = 10,
@@ -284,6 +273,17 @@ local raid_list = {
 				create_achievement_pattern(3916),
 			}
 		),
+	},
+
+	{
+		name = 'toc10wq',
+		instance_name = 'Trial of the Crusader',
+		size = 10,
+		patterns = {
+			'tog?c1?0?' .. csep .. 'weekly',
+			'Lord Jaraxxus' .. wtext .. '!',
+			create_quest_pattern(24589),
+		},
 	},
 
 	{
@@ -357,23 +357,6 @@ local raid_list = {
 	},
 
 	{
-		name = 'ulduar10wq',
-		instance_name = 'Ulduar',
-		size = 10,
-		patterns = {
-			'ull?a?d[au]?[au]?r?1?0?' .. csep .. 'weekly',
-			'Flame Leviathan' .. wtext .. '!',
-			create_quest_pattern(24585),
-			'Ignis' .. wtext .. '!',
-			create_quest_pattern(24587),
-			'Razorscale' .. wtext .. '!',
-			create_quest_pattern(24586),
-			'XT-002' .. wtext .. '!',
-			create_quest_pattern(24588),
-		},
-	},
-
-	{
 		name = 'ulduar10',
 		instance_name = 'Ulduar',
 		size = 10,
@@ -396,14 +379,20 @@ local raid_list = {
 	},
 
 	{
-		name = 'os10wq',
-		instance_name = 'The Obsidian Sanctum',
+		name = 'ulduar10wq',
+		instance_name = 'Ulduar',
 		size = 10,
 		patterns = {
-			'os1?0?' .. csep .. 'weekly',
-			'Sartharion' .. wtext .. '!',
-			create_quest_pattern(24579),
-		}
+			'ull?a?d[au]?[au]?r?1?0?' .. csep .. 'weekly',
+			'Flame Leviathan' .. wtext .. '!',
+			create_quest_pattern(24585),
+			'Ignis' .. wtext .. '!',
+			create_quest_pattern(24587),
+			'Razorscale' .. wtext .. '!',
+			create_quest_pattern(24586),
+			'XT-002' .. wtext .. '!',
+			create_quest_pattern(24588),
+		},
 	},
 
 	{
@@ -433,20 +422,14 @@ local raid_list = {
 	},
 
 	{
-		name = 'naxx10wq',
-		instance_name = 'Naxxramas',
+		name = 'os10wq',
+		instance_name = 'The Obsidian Sanctum',
 		size = 10,
 		patterns = {
-			'naxx?1?0?' .. csep .. 'weekly',
-			'Anub\'Rekhan' .. wtext .. '!',
-			create_quest_pattern(24580),
-			'Noth' .. wtext .. '!',
-			create_quest_pattern(24581),
-			'Razuvious' .. wtext .. '!',
-			create_quest_pattern(24582),
-			'Patchwerk' .. wtext .. '!',
-			create_quest_pattern(24583),
-		},
+			'os1?0?' .. csep .. 'weekly',
+			'Sartharion' .. wtext .. '!',
+			create_quest_pattern(24579),
+		}
 	},
 
 	{
@@ -474,13 +457,19 @@ local raid_list = {
 	},
 
 	{
-		name = 'eoe10wq',
-		instance_name = 'The Eye of Eternity',
+		name = 'naxx10wq',
+		instance_name = 'Naxxramas',
 		size = 10,
 		patterns = {
-			'eoe1?0?' .. csep .. 'weekly',
-			'Malygos' .. wtext .. '!',
-			create_quest_pattern(24584),
+			'naxx?1?0?' .. csep .. 'weekly',
+			'Anub\'Rekhan' .. wtext .. '!',
+			create_quest_pattern(24580),
+			'Noth' .. wtext .. '!',
+			create_quest_pattern(24581),
+			'Razuvious' .. wtext .. '!',
+			create_quest_pattern(24582),
+			'Patchwerk' .. wtext .. '!',
+			create_quest_pattern(24583),
 		},
 	},
 
@@ -512,6 +501,17 @@ local raid_list = {
 				create_achievement_pattern(1870),
 			}
 		),
+	},
+
+	{
+		name = 'eoe10wq',
+		instance_name = 'The Eye of Eternity',
+		size = 10,
+		patterns = {
+			'eoe1?0?' .. csep .. 'weekly',
+			'Malygos' .. wtext .. '!',
+			create_quest_pattern(24584),
+		},
 	},
 
 	{
@@ -1006,8 +1006,9 @@ function RaidBrowser.lex_raid_info(message)
 			-- only count as new unique raid, if previously found raid was a different size or zone
 			if not raid or (raid.size ~= r.size or RaidBrowser.get_short_raid_name(r.name) ~= RaidBrowser.get_short_raid_name(raid.name)) then
 				num_unique_raids = num_unique_raids + 1;
-				raid = r;
 			end
+			-- but return last found raid to favor nm difficulty (hc achievements are often posted for nm raids, because once u have hc u cannot post the nm) and wq raids
+			raid = r;
 		end
 	end
 
@@ -1110,7 +1111,7 @@ function RaidBrowser.raid_info(message)
 end
 
 function RaidBrowser.get_short_raid_name(raid_name)
-	return string.gsub(raid_name, '[1|2][0|5](%w+)', '');
+	return string.gsub(raid_name, '[1|2][0|5](%w*)', '');
 end
 
 --[[ Event handlers and listeners ]] --
