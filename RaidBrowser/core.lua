@@ -77,24 +77,22 @@ local raid_patterns_template = {
 ---@return table
 ---@nodiscard
 local function create_pattern_from_template(raid_name_pattern, size, difficulty)
-	if not difficulty then
-		difficulty = 'nm'
-	end
 
 	local size_pattern = '1[0p]'
 	if size == 10 then
 		size_pattern = '1[0o]';
+	elseif size == 25 then
+		size_pattern = '2[5p]';
 	elseif size == 40 then
 		size_pattern = '4[0p]';
 	end
 
-	local difficulty_pattern = 'hc'
 	if not difficulty then
-		difficulty_pattern = 'nm'
+		difficulty = 'nm'
 	end
 
 	-- Replace placeholders with the specified raid info
-	return std.algorithm.transform(raid_patterns_template[difficulty_pattern], function(pattern)
+	return std.algorithm.transform(raid_patterns_template[difficulty], function(pattern)
 		pattern = pattern:gsub('<raid>', raid_name_pattern);
 		pattern = pattern:gsub('<size>', size_pattern);
 		return pattern;
