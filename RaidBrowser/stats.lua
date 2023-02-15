@@ -207,7 +207,7 @@ function RaidBrowser.stats.active_spec()
 		end
 	end
 
-	-- make config to toggle using full or short spec names
+	-- TODO: make config to toggle using full or short spec names
 	return spec_names["full"][spec_name] or spec_name;
 end
 
