@@ -52,19 +52,6 @@ local raid_achievements = {
 		4078, -- Realm First! Grand Crusader
 	},
 	
-	togc = {
-		3917, -- Call of the Crusade 10-man	
-		3916, -- Call of the Crusade 25-man
-		3918, -- Call of the Grand Crusade (10 HC)
-		3810, -- A Tribute to Insanity (10 HC)
-		3812, -- Call of the Grand Crusade (25 HC)
-		3819, -- A Tribute to Insanity (25 HC)
-		4080, -- A Tribute to Dedicated Insanity (10 HC)
-		4079, -- A Tribute to Immortality (25 HC Horde)
-		4156, -- A Tribute to Immortality (25 HC Alliance)
-		4078, -- Realm First! Grand Crusader
-	},
-	
 	ulduar = {
 		2894, -- The Secrets of Ulduar 10
 		2895, -- The Secrets of Ulduar 25

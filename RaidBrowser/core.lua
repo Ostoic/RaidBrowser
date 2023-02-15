@@ -157,7 +157,7 @@ local raid_list = {
 	},
 
 	{
-		name = 'togc10hc',
+		name = 'toc10hc',
 		instance_name = 'Trial of the Crusader',
 		size = 10,
 		patterns = std.algorithm.copy_back(
@@ -170,7 +170,7 @@ local raid_list = {
 	},
 
 	{
-		name = 'togc25hc',
+		name = 'toc10hc',
 		instance_name = 'Trial of the Crusader',
 		size = 25,
 		patterns = std.algorithm.copy_back(
