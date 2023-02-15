@@ -43,6 +43,10 @@ local function set_sort(column)
 	end
 end
 
+function raid_browser.set_sort(column)
+    set_sort(column)
+end
+
 local function get_sorted_messages()
 	local keys = {}
   	for key,info in pairs(raid_browser.lfm_messages) do
@@ -192,6 +196,8 @@ local function assign_lfr_button(button, host_name, lfm_info, index)
 	button.healerIcon:SetTexture("Interface\\LFGFrame\\LFGRole");
 	button.damageIcon:SetTexture("Interface\\LFGFrame\\LFGRole");
 	button.partyIcon:SetTexture("Interface\\LFGFrame\\LFGRole");
+
+button:SetScript("OnDoubleClick", on_join)
 
 	button:SetScript('OnEnter', 
 		function(button) 
