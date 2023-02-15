@@ -1468,112 +1468,112 @@ local test_cases = {
 local function array_contains(t, element)
 	for _, k in ipairs(t) do
 		if k == element then
-			return true;
+			return true
 		end
 	end
 
-	return false;
+	return false
 end
 
 local function subset_of(table1, table2)
 	if #table1 ~= #table2 then
-		return false;
+		return false
 	end
 
 	for _, x in ipairs(table1) do
 
 		if not array_contains(table2, x) then
-			return false;
+			return false
 		end
 	end
 
-	return true;
+	return true
 end
 
 ---@param test table
 local function display_test(test)
-	local roles_string = '';
-	local raid_string = test.raid or '';
-	local gs_string = test.gs or '';
+	local roles_string = ''
+	local raid_string = test.raid or ''
+	local gs_string = test.gs or ''
 
 	if (test.roles) then
 		for _, role in ipairs(test.roles) do
-			roles_string = role .. ' ' .. roles_string;
+			roles_string = role .. ' ' .. roles_string
 		end
 	end
 
-	RaidBrowser:Print('Original message: ' .. test.message);
-	RaidBrowser:Print('[Required]: ' .. raid_string .. ', ' .. roles_string .. ', ' .. gs_string);
-	RaidBrowser:Print('Should fail: ' .. tostring(test.should_fail));
+	RaidBrowser:Print('Original message: ' .. test.message)
+	RaidBrowser:Print('[Required]: ' .. raid_string .. ', ' .. roles_string .. ', ' .. gs_string)
+	RaidBrowser:Print('Should fail: ' .. tostring(test.should_fail))
 end
 
 ---@param test table
 ---@param detected table
 ---@param message string
 local function test_failed(test, detected, message)
-	display_test(test);
-	RaidBrowser:Print('Test failed: ' .. message);
+	display_test(test)
+	RaidBrowser:Print('Test failed: ' .. message)
 
 	if detected then
 		local roles_string = std.algorithm.fold(detected.roles, '', function(text, role)
-			return text .. role .. ' ';
+			return text .. role .. ' '
 		end)
 
-		RaidBrowser:Print('[Detected]: ' .. detected.raid .. ', ' .. roles_string .. ', ' .. detected.gs);
+		RaidBrowser:Print('[Detected]: ' .. detected.raid .. ', ' .. roles_string .. ', ' .. detected.gs)
 	end
 
-	print('');
+	print('')
 end
 
 ---@param test table
 local function run_test_case(test)
 	local raid_info, roles, gs = RaidBrowser.raid_info(test.message)
 
-	local detected = nil;
+	local detected = nil
 	if raid_info and roles and gs then
-		detected = { raid = raid_info.name, roles = roles, gs = gs };
+		detected = { raid = raid_info.name, roles = roles, gs = gs }
 	end
 
 	if test.should_fail then
 		-- If we found an lfm message, then the test failed
 		if raid_info then
-			test_failed(test, detected, 'test should have failed');
-			return false;
+			test_failed(test, detected, 'test should have failed')
+			return false
 		end
 	else
 		-- No raid was found
 		if not raid_info then
-			test_failed(test, detected, 'no raid detected');
-			return false;
+			test_failed(test, detected, 'no raid detected')
+			return false
 
 		elseif test.raid ~= raid_info.name then
-			test_failed(test, detected, 'detected raid name is incorrect');
-			return false;
+			test_failed(test, detected, 'detected raid name is incorrect')
+			return false
 
 		elseif test.gs ~= gs then
-			test_failed(test, detected, 'detected gearscore is incorrect');
-			return false;
+			test_failed(test, detected, 'detected gearscore is incorrect')
+			return false
 
 			-- Incorrect gearscore detected
 		elseif not (test.gs == gs) then
-			test_failed(test, detected, 'detected gearscore is incorrect');
-			return false;
+			test_failed(test, detected, 'detected gearscore is incorrect')
+			return false
 
 			-- Incorrect list of roles
 		elseif not subset_of(test.roles, roles) then
-			test_failed(test, detected, 'detected list of roles is not correct');
-			return false;
+			test_failed(test, detected, 'detected list of roles is not correct')
+			return false
 		end
 	end
 
-	return true;
+	return true
 end
 
 -- Run all the test cases
-local test_results = std.algorithm.transform(test_cases, run_test_case);
+local test_results = std.algorithm.transform(test_cases, run_test_case)
 
 -- Count the number of failed tests.
-local number_failed_tests = #test_cases - std.algorithm.count(test_results, true);
+local number_failed_tests = #test_cases - std.algorithm.count(test_results, true)
 
-RaidBrowser:Print('All unit tests executed.');
-RaidBrowser:Print('There were ' .. number_failed_tests .. '/' .. #test_cases .. ' failed unit tests!');
+RaidBrowser:Print('All unit tests executed.')
+RaidBrowser:Print('There were ' .. number_failed_tests .. '/' .. #test_cases .. ' failed unit tests!')

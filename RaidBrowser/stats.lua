@@ -1,4 +1,4 @@
-RaidBrowser.stats = {};
+RaidBrowser.stats = {}
 
 local raid_translations
 if GetLocale() ~= "enUS" then
@@ -113,7 +113,7 @@ local raid_achievements = {
 		3837, -- Koralon the Flame Watcher 25
 		4586, -- Toravon the Ice Watcher 25
 	}
-};
+}
 
 local spec_names = {
 	full = {
@@ -213,18 +213,18 @@ local spec_names = {
 ---@param raid string The name of the achievement ids table
 ---@nodiscard
 local function find_best_achievement(raid)
-	local ids = raid_achievements[raid];
+	local ids = raid_achievements[raid]
 	if not ids then
-		return nil;
+		return nil
 	end
 
-	local max_achievement = nil;
+	local max_achievement = nil
 
 	-- Find the highest ranking completed achievement
 	for i, id in ipairs(ids) do
-		local _, _, _, completed = GetAchievementInfo(id);
+		local _, _, _, completed = GetAchievementInfo(id)
 		if completed and (not max_achievement or max_achievement[1] <= i) then
-			max_achievement = { i, id };
+			max_achievement = { i, id }
 		end
 	end
 
@@ -234,15 +234,15 @@ local function find_best_achievement(raid)
 		for j = 1, GetAchievementNumCriteria(id) do
 			local _, _, completed = GetAchievementCriteriaInfo(id, j)
 			if completed and (not max_achievement or max_achievement[1] <= i) then
-				max_achievement = { i, id };
+				max_achievement = { i, id }
 			end
 		end
 	end
 
 	if max_achievement then
-		return max_achievement[2];
+		return max_achievement[2]
 	else
-		return nil;
+		return nil
 	end
 end
 
@@ -252,27 +252,27 @@ end
 ---@nodiscard
 local function GetTalentTabPoints(i)
 	local _, _, pts = GetTalentTabInfo(i)
-	return pts;
+	return pts
 end
 
 -- Return the index of the player's active spec.
 ---@return integer
 function RaidBrowser.stats.active_spec_index()
 	local indices = std.algorithm.transform({ 1, 2, 3 }, GetTalentTabPoints)
-	local i, _ = std.algorithm.max_of(indices);
-	return i;
+	local i, _ = std.algorithm.max_of(indices)
+	return i
 end
 
 ---@return string
 ---@nodiscard
 function RaidBrowser.stats.active_spec()
 	local active_tab = RaidBrowser.stats.active_spec_index()
-	local _, _, _, spec_name = GetTalentTabInfo(active_tab);
-	local _, class = UnitClass("player");
+	local _, _, _, spec_name = GetTalentTabInfo(active_tab)
+	local _, class = UnitClass("player")
 
 	-- If we're a feral druid, then we need to distinguish between tank and cat feral.
 	if spec_name == 'DruidFeralCombat' then
-		local thick_hide_talent = 5;
+		local thick_hide_talent = 5
 		local _, _, _, _, points = GetTalentInfo(active_tab, thick_hide_talent)
 		if points > 1 then
 			return 'Feral Druid (Tank)'
@@ -293,7 +293,7 @@ function RaidBrowser.stats.active_spec()
 	end
 
 	-- TODO: make config to toggle using full or short spec names
-	return spec_names["full"][spec_name] or spec_name;
+	return spec_names["full"][spec_name] or spec_name
 end
 
 ---Return if the given raid is locked, and if so its reset time left (in seconds)
@@ -308,16 +308,16 @@ function RaidBrowser.stats.raid_lock_info(raid_info)
 
 	if instance_name == nil or raid_info.size == nil then return false, nil end
 	for i = 1, GetNumSavedInstances() do
-		local saved_name, _, reset, _, locked, _, _, _, saved_size = GetSavedInstanceInfo(i);
+		local saved_name, _, reset, _, locked, _, _, _, saved_size = GetSavedInstanceInfo(i)
 		if saved_name ~= nil then
 			-- @napnapnap lockout fix (c8207076730d04f41b881dea3dd9f6ca32655372)
 			if string.lower(saved_name) == string.lower(instance_name) and saved_size == raid_info.size and locked then
-				return true, reset;
+				return true, reset
 			end
 		end
 	end
 
-	return false, nil;
+	return false, nil
 end
 
 -- Try to obtain the player's gearscore.
@@ -327,7 +327,7 @@ function RaidBrowser.stats.gear_score()
 
 	-- Retrieve gearscore if a GearScore addon is installed
 	if GearScore_GetScore then
-		gs = GearScore_GetScore(UnitName('player'), 'player');
+		gs = GearScore_GetScore(UnitName('player'), 'player')
 
 		-- older GearScore version does not return gs on method call
 		if gs == nil and GS_Data then
@@ -344,17 +344,17 @@ end
 ---@return string, integer?
 ---@nodiscard
 function RaidBrowser.stats.get_active_raidset()
-	local spec = RaidBrowser.stats.active_spec();
+	local spec = RaidBrowser.stats.active_spec()
 	local gs = RaidBrowser.stats.gear_score()
-	return spec, gs;
+	return spec, gs
 end
 
 ---@param set 'Active' | 'Primary' | 'Secondary' | 'Both'
 ---@return string?, integer?, string?, integer?
 ---@nodiscard
 function RaidBrowser.stats.get_raidset(set)
-	local raidset1 = RaidBrowserCharacterRaidsets['Primary'] or nil;
-	local raidset2 = RaidBrowserCharacterRaidsets['Secondary'] or nil;
+	local raidset1 = RaidBrowserCharacterRaidsets['Primary'] or nil
+	local raidset2 = RaidBrowserCharacterRaidsets['Secondary'] or nil
 	if not (raidset1 or raidset2) then
 		return
 	elseif (raidset1 and raidset2) then
@@ -369,28 +369,28 @@ end
 ---@return string?, integer?
 function RaidBrowser.stats.current_raidset()
 	if RaidBrowserCharacterCurrentRaidset == 'Active' then
-		return RaidBrowser.stats.get_active_raidset();
+		return RaidBrowser.stats.get_active_raidset()
 	elseif RaidBrowserCharacterCurrentRaidset == 'Both' then
-		return RaidBrowser.stats.get_raidsets();
+		return RaidBrowser.stats.get_raidsets()
 	end
 
 	---@diagnostic disable-next-line: param-type-mismatch
-	return RaidBrowser.stats.get_raidset(RaidBrowserCharacterCurrentRaidset);
+	return RaidBrowser.stats.get_raidset(RaidBrowserCharacterCurrentRaidset)
 end
 
 ---@param set 'Active' | 'Primary' | 'Secondary' | 'Both'
 function RaidBrowser.stats.select_current_raidset(set)
-	RaidBrowserCharacterCurrentRaidset = set;
+	RaidBrowserCharacterCurrentRaidset = set
 end
 
 function RaidBrowser.stats.save_primary_raidset()
-	local spec, gs = RaidBrowser.stats.get_active_raidset();
-	RaidBrowserCharacterRaidsets['Primary'] = { spec = spec, gs = gs };
+	local spec, gs = RaidBrowser.stats.get_active_raidset()
+	RaidBrowserCharacterRaidsets['Primary'] = { spec = spec, gs = gs }
 end
 
 function RaidBrowser.stats.save_secondary_raidset()
-	local spec, gs = RaidBrowser.stats.get_active_raidset();
-	RaidBrowserCharacterRaidsets['Secondary'] = { spec = spec, gs = gs };
+	local spec, gs = RaidBrowser.stats.get_active_raidset()
+	RaidBrowserCharacterRaidsets['Secondary'] = { spec = spec, gs = gs }
 end
 
 ---Returns join message string
@@ -398,10 +398,10 @@ end
 ---@return string
 ---@nodiscard
 function RaidBrowser.stats.build_join_message(raid_name)
-	local message = 'inv ';
-	local class = UnitClass("player");
+	local message = 'inv '
+	local class = UnitClass("player")
 
-	local spec1, gs1, spec2, gs2 = RaidBrowser.stats.current_raidset();
+	local spec1, gs1, spec2, gs2 = RaidBrowser.stats.current_raidset()
 	if spec1 and gs1 then
 		message = message .. gs1 .. 'gs ' .. spec1
 	end
@@ -411,16 +411,16 @@ function RaidBrowser.stats.build_join_message(raid_name)
 	if spec2 and gs2 then
 		message = message .. gs2 .. 'gs ' .. spec2
 	end
-	message = message .. ' ' .. class;
+	message = message .. ' ' .. class
 
 	-- Remove difficulty and raid_name size from the string
-	raid_name = string.gsub(raid_name, '[1|2][0|5](%w*)', '');
+	raid_name = string.gsub(raid_name, '[1|2][0|5](%w*)', '')
 
 	-- Find the best possible achievement for the given raid_name.
-	local achieve_id = find_best_achievement(raid_name);
+	local achieve_id = find_best_achievement(raid_name)
 	if achieve_id then
-		message = message .. ' ' .. GetAchievementLink(achieve_id);
+		message = message .. ' ' .. GetAchievementLink(achieve_id)
 	end
 
-	return message;
+	return message
 end
