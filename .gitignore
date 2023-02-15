@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-.vscode/
-.history/
-=======
 # Compiled Lua sources
 luac.out
 
@@ -43,4 +39,3 @@ luac.out
 *.x86_64
 *.hex
 
->>>>>>> master
