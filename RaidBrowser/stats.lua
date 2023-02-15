@@ -6,14 +6,12 @@ if GetLocale() ~= "enUS" then
 end
 
 local raid_achievements = {
-	
 	rs = {
 		4817, -- The Twilight Destroyer 10
 		4815, -- The Twilight Destroyer 25
 		4818, -- The Twilight Destroyer 10 HC
 		4816, -- The Twilight Destroyer 25 HC
 	},
-
 	icc = {
 		4531, -- Storming the Citadel 10-man
 		4604, -- Storming the Citadel 25-man
@@ -43,7 +41,6 @@ local raid_achievements = {
 		4603, -- Glory of the Icecrown Raider 25
 		4576, -- Realm First! Fall of the Lich King (25 HC)
 	},
-
 	toc = {
 		3917, -- Call of the Crusade 10-man
 		3916, -- Call of the Crusade 25-man
@@ -56,7 +53,6 @@ local raid_achievements = {
 		4156, -- A Tribute to Immortality (25 HC Alliance)
 		4078, -- Realm First! Grand Crusader
 	},
-	
 	ulduar = {
 		2894, -- The Secrets of Ulduar 10
 		2895, -- The Secrets of Ulduar 25
@@ -76,7 +72,6 @@ local raid_achievements = {
 		3259, -- Realm First! Celestial Defender
 		3117, -- Realm First! Death's Demise
 	},
-	
 	eoe = {
 		622, -- Spellweaver 10
 		1874, -- You don't have an eternity 10
@@ -84,7 +79,6 @@ local raid_achievements = {
 		1875, -- You don't have an eternity 25
 		1400, -- Realm First! Magic Seeker
 	},
-	
 	os = {
 		1876, -- Besting the Black Dragonflight 10
 		2049, -- Twilight Assist 10
@@ -96,7 +90,6 @@ local raid_achievements = {
 		2054, -- Twilight Zone 25
 		456, -- Realm First! Obsidian Slayer
 	},
-	
 	naxx = {
 		574, -- Kel'Thuzad's Defeat 10
 		575, -- Kel'Thuzad's Defeat 25
@@ -110,7 +103,6 @@ local raid_achievements = {
 		2138, -- Glory of the Raider 25
 		1402, -- Realm First! Conqueror of Naxxramas
 	},
-
 	voa = {
 		1722, -- Archavon the Stone Watcher 10
 		3136, -- Emalon the Storm Watcher 10
@@ -175,7 +167,6 @@ local spec_names = {
 		DruidFeralCombat = "Feral Druid",
 		DruidRestoration = "Restoration Druid"
 	},
-
 	short = {
 		WarriorArms = "Arms Warri",
 		WarriorFury = "Fury Warri",
@@ -264,6 +255,8 @@ local function GetTalentTabPoints(i)
 	return pts;
 end
 
+-- Return the index of the player's active spec.
+---@return integer
 function RaidBrowser.stats.active_spec_index()
 	local indices = std.algorithm.transform({ 1, 2, 3 }, GetTalentTabPoints)
 	local i, _ = std.algorithm.max_of(indices);
@@ -287,13 +280,12 @@ function RaidBrowser.stats.active_spec()
 			return 'Feral Druid (DPS)'
 		end
 	end
-	
+
 	-- If we're a death knight, then we need to distinguish between tank and dps.
 	if class == 'DEATHKNIGHT' then
-		local toughness_talent = 3;
-		local _, _, _, _, points = GetTalentInfo(2, toughness_talent)
-		local _, _, _, _, points2 = GetTalentInfo(1, 3)
-		if points > 3 and points2 > 3 then
+		local _, _, _, _, toughness_points = GetTalentInfo(2, 3)
+		local _, _, _, _, blade_barrier_talent = GetTalentInfo(1, 3)
+		if toughness_points > 3 and blade_barrier_talent > 3 then
 			return spec_name .. ' (Tank)'
 		else
 			return spec_name .. ' (DPS)'
@@ -328,14 +320,12 @@ function RaidBrowser.stats.raid_lock_info(raid_info)
 	return false, nil;
 end
 
----Returns for the currently active raidset, the spec name and its gearscore.
----@return string, integer
----@nodiscard
-function RaidBrowser.stats.get_active_raidset()
-	local spec = nil;
-	local gs = nil;
+-- Try to obtain the player's gearscore.
+---@return number? gs The player's gearscore
+function RaidBrowser.stats.gear_score()
+	local gs = nil
 
-	-- Retrieve gearscore if GearScoreLite is installed
+	-- Retrieve gearscore if a GearScore addon is installed
 	if GearScore_GetScore then
 		gs = GearScore_GetScore(UnitName('player'), 'player');
 
@@ -347,21 +337,20 @@ function RaidBrowser.stats.get_active_raidset()
 		end
 	end
 
-	spec = RaidBrowser.stats.active_spec();
+	return gs
+end
+
+---Returns for the currently active raidset, the spec name and its gearscore.
+---@return string, integer?
+---@nodiscard
+function RaidBrowser.stats.get_active_raidset()
+	local spec = RaidBrowser.stats.active_spec();
+	local gs = RaidBrowser.stats.gear_score()
 	return spec, gs;
 end
 
----@param set 'Primary'|'Secondary'
----@return string?, integer?
----@nodiscard
-function RaidBrowser.stats.get_raidset(set)
-	local raidset = RaidBrowserCharacterRaidsets[set];
-	if not raidset then return end
-	return raidset.spec, raidset.gs;
-end
-
----@param set 'Primary'|'Secondary'
----@return string?, integer?
+---@param set 'Active' | 'Primary' | 'Secondary' | 'Both'
+---@return string?, integer?, string?, integer?
 ---@nodiscard
 function RaidBrowser.stats.get_raidset(set)
 	local raidset1 = RaidBrowserCharacterRaidsets['Primary'] or nil;
@@ -369,7 +358,7 @@ function RaidBrowser.stats.get_raidset(set)
 	if not (raidset1 or raidset2) then
 		return
 	elseif (raidset1 and raidset2) then
-		return raidset1.spec , raidset1.gs , raidset2.spec , raidset2.gs
+		return raidset1.spec, raidset1.gs, raidset2.spec, raidset2.gs
 	elseif raidset1 then
 		return raidset1.spec, raidset1.gs
 	elseif raidset2 then
@@ -381,7 +370,6 @@ end
 function RaidBrowser.stats.current_raidset()
 	if RaidBrowserCharacterCurrentRaidset == 'Active' then
 		return RaidBrowser.stats.get_active_raidset();
-		
 	elseif RaidBrowserCharacterCurrentRaidset == 'Both' then
 		return RaidBrowser.stats.get_raidsets();
 	end
@@ -412,7 +400,7 @@ end
 function RaidBrowser.stats.build_join_message(raid_name)
 	local message = 'inv ';
 	local class = UnitClass("player");
-	
+
 	local spec1, gs1, spec2, gs2 = RaidBrowser.stats.current_raidset();
 	if spec1 and gs1 then
 		message = message .. gs1 .. 'gs ' .. spec1
@@ -424,10 +412,10 @@ function RaidBrowser.stats.build_join_message(raid_name)
 		message = message .. gs2 .. 'gs ' .. spec2
 	end
 	message = message .. ' ' .. class;
-	
+
 	-- Remove difficulty and raid_name size from the string
 	raid_name = string.gsub(raid_name, '[1|2][0|5](%w*)', '');
-	
+
 	-- Find the best possible achievement for the given raid_name.
 	local achieve_id = find_best_achievement(raid_name);
 	if achieve_id then

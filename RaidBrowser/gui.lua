@@ -54,8 +54,9 @@ local function set_sort(column)
 end
 
 
-function raid_browser.set_sort(column)
-    set_sort(column)
+---@param column string
+function RaidBrowser.set_sort(column)
+	set_sort(column)
 end
 
 ---@return table
@@ -138,7 +139,8 @@ end
 LFRBrowseFrameRaidDropDown:Hide()
 
 search_button:SetText('Find Raid')
-search_button:SetScript('OnClick', function() end)
+search_button:SetScript('OnClick', function()
+end)
 
 local function clear_highlights()
 	for i = 1, NUM_LFR_LIST_BUTTONS do
@@ -210,8 +212,6 @@ local function assign_lfr_button(button, host_name, lfm_info, index)
 	button.damageIcon:SetTexture("Interface\\LFGFrame\\LFGRole");
 	button.partyIcon:SetTexture("Interface\\LFGFrame\\LFGRole");
 
-button:SetScript("OnDoubleClick", on_join)
-
 	button:SetScript('OnEnter',
 		function(lfr_button)
 			GameTooltip:SetOwner(lfr_button, 'ANCHOR_RIGHT');
@@ -254,7 +254,6 @@ local function insert_lfm_button(button, index)
 
 		count = count + 1;
 	end
-
 end
 
 local function update_buttons()

@@ -120,15 +120,15 @@ local menu = {
 }
 
 -- Get the menu option text
----@param option 'Primary'|'Secondary'
+---@param option 'Active' | 'Primary' | 'Secondary' | 'Both'
 ---@return string
 local function get_option_active(option)
-    local spec, gs = raid_browser.stats.active_spec(), GearScore_GetScore(UnitName('player'), 'player');
-    return (option .. ': ' .. gs .. ' ' .. spec)
+    local spec, gs = RaidBrowser.stats.active_spec(), RaidBrowser.stats.gear_score()
+    return option .. ': ' .. gs .. ' ' .. spec
 end
 
 -- Get the menu option text
----@param option 'Primary'|'Secondary'
+---@param option 'Active' | 'Primary' | 'Secondary' | 'Both'
 ---@return string
 local function get_option_text(option)
 	local spec, _ = RaidBrowser.stats.get_raidset(option);
