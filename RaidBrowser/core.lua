@@ -51,13 +51,13 @@ local raid_patterns_template = {
 		'<raid>' .. csep .. '<size>' .. csep .. 'm?a?n?' .. csep .. 'f?u?l?l?' .. csep .. 'hc?',
 		sep .. 'hc?' .. csep .. '<raid>' .. csep .. '<size>',
 		'<raid>' .. csep .. 'hc?' .. csep .. '<size>',
-		sep .. '<size>' .. csep .. 'ma?n?' .. csep .. '<raid>' .. sep,
+		sep .. '<size>' .. csep .. 'ma?n?' .. csep .. '<raid>' .. csep .. 'hc?'.. sep,
 
-		'^<size>' .. csep .. '<raid>' .. sep,
+		'^<size>' .. csep .. '<raid>' .. csep .. 'hc?'.. sep,
 	},
 
 	nm = {
-		'<raid>' .. csep .. '<size>' .. csep .. 'm?a?n?' .. csep .. 'f?u?l?l?' .. csep .. 'n?m?' .. csep,
+		'<raid>' .. csep .. '<size>' .. csep .. 'm?a?n?' .. csep .. 'f?u?l?l?' .. csep .. 'n?m?' .. sep,
 		sep .. 'nm?' .. csep .. '<raid>' .. csep .. '<size>',
 		'<raid>' .. csep .. 'n?m?' .. csep .. '<size>',
 		sep .. '<size>' .. csep .. 'ma?n?' .. csep .. '<raid>' .. sep,
@@ -80,13 +80,11 @@ local raid_patterns_template = {
 ---@nodiscard
 local function create_pattern_from_template(raid_name_pattern, size, difficulty)
 
-	local size_pattern = '1[0p]'
-	if size == 10 then
-		size_pattern = '1[0o]';
-	elseif size == 25 then
-		size_pattern = '2[5p]';
+	local size_pattern = '1[0Op]+'
+	if size == 25 then
+		size_pattern = '2[5p]+';
 	elseif size == 40 then
-		size_pattern = '4[0p]';
+		size_pattern = '4[0Op]+';
 	end
 
 	if not difficulty then
@@ -212,11 +210,12 @@ local raid_list = {
 
 	{
         name = 'icc10wq',
+		prioritized = true,
         instance_name = 'Icecrown Citadel',
         size = 10,
         patterns = {
             'icc1?0?' .. csep .. 'weekly',
-            'Lord Marrowgar' .. wtext .. '!',
+            'Lord Marrowgar' .. wtext .. '[!%]]',
             create_quest_pattern(24590),
         },
     },
@@ -277,11 +276,12 @@ local raid_list = {
 
 	{
 		name = 'toc10wq',
+		prioritized = true,
 		instance_name = 'Trial of the Crusader',
 		size = 10,
 		patterns = {
 			'tog?c1?0?' .. csep .. 'weekly',
-			'Lord Jaraxxus' .. wtext .. '!',
+			'Lord Jaraxxus' .. wtext .. '[!%]]',
 			create_quest_pattern(24589),
 		},
 	},
@@ -353,7 +353,11 @@ local raid_list = {
 		name = 'voa25',
 		instance_name = 'Vault of Archavon',
 		size = 25,
-		patterns = create_pattern_from_template('voa', 25, 'simple'),
+		patterns = std.algorithm.copy_back(
+			create_pattern_from_template('voa', 25, 'simple'),
+			{
+				'voa' .. sep
+			})
 	},
 
 	{
@@ -380,17 +384,18 @@ local raid_list = {
 
 	{
 		name = 'ulduar10wq',
+		prioritized = true,
 		instance_name = 'Ulduar',
 		size = 10,
 		patterns = {
 			'ull?a?d[au]?[au]?r?1?0?' .. csep .. 'weekly',
-			'Flame Leviathan' .. wtext .. '!',
+			'Flame Leviathan' .. wtext .. '[!%]]',
 			create_quest_pattern(24585),
-			'Ignis' .. wtext .. '!',
+			'Ignis' .. wtext .. '[!%]]',
 			create_quest_pattern(24587),
-			'Razorscale' .. wtext .. '!',
+			'Razorscale' .. wtext .. '[!%]]',
 			create_quest_pattern(24586),
-			'XT-002' .. wtext .. '!',
+			'XT-002' .. wtext .. '[!%]]',
 			create_quest_pattern(24588),
 		},
 	},
@@ -423,11 +428,12 @@ local raid_list = {
 
 	{
 		name = 'os10wq',
+		prioritized = true,
 		instance_name = 'The Obsidian Sanctum',
 		size = 10,
 		patterns = {
 			'os1?0?' .. csep .. 'weekly',
-			'Sartharion' .. wtext .. '!',
+			'Sartharion' .. wtext .. '[!%]]',
 			create_quest_pattern(24579),
 		}
 	},
@@ -458,34 +464,20 @@ local raid_list = {
 
 	{
 		name = 'naxx10wq',
+		prioritized = true,
 		instance_name = 'Naxxramas',
 		size = 10,
 		patterns = {
 			'naxx?1?0?' .. csep .. 'weekly',
-			'Anub\'Rekhan' .. wtext .. '!',
+			'Anub\'Rekhan' .. wtext .. '[!%]]',
 			create_quest_pattern(24580),
-			'Noth' .. wtext .. '!',
+			'Noth' .. wtext .. '[!%]]',
 			create_quest_pattern(24581),
-			'Razuvious' .. wtext .. '!',
+			'Razuvious' .. wtext .. '[!%]]',
 			create_quest_pattern(24582),
-			'Patchwerk' .. wtext .. '!',
+			'Patchwerk' .. wtext .. '[!%]]',
 			create_quest_pattern(24583),
 		},
-	},
-
-	{
-		name = 'eoe10',
-		instance_name = 'The Eye of Eternity',
-		size = 10,
-		patterns = std.algorithm.copy_back(
-			create_pattern_from_template('eoe', 10, 'simple'),
-			{
-				'malygo?s' .. csep .. '10',
-				'eoe' .. csep .. '10',
-				'A Poke In The Eye %(10 player%)',
-				create_achievement_pattern(1869),
-			}
-		),
 	},
 
 	{
@@ -496,7 +488,7 @@ local raid_list = {
 			create_pattern_from_template('eoe', 25, 'simple'),
 			{
 				'malygo?s' .. csep .. '25',
-				'eoe' .. csep .. '10',
+				'eoe' .. csep .. '25',
 				'A Poke In The Eye %(25 player%)',
 				create_achievement_pattern(1870),
 			}
@@ -504,12 +496,28 @@ local raid_list = {
 	},
 
 	{
+		name = 'eoe10',
+		instance_name = 'The Eye of Eternity',
+		size = 10,
+		patterns = std.algorithm.copy_back(
+			create_pattern_from_template('eoe', 10, 'simple'),
+			{
+				'malygo?s',
+				'eoe',
+				'A Poke In The Eye %(10 player%)',
+				create_achievement_pattern(1869),
+			}
+		),
+	},
+
+	{
 		name = 'eoe10wq',
+		prioritized = true,
 		instance_name = 'The Eye of Eternity',
 		size = 10,
 		patterns = {
 			'eoe1?0?' .. csep .. 'weekly',
-			'Malygos' .. wtext .. '!',
+			'Malygos' .. wtext .. '[!%]]',
 			create_quest_pattern(24584),
 		},
 	},
@@ -692,23 +700,21 @@ local role_patterns = {
 
 		'sh?a?d?o?w?' .. csep .. 'pri?e?st',
 		'pri?e?st' .. csep .. 'dps',
-		'sp',
+		'[^a-z]sp[^a-z]',
 
 		'elem?e?n?t?a?l?' .. csep .. 'shamm?[iy]?',
-		'mage',
+		'mage[^a-z]',
 
-		'boo?my?i?',
-		'boo?mki?n',
-		'boo?mi',
-		'boo?my',
-		'owl',
+		'boo?mm?[iy]?',
+		'boo?mm?ki?n',
+		'owl[^a-z]',
 		'ba?l?a?n?c?e?' .. csep .. 'd[ru][ud][iu]d?',
 
 		'rogu?e?' .. meta_or_sep,
 		'roug?e?' .. meta_or_sep,
 
 		'kitt?y',
-		'cat',
+		'cat[^a-z]',
 		'feral' .. csep .. 'cat' .. sep,
 		'feral' .. csep .. 'd?p?s?',
 
@@ -723,7 +729,8 @@ local role_patterns = {
 	},
 
 	healer = {
-		'h[ea][ea]?l[ers]*', -- LF healer
+		'h[ea][ea]l[ers]*', -- LF healer
+		'heler',
 
 		're?s?t?o?' .. csep .. 'd[ru][ud][iu]d?', -- LF rdruid/rdudu
 		meta_or_sep .. 'r' .. csep .. 'd[ru][ud][iu]d?', -- LF rdruid/rdudu
@@ -732,8 +739,8 @@ local role_patterns = {
 		're?s?t?o?' .. csep .. 'shamm?y?', -- LF rsham
 		meta_or_sep .. 'r' .. csep .. 'shamm?y?', -- LF rsham
 
-		'disco?' .. csep .. 'pri?e?st', -- disc priest
-		'dpri?e?st', -- disc priest
+		'disco?[^a-z]',
+		'dpri?e?st[^a-z]', -- disc priest
 		meta_or_sep .. 'd' .. csep .. 'pri?e?st', -- disc priest
 
 		'ho?l?l?y?' .. csep .. 'pala?d?i?n?', -- LF holy pala
@@ -744,7 +751,7 @@ local role_patterns = {
 		role_sep .. '[mo]t' .. role_sep, -- Need MT/OT
 		role_sep .. '[mo]t' .. csep .. '$', -- Need MT/OT
 		'ta*n+a?k+s?', -- NEED TANKS
-		'b[ea]*rs?',
+		'b[ea][ea]+rs?',
 		'prote?c?t?i?o?n?', -- NEED PROT PALA/WARRI
 	},
 }
@@ -848,48 +855,52 @@ local guild_patterns = {
 local lfg_patterns = {
 	'^' .. csep .. 'lfg' .. non_meta .. meta_raid,
 	'^' .. csep .. meta_gs .. non_meta .. meta_role .. non_meta .. 'looking' .. csep .. 'for' .. non_meta .. meta_raid,
-	'^' .. csep .. meta_role .. non_meta .. meta_gs .. non_meta .. 'looking' .. csep .. 'for' .. non_meta .. meta_raid,
+	meta_role .. non_meta .. meta_gs .. non_meta .. 'looking' .. csep .. 'for' .. non_meta .. meta_raid,
 
 	'^' .. csep .. meta_gs .. non_meta .. meta_role .. non_meta .. 'lf' .. non_meta .. meta_raid,
-	'^' .. csep .. meta_role .. non_meta .. meta_gs .. non_meta .. 'lf' .. non_meta .. meta_raid,
+	meta_role .. non_meta .. meta_gs .. non_meta .. 'lf' .. non_meta .. meta_raid,
 };
 
 ---@param message string
 ---@param patterns table
 ---@return boolean
 ---@nodiscard
-local function matches_any_pattern(message, patterns)
+local function matches_any_pattern(message, patterns, debug)
 	return std.algorithm.find_if(patterns, function(pattern)
-		return message:find(pattern);
+		local result = message:find(pattern)
+		if debug and result then
+			RaidBrowser:Print("Pattern matched: " .. pattern)
+		end
+		return result;
 	end) ~= nil;
 end
 
 ---@param message string
 ---@return boolean
 ---@nodiscard
-local function is_lfm_message(message)
-	return matches_any_pattern(message, lfm_patterns);
+local function is_lfm_message(message, debug)
+	return matches_any_pattern(message, lfm_patterns, debug);
 end
 
 ---@param message string
 ---@return boolean
 ---@nodiscard
-local function is_guild_recruitment(message)
-	return matches_any_pattern(message, guild_recruitment_patterns);
+local function is_guild_recruitment(message, debug)
+	return matches_any_pattern(message, guild_recruitment_patterns, debug);
 end
 
 ---@param message string
 ---@return boolean
 ---@nodiscard
-local function is_lfg_message(message)
-	return matches_any_pattern(message, lfg_patterns);
+local function is_lfg_message(message, debug)
+	return matches_any_pattern(message, lfg_patterns, debug);
 end
 
 ---@param message string
 ---@return boolean
 ---@nodiscard
-local function is_trade_message(message)
-	return matches_any_pattern(message, trade_message_patterns);
+local function is_trade_message(message, debug)
+	return matches_any_pattern(message, trade_message_patterns, debug);
 end
 
 -- Basic http pattern matching for streaming sites and etc.
@@ -925,13 +936,16 @@ end
 ---@param role "healer"|"dps"|"tank"
 ---@return table, string
 ---@nodiscard
-local function lex_roles(roles, message, role)
+local function lex_roles(roles, message, role, debug)
 	local found = false;
 
 	for _, pattern in ipairs(role_patterns[role]) do
 		local m, result = message:gsub(pattern, meta_role);
 
 		if result > 0 then
+			if debug then
+				RaidBrowser:Print('Role pattern found for '.. role .. ': ' .. pattern)
+			end
 			message = m;
 			found = true;
 		end
@@ -986,29 +1000,46 @@ end
 ---@param message string
 ---@return table?, string?, integer?
 ---@nodiscard
-function RaidBrowser.lex_raid_info(message)
+function RaidBrowser.lex_raid_info(message, debug)
 
 	local raid;
 	local num_unique_raids = 0;
+	local raid_pattern_index;
 	for _, r in ipairs(raid_list) do
+		local message_index;
 		local index = std.algorithm.find_if(r.patterns, function(pattern)
-			local m, result = message:gsub(pattern:lower(), meta_raid);
+			pattern = pattern:lower();
+			message_index = message:find(pattern);
+			
+			if message_index ~= nil then
+				local m, result = message:gsub(pattern, meta_raid);
 
-			if result > 0 then
-				message = m;
-				return true;
+				if result > 0 then
+					if debug then
+						RaidBrowser:Print("Raid found! " .. r.name .. ": " .. pattern);
+					end
+					message = m;
+					return true;
+				end
 			end
 
 			return false;
 		end);
 
 		if index then
-			-- only count as new unique raid, if previously found raid was a different size or zone
-			if not raid or (raid.size ~= r.size or RaidBrowser.get_short_raid_name(r.name) ~= RaidBrowser.get_short_raid_name(raid.name)) then
+			-- only count as new unique raid, if previously found raid was a different zone
+			if not raid or (RaidBrowser.get_short_raid_name(r.name) ~= RaidBrowser.get_short_raid_name(raid.name)) then
 				num_unique_raids = num_unique_raids + 1;
+				if debug and raid then
+					RaidBrowser:Print("Mutliple raids found! " .. r.name .. " - " .. raid.name)
+				end
 			end
-			-- but return last found raid to favor nm difficulty (hc achievements are often posted for nm raids, because once u have hc u cannot post the nm) and wq raids
-			raid = r;
+			
+			-- overwrite raid choice only if new raid is prioritized or found earlier in message (as people post hc achievements after declaring nm)
+			if (raid_pattern_index == nil or (raid and r.prioritized and not raid.prioritized) or raid_pattern_index > message_index) then
+				raid_pattern_index = message_index
+				raid = r;
+			end
 		end
 	end
 
@@ -1046,7 +1077,7 @@ end
 ---@param message any
 ---@return string?, table?, table?, string?
 ---@nodiscard
-function RaidBrowser.lex_and_extract(message)
+function RaidBrowser.lex_and_extract(message, debug)
 	if not message then return end
 	message = message:lower();
 	message = remove_http_links(message);
@@ -1062,7 +1093,7 @@ function RaidBrowser.lex_and_extract(message)
 	message = lex_guild_recruitments(message);
 
 	-- Get the raid_info from the message
-	local raid_info, raid_lexed_message, num_unique_raids = RaidBrowser.lex_raid_info(message);
+	local raid_info, raid_lexed_message, num_unique_raids = RaidBrowser.lex_raid_info(message, debug);
 	if not raid_info or not raid_lexed_message or not num_unique_raids then return end
 
 	if has_guild_recruitment_production(raid_lexed_message) then return end
@@ -1076,9 +1107,9 @@ function RaidBrowser.lex_and_extract(message)
 	local roles = {};
 
 	if not raid_lexed_message:find('lfm? all ') and not raid_lexed_message:find('nee?d all ') then
-		roles, raid_lexed_message = lex_roles(roles, raid_lexed_message, 'dps');
-		roles, raid_lexed_message = lex_roles(roles, raid_lexed_message, 'tank');
-		roles, raid_lexed_message = lex_roles(roles, raid_lexed_message, 'healer');
+		roles, raid_lexed_message = lex_roles(roles, raid_lexed_message, 'dps', debug);
+		roles, raid_lexed_message = lex_roles(roles, raid_lexed_message, 'tank', debug);
+		roles, raid_lexed_message = lex_roles(roles, raid_lexed_message, 'healer', debug);
 	end
 
 	-- If there is only an LFM message, then it is assumed that all roles are needed
@@ -1096,16 +1127,16 @@ end
 ---@param message string
 ---@return table?, table?, string?
 ---@nodiscard
-function RaidBrowser.raid_info(message)
-	local lexed_message, raid_info, roles, gs = RaidBrowser.lex_and_extract(message);
+function RaidBrowser.raid_info(message, debug)
+	local lexed_message, raid_info, roles, gs = RaidBrowser.lex_and_extract(message, debug);
 
 	if not lexed_message then return end
 
 	-- Any message that is lexed out to be an lfg is excluded (unfortunately near the end).
-	if is_lfg_message(lexed_message) then return end
+	if is_lfg_message(lexed_message, debug) then return end
 
 	-- Parse symbols to determine if the message is valid
-	if not is_lfm_message(lexed_message) then return end
+	if not is_lfm_message(lexed_message, debug) then return end
 
 	return raid_info, roles, gs or ' ';
 end

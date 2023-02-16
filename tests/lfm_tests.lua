@@ -10,7 +10,7 @@ local test_cases = {
 	{
 		message = 'LF [Lord Marrowgar Must Die!] NEED ALL',
 		should_fail = false,
-		raid = 'icc10nm',
+		raid = 'icc10wq',
 		roles = { 'dps', 'tank', 'healer' },
 		gs = ' '
 	},
@@ -18,7 +18,7 @@ local test_cases = {
 	{
 		message = '1 GOOD TANK 2 HEALS AND A COUPLE DPS  [Anub\'Rekhan Must Die!] W/ GS AND ROLE EASY WEEKLY',
 		should_fail = false,
-		raid = 'naxx10',
+		raid = 'naxx10wq',
 		roles = { 'dps', 'tank', 'healer' },
 		gs = ' ',
 	},
@@ -26,7 +26,7 @@ local test_cases = {
 	{
 		message = 'LFM 1 GOOD TANK 2 HEALS 2 DPS  [Anub\'Rekhan Must Die!] EASY FAST WEEKLY W GS AND ROLE',
 		should_fail = false,
-		raid = 'naxx10',
+		raid = 'naxx10wq',
 		roles = { 'dps', 'tank', 'healer' },
 		gs = ' ',
 	},
@@ -77,7 +77,7 @@ local test_cases = {
 	{
 		message = 'Just Dps  [Sartharion Must Die!] >>>Bag Satchel Resserved <<<Dps need',
 		should_fail = false,
-		raid = 'os10',
+		raid = 'os10wq',
 		roles = { 'dps' },
 		gs = ' ',
 	},
@@ -146,7 +146,7 @@ local test_cases = {
 	{
 		message = 'OS10 NEED 1HEAL 2DPS	[Sartharion Must Die!]',
 		should_fail = false,
-		raid = 'os10',
+		raid = 'os10wq',
 		roles = { 'dps', 'healer' },
 		gs = ' ',
 	},
@@ -955,7 +955,7 @@ local test_cases = {
 	{
 		message = '[Sartharion Must Die!] OS 10 heal/dps 4.5k+',
 		should_fail = false,
-		raid = 'os10',
+		raid = 'os10wq',
 		roles = { 'healer', 'dps' },
 		gs = '4.5',
 	},
@@ -1071,7 +1071,7 @@ local test_cases = {
 	{
 		message = 'LFM  [Anub\'Rekhan Must Die!] NEED ALL',
 		should_fail = false,
-		raid = 'naxx10',
+		raid = 'naxx10wq',
 		roles = { 'dps', 'healer', 'tank' },
 		gs = ' ',
 	},
@@ -1331,7 +1331,7 @@ local test_cases = {
 	{
 		message = 'NEW RUN [Sartharion Must Die!] 25er w me info !!',
 		should_fail = false,
-		raid = 'os25',
+		raid = 'os25wq',
 		roles = { 'tank', 'dps', 'healer' },
 		gs = ' ',
 	},
@@ -1398,7 +1398,7 @@ local test_cases = {
 	{
 		message = 'LFM 10 man [Sartharion Must Die] - Need 1x Tank & 2x DPS - (Can share quest) Group Loot',
 		should_fail = false,
-		raid = 'os10',
+		raid = 'os10wq',
 		roles = { 'tank', 'dps' },
 		gs = ' '
 	},
@@ -1527,7 +1527,9 @@ end
 
 ---@param test table
 local function run_test_case(test)
-	local raid_info, roles, gs = RaidBrowser.raid_info(test.message)
+	local verbose_logging = true
+	RaidBrowser.Print("Testing: " .. test.message)
+	local raid_info, roles, gs = RaidBrowser.raid_info(test.message, verbose_logging)
 
 	local detected = nil;
 	if raid_info and roles and gs then
@@ -1566,14 +1568,29 @@ local function run_test_case(test)
 		end
 	end
 
+	RaidBrowser.Print("Test successful!")
+
 	return true;
 end
 
--- Run all the test cases
-local test_results = std.algorithm.transform(test_cases, run_test_case);
+RaidBrowser.test = function(m)
+	if m == nil then
+		-- Run all the test cases
+		local test_results = std.algorithm.transform(test_cases, run_test_case);
+		
+		-- Count the number of failed tests.
+		local number_failed_tests = #test_cases - std.algorithm.count(test_results, true);
+		
+		RaidBrowser:Print('All unit tests executed.');
+		RaidBrowser:Print('There were ' .. number_failed_tests .. '/' .. #test_cases .. ' failed unit tests!');
+		print('There were ' .. number_failed_tests .. '/' .. #test_cases .. ' failed unit tests!')
+	else
+		local test = {}
+		test.message = m
+		test.should_fail = true
+		run_test_case(test)
+		RaidBrowser:Print('Test executed.');
+	end
+end
 
--- Count the number of failed tests.
-local number_failed_tests = #test_cases - std.algorithm.count(test_results, true);
-
-RaidBrowser:Print('All unit tests executed.');
-RaidBrowser:Print('There were ' .. number_failed_tests .. '/' .. #test_cases .. ' failed unit tests!');
+RaidBrowser.test()
