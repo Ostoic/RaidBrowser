@@ -26,6 +26,8 @@ local meta_or_sep = '[^' .. meta_char .. ']?' .. '[' .. sep .. ']?';
 
 local non_meta = '[^' .. meta_char .. ']*';
 
+local lfm = 'l[fm]%d*[fm]?'
+
 local function make_meta(text)
 	return meta_char .. text .. meta_char;
 end
@@ -49,13 +51,13 @@ local raid_patterns_template = {
 		'<raid>' .. csep .. '<size>' .. csep .. 'm?a?n?' .. csep .. 'f?u?l?l?' .. csep .. 'hc?',
 		sep .. 'hc?' .. csep .. '<raid>' .. csep .. '<size>',
 		'<raid>' .. csep .. 'hc?' .. csep .. '<size>',
-		sep .. '<size>' .. csep .. 'ma?n?' .. csep .. '<raid>' .. sep,
+		sep .. '<size>' .. csep .. 'ma?n?' .. csep .. '<raid>' .. csep .. 'hc?'.. sep,
 
-		'^<size>' .. csep .. '<raid>' .. sep,
+		'^<size>' .. csep .. '<raid>' .. csep .. 'hc?'.. sep,
 	},
 
 	nm = {
-		'<raid>' .. csep .. '<size>' .. csep .. 'm?a?n?' .. csep .. 'f?u?l?l?' .. csep .. 'n?m?' .. csep,
+		'<raid>' .. csep .. '<size>' .. csep .. 'm?a?n?' .. csep .. 'f?u?l?l?' .. csep .. 'n?m?' .. sep,
 		sep .. 'nm?' .. csep .. '<raid>' .. csep .. '<size>',
 		'<raid>' .. csep .. 'n?m?' .. csep .. '<size>',
 		sep .. '<size>' .. csep .. 'ma?n?' .. csep .. '<raid>' .. sep,
@@ -78,13 +80,11 @@ local raid_patterns_template = {
 ---@nodiscard
 local function create_pattern_from_template(raid_name_pattern, size, difficulty)
 
-	local size_pattern = '1[0p]'
-	if size == 10 then
-		size_pattern = '1[0o]';
-	elseif size == 25 then
-		size_pattern = '2[5p]';
+	local size_pattern = '1[0Op]+'
+	if size == 25 then
+		size_pattern = '2[5p]+';
 	elseif size == 40 then
-		size_pattern = '4[0p]';
+		size_pattern = '4[0Op]+';
 	end
 
 	if not difficulty then
@@ -97,6 +97,14 @@ local function create_pattern_from_template(raid_name_pattern, size, difficulty)
 		pattern = pattern:gsub('<size>', size_pattern);
 		return pattern;
 	end);
+end
+
+local function create_achievement_pattern(achievement_id)
+	return "achievement:" .. tostring(achievement_id) .. ".+%]"
+end
+
+local function create_quest_pattern(quest_id)
+	return "quest:" .. tostring(quest_id) .. ".+%]"
 end
 
 local raid_list = {
@@ -136,7 +144,15 @@ local raid_list = {
 		size = 10,
 		patterns = std.algorithm.copy_back(
 			create_pattern_from_template('icc', 10, 'hc'),
-			{ 'bane of the fallen king' }
+			{ 
+				'Heroic: Storming the Citadel %(10 player%)',
+				create_achievement_pattern(4628),
+				'Bane of the Fallen King',
+				'[^a-z]Bane[^a-z]',
+				create_achievement_pattern(4583),
+				'Heroic: Fall of the Lich King %(10 player%)',
+				create_achievement_pattern(4636),
+			}
 		)
 	},
 
@@ -146,7 +162,15 @@ local raid_list = {
 		size = 25,
 		patterns = std.algorithm.copy_back(
 			create_pattern_from_template('icc', 25, 'hc'),
-			{ 'the light of dawn' }
+			{ 
+				'Heroic: Storming the Citadel %(25 player%)',
+				create_achievement_pattern(4632),
+				'The Light of Dawn',
+				'[^a-z]LoD[^a-z]',
+				create_achievement_pattern(4584),
+				'Heroic: Fall of the Lich King %(25 player%)',
+				create_achievement_pattern(4637),
+			}
 		)
 	},
 
@@ -154,15 +178,47 @@ local raid_list = {
 		name = 'icc10nm',
 		instance_name = 'Icecrown Citadel',
 		size = 10,
-		patterns = create_pattern_from_template('icc', 10, 'nm'),
+		patterns = std.algorithm.copy_back(
+			create_pattern_from_template('icc', 10, 'nm'),
+			{ 
+				'Storming the Citadel %(10 player%)',
+				create_achievement_pattern(4531),
+				'The Frozen Throne %(10 player%)',
+				create_achievement_pattern(4530),
+				'Fall of the Lich King %(10 player%)',
+				create_achievement_pattern(4532),
+			}
+		)
 	},
 
 	{
 		name = 'icc25nm',
 		instance_name = 'Icecrown Citadel',
 		size = 25,
-		patterns = create_pattern_from_template('icc', 25, 'nm'),
+		patterns = std.algorithm.copy_back(
+			create_pattern_from_template('icc', 25, 'nm'),
+			{ 
+				'Storming the Citadel %(25 player%)',
+				create_achievement_pattern(4604),
+				'The Frozen Throne %(25 player%)',
+				create_achievement_pattern(4597),
+				'Fall of the Lich King %(25 player%)',
+				create_achievement_pattern(4608),
+			}
+		)
 	},
+
+	{
+        name = 'icc10wq',
+		prioritized = true,
+        instance_name = 'Icecrown Citadel',
+        size = 10,
+        patterns = {
+            'icc1?0?' .. csep .. 'weekly',
+            'Lord Marrowgar' .. wtext .. '[!%]]',
+            create_quest_pattern(24590),
+        },
+    },
 
 	{
 		name = 'toc10hc',
@@ -172,7 +228,8 @@ local raid_list = {
 			create_pattern_from_template('toc', 10, 'hc'),
 			{
 				'togc' .. csep .. '10',
-				--'%[call of the grand crusade %(10 player%)%]'
+				'Call of the Grand Crusade %(10 player%)',
+				create_achievement_pattern(3918),
 			}-- Trial of the grand crusader (togc) refers to heroic toc
 		),
 	},
@@ -185,7 +242,8 @@ local raid_list = {
 			create_pattern_from_template('toc', 25, 'hc'),
 			{
 				'togc' .. csep .. '25',
-				--'%[call of the grand crusade %(25 player%)%]'
+				'Call of the Grand Crusade %(25 player%)',
+				create_achievement_pattern(3812),
 			}-- Trial of the grand crusader (togc) refers to heroic toc
 		),
 	},
@@ -196,7 +254,10 @@ local raid_list = {
 		size = 10,
 		patterns = std.algorithm.copy_back(
 			create_pattern_from_template('toc', 10, 'nm'),
-			{ '%[call of the crusade %(10 player%)%]' }
+			{ 
+				'Call of the Crusade %(10 player%)',
+				create_achievement_pattern(3917),
+			}
 		),
 	},
 
@@ -206,15 +267,37 @@ local raid_list = {
 		size = 25,
 		patterns = std.algorithm.copy_back(
 			create_pattern_from_template('toc', 25, 'nm'),
-			{ '%[call of the crusade %(25 player%)%]' }
+			{ 
+				'Call of the Crusade %(25 player%)',
+				create_achievement_pattern(3916),
+			}
 		),
+	},
+
+	{
+		name = 'toc10wq',
+		prioritized = true,
+		instance_name = 'Trial of the Crusader',
+		size = 10,
+		patterns = {
+			'tog?c1?0?' .. csep .. 'weekly',
+			'Lord Jaraxxus' .. wtext .. '[!%]]',
+			create_quest_pattern(24589),
+		},
 	},
 
 	{
 		name = 'rs10hc',
 		instance_name = 'The Ruby Sanctum',
 		size = 10,
-		patterns = create_pattern_from_template('rs', 10, 'hc')
+		patterns = std.algorithm.copy_back(
+			create_pattern_from_template('rs', 10, 'hc'),
+			{
+				'ruby' .. csep .. 'sanctum' .. csep .. '10' .. wtext .. 'hc',
+				'Heroic: The Twilight Destroyer %(10 player%)',
+				create_achievement_pattern(4818),
+			}
+		),
 	},
 
 	{
@@ -224,7 +307,9 @@ local raid_list = {
 		patterns = std.algorithm.copy_back(
 			create_pattern_from_template('rs', 25, 'hc'),
 			{
-				'ruby' .. csep .. 'sanctum' .. csep .. 25
+				'ruby' .. csep .. 'sanctum' .. csep .. '25' .. wtext .. 'hc',
+				'Heroic: The Twilight Destroyer %(25 player%)',
+				create_achievement_pattern(4816),
 			}
 		),
 	},
@@ -236,7 +321,9 @@ local raid_list = {
 		patterns = std.algorithm.copy_back(
 			create_pattern_from_template('rs', 10, 'nm'),
 			{
-				'ruby' .. csep .. 'sanctum' .. csep .. 10
+				'ruby' .. csep .. 'sanctum' .. csep .. '10',
+				'The Twilight Destroyer %(10 player%)',
+				create_achievement_pattern(4817),
 			}
 		),
 	},
@@ -246,8 +333,12 @@ local raid_list = {
 		instance_name = 'The Ruby Sanctum',
 		size = 25,
 		patterns = std.algorithm.copy_back(
-			{ ' rs 25n ' },
-			create_pattern_from_template('rs', 25, 'nm')
+			create_pattern_from_template('rs', 25, 'nm'),
+			{
+				'ruby' .. csep .. 'sanctum' .. csep .. '25',
+				'The Twilight Destroyer %(25 player%)',
+				create_achievement_pattern(4815),
+			}
 		)
 	},
 
@@ -262,7 +353,11 @@ local raid_list = {
 		name = 'voa25',
 		instance_name = 'Vault of Archavon',
 		size = 25,
-		patterns = create_pattern_from_template('voa', 25, 'simple'),
+		patterns = std.algorithm.copy_back(
+			create_pattern_from_template('voa', 25, 'simple'),
+			{
+				'voa' .. sep
+			})
 	},
 
 	{
@@ -271,6 +366,8 @@ local raid_list = {
 		size = 10,
 		patterns = {
 			'ull?a?d[au]?[au]?r?' .. csep .. '10',
+			'The Siege of Ulduar %(10 player%)',
+			create_achievement_pattern(2886),
 		},
 	},
 
@@ -280,7 +377,27 @@ local raid_list = {
 		size = 25,
 		patterns = {
 			'ull?a?d[au]?[au]?r?' .. csep .. '25',
+			'The Siege of Ulduar %(25 player%)',
+			create_achievement_pattern(2887),
 		}
+	},
+
+	{
+		name = 'ulduar10wq',
+		prioritized = true,
+		instance_name = 'Ulduar',
+		size = 10,
+		patterns = {
+			'ull?a?d[au]?[au]?r?1?0?' .. csep .. 'weekly',
+			'Flame Leviathan' .. wtext .. '[!%]]',
+			create_quest_pattern(24585),
+			'Ignis' .. wtext .. '[!%]]',
+			create_quest_pattern(24587),
+			'Razorscale' .. wtext .. '[!%]]',
+			create_quest_pattern(24586),
+			'XT-002' .. wtext .. '[!%]]',
+			create_quest_pattern(24588),
+		},
 	},
 
 	{
@@ -289,7 +406,10 @@ local raid_list = {
 		size = 10,
 		patterns = std.algorithm.copy_back(
 			create_pattern_from_template('os', 10, 'simple'),
-			{ 'sartharion must die!' }
+			{ 
+				'Besting the Black Dragonflight %(10 player%)',
+				create_achievement_pattern(1876),
+			}
 		),
 	},
 
@@ -299,11 +419,23 @@ local raid_list = {
 		size = 25,
 		patterns = std.algorithm.copy_back(
 			create_pattern_from_template('os', 25, 'simple'),
-			{
-				'%[sartharion must die!%]' .. csep .. '25',
-				csep .. '25' .. '%[sartharion must die%!%]',
+			{ 
+				'Besting the Black Dragonflight %(25 player%)',
+				create_achievement_pattern(625),
 			}
 		)
+	},
+
+	{
+		name = 'os10wq',
+		prioritized = true,
+		instance_name = 'The Obsidian Sanctum',
+		size = 10,
+		patterns = {
+			'os1?0?' .. csep .. 'weekly',
+			'Sartharion' .. wtext .. '[!%]]',
+			create_quest_pattern(24579),
+		}
 	},
 
 	{
@@ -311,15 +443,10 @@ local raid_list = {
 		instance_name = 'Naxxramas',
 		size = 10,
 		patterns = {
-			'the fall of naxxramas %(10 player%)',
-			'noth' .. csep .. 'the' .. csep .. 'plaguebringer' .. csep .. 'must' .. csep .. 'die!',
-			'instructor' .. csep .. 'razuvious' .. csep .. 'must' .. csep .. 'die!',
+			'The Fall of Naxxramas %(10 player%)',
+			create_achievement_pattern(576),
 			'naxx?ramm?as' .. csep .. '10',
-			'anub\'rekhan' .. csep .. 'must' .. csep .. 'die!',
-			'patchwerk must die!',
 			'naxx?' .. csep .. '10',
-			'naxx' .. sep .. 'weekly',
-			'patchwerk' .. csep .. 'must' .. csep .. 'die!',
 		},
 	},
 
@@ -328,23 +455,29 @@ local raid_list = {
 		instance_name = 'Naxxramas',
 		size = 25,
 		patterns = {
-			'the fall of naxxramas %(25 player%)',
+			'The Fall of Naxxramas %(25 player%)',
+			create_achievement_pattern(577),
 			'naxx?ramm?as' .. csep .. '25',
 			'naxx?' .. csep .. '25',
 		},
 	},
 
 	{
-		name = 'eoe10',
-		instance_name = 'The Eye of Eternity',
+		name = 'naxx10wq',
+		prioritized = true,
+		instance_name = 'Naxxramas',
 		size = 10,
-		patterns = std.algorithm.copy_back(
-			create_pattern_from_template('eoe', 10, 'simple'),
-			{
-				' eoe' .. csep .. '1?0?',
-				'malygo?s' .. csep .. '1?0?',
-			}
-		),
+		patterns = {
+			'naxx?1?0?' .. csep .. 'weekly',
+			'Anub\'Rekhan' .. wtext .. '[!%]]',
+			create_quest_pattern(24580),
+			'Noth' .. wtext .. '[!%]]',
+			create_quest_pattern(24581),
+			'Razuvious' .. wtext .. '[!%]]',
+			create_quest_pattern(24582),
+			'Patchwerk' .. wtext .. '[!%]]',
+			create_quest_pattern(24583),
+		},
 	},
 
 	{
@@ -355,8 +488,38 @@ local raid_list = {
 			create_pattern_from_template('eoe', 25, 'simple'),
 			{
 				'malygo?s' .. csep .. '25',
+				'eoe' .. csep .. '25',
+				'A Poke In The Eye %(25 player%)',
+				create_achievement_pattern(1870),
 			}
 		),
+	},
+
+	{
+		name = 'eoe10',
+		instance_name = 'The Eye of Eternity',
+		size = 10,
+		patterns = std.algorithm.copy_back(
+			create_pattern_from_template('eoe', 10, 'simple'),
+			{
+				'malygo?s',
+				'eoe',
+				'A Poke In The Eye %(10 player%)',
+				create_achievement_pattern(1869),
+			}
+		),
+	},
+
+	{
+		name = 'eoe10wq',
+		prioritized = true,
+		instance_name = 'The Eye of Eternity',
+		size = 10,
+		patterns = {
+			'eoe1?0?' .. csep .. 'weekly',
+			'Malygos' .. wtext .. '[!%]]',
+			create_quest_pattern(24584),
+		},
 	},
 
 	{
@@ -364,8 +527,9 @@ local raid_list = {
 		instance_name = 'Onyxia\'s Lair',
 		size = 25,
 		patterns = {
-			"onyxia's lair (25 player)",
 			'onyx?i?a?' .. csep .. '25',
+			'Onyxia\'s Lair %(25 player%)',
+			create_achievement_pattern(4397),
 		},
 	},
 
@@ -374,8 +538,9 @@ local raid_list = {
 		instance_name = 'Onyxia\'s Lair',
 		size = 10,
 		patterns = {
-			"onyxia's lair (10 player)",
 			'onyx?i?a?' .. csep .. '10',
+			'Onyxia\'s Lair %(10 player%)',
+			create_achievement_pattern(4396),
 		},
 	},
 
@@ -386,6 +551,7 @@ local raid_list = {
 		patterns = {
 			'mount' .. csep .. 'hyjal',
 			'the' .. csep .. 'battle' .. csep .. 'for' .. csep .. 'mount' .. csep .. 'hyjal',
+			create_achievement_pattern(695),
 		},
 	},
 
@@ -395,6 +561,7 @@ local raid_list = {
 		size = 10,
 		patterns = {
 			'zul' .. csep .. '\'?' .. csep .. 'aman',
+			create_achievement_pattern(691),
 		},
 	},
 
@@ -406,6 +573,7 @@ local raid_list = {
 			'te*mpe*st' .. csep .. 'ke+p',
 			sep .. 'tk',
 			'tk' .. sep,
+			create_achievement_pattern(696),
 		},
 	},
 
@@ -417,6 +585,7 @@ local raid_list = {
 			'karaz?h?a?n?' .. csep .. '1?0?', -- karazhan
 			'^kz' .. csep .. '10',
 			sep .. 'kz' .. csep .. '10',
+			create_achievement_pattern(690),
 		},
 	},
 
@@ -426,6 +595,7 @@ local raid_list = {
 		size = 25,
 		patterns = {
 			'magt?h?e?r?i?d?o?n?\'*s*' .. csep .. 'lai?r',
+			create_achievement_pattern(693),
 		},
 	},
 
@@ -435,6 +605,7 @@ local raid_list = {
 		size = 25,
 		patterns = {
 			'gruul\'*s*' .. csep .. 'l?a?i?r?',
+			create_achievement_pattern(692),
 		},
 	},
 
@@ -443,7 +614,10 @@ local raid_list = {
 		instance_name = 'Blackwing Lair',
 		size = 40,
 		patterns = {
-			'gruul\'*s*' .. csep .. 'l?a?i?r?',
+			sep .. 'bwl4?0?',
+			'blackwing' .. csep .. 'l?a?i?r?',
+			'blackwi?n?g?' .. csep .. 'la?i?r?',
+			create_achievement_pattern(685),
 		},
 	},
 
@@ -454,6 +628,7 @@ local raid_list = {
 		patterns = {
 			'molte?n' .. csep .. 'core?',
 			sep .. 'mc' .. csep .. '4?0?' .. sep,
+			create_achievement_pattern(686),
 		},
 	},
 
@@ -464,6 +639,7 @@ local raid_list = {
 		patterns = {
 			'black' .. csep .. 'temple',
 			'[%s-_,.]+bt' .. csep .. '25[%s-_,.]+',
+			create_achievement_pattern(697),
 		},
 	},
 
@@ -475,6 +651,7 @@ local raid_list = {
 			'sunwell' .. csep .. 'plateau',
 			'swp' .. sep,
 			sep .. 'swp',
+			create_achievement_pattern(698),
 		},
 	},
 
@@ -488,6 +665,7 @@ local raid_list = {
 			'ssc' .. sep,
 			'ssc' .. csep .. '$',
 			'serpent' .. csep .. 'shrine' .. csep .. 'cavern',
+			create_achievement_pattern(694),
 		},
 	},
 
@@ -498,16 +676,18 @@ local raid_list = {
 		patterns = {
 			'temple?' .. csep .. 'of?' .. csep .. 'ahn\'?' .. csep .. 'qiraj',
 			sep .. '*aq' .. csep .. '40' .. csep .. '',
+			create_achievement_pattern(687),
 		},
 	},
 
 	{
 		name = 'aq20',
-		instance_name = "Ruins of Ahn'Qiraj",
+		instance_name = 'Ruins of Ahn\'Qiraj',
 		size = 20,
 		patterns = {
 			'ruins?' .. csep .. 'of?' .. csep .. 'ahn\'?' .. csep .. 'qiraj',
 			'aq' .. csep .. '20',
+			create_achievement_pattern(689),
 		},
 	},
 }
@@ -515,32 +695,31 @@ local raid_list = {
 local role_patterns = {
 	dps = {
 
+		're?t?r?i?b?u?t?i?o?n?' .. csep .. 'pal[al]?[dy]?i?n?',
+		'fury',
+
+		'sh?a?d?o?w?' .. csep .. 'pri?e?st',
+		'pri?e?st' .. csep .. 'dps',
+		'[^a-z]sp[^a-z]',
+
+		'elem?e?n?t?a?l?' .. csep .. 'shamm?[iy]?',
+		'mage[^a-z]',
+
+		'boo?mm?[iy]?',
+		'boo?mm?ki?n',
+		'owl[^a-z]',
+		'ba?l?a?n?c?e?' .. csep .. 'd[ru][ud][iu]d?',
+
+		'rogu?e?' .. meta_or_sep,
+		'roug?e?' .. meta_or_sep,
+
+		'kitt?y',
+		'cat[^a-z]',
 		'feral' .. csep .. 'cat' .. sep,
 		'feral' .. csep .. 'd?p?s?',
 
-		'ret' .. csep .. 'pal[al]?[dy]?i?n?',
-
-		'shadow' .. csep .. 'pri?e?st',
-		'pri?e?st' .. csep .. 'dps',
-
-		'balance' .. '[ru][ud][iu]d?',
-
-		'elem?e?n?t?a?l?' .. csep .. 'shamm?[iy]?',
-		'mage',
-
-		'boo?my?i?',
-		'boo?mki?n',
-
-		'b[ru][ud][iu]d?',
-
-		'rogue' .. meta_or_sep,
-		'rouge' .. meta_or_sep,
-
-		'kitt?y',
-
 		'w?a?r?lock',
-
-		'spri?e?st',
+		'demol?i?t?i?o?n?',
 
 		'hunte?r?s?',
 
@@ -553,31 +732,27 @@ local role_patterns = {
 		'h[ea][ea]l[ers]*', -- LF healer
 		'heler',
 
-		'resto' .. csep .. 'd[ru][ud][iu]d?', -- LF rdruid/rdudu
-		'rd[ru][ud][iu]d?', -- LF rdruid/rdudu
+		're?s?t?o?' .. csep .. 'd[ru][ud][iu]d?', -- LF rdruid/rdudu
 		meta_or_sep .. 'r' .. csep .. 'd[ru][ud][iu]d?', -- LF rdruid/rdudu
-
 		'tree', -- LF tree
 
-		'resto' .. csep .. 'shamm?y?', -- LF rsham
-		'rshamm?y?', -- LF rsham
+		're?s?t?o?' .. csep .. 'shamm?y?', -- LF rsham
 		meta_or_sep .. 'r' .. csep .. 'shamm?y?', -- LF rsham
 
-		'disco?' .. csep .. 'pri?e?st', -- disc priest
-		'dpri?e?st', -- disc priest
+		'disco?[^a-z]',
+		'dpri?e?st[^a-z]', -- disc priest
 		meta_or_sep .. 'd' .. csep .. 'pri?e?st', -- disc priest
 
-		'holl?y' .. csep .. 'palad?i?n?', -- LF holy pala
-		'hpala?d?i?n?', -- LF hpala
-		meta_or_sep .. 'h' .. csep .. 'palad?i?n?', -- LF hpala
+		'ho?l?l?y?' .. csep .. 'pala?d?i?n?', -- LF holy pala
+		meta_or_sep .. 'h' .. csep .. 'pala?d?i?n?', -- LF hpala
 	},
 
 	tank = {
 		role_sep .. '[mo]t' .. role_sep, -- Need MT/OT
 		role_sep .. '[mo]t' .. csep .. '$', -- Need MT/OT
 		'ta*n+a?k+s?', -- NEED TANKS
-		'b[ea]*rs?',
-		'prot' .. csep .. 'pal[al]?[dy]?i?n?',
+		'b[ea][ea]+rs?',
+		'prote?c?t?i?o?n?', -- NEED PROT PALA/WARRI
 	},
 }
 
@@ -620,29 +795,29 @@ local rolelist_patterns = {
 };
 
 local lfm_patterns = {
-	'l[fm][fm]?' .. non_meta .. meta_role .. non_meta .. meta_raid,
+	lfm .. non_meta .. meta_role .. non_meta .. meta_raid,
 
 	meta_raid .. non_meta .. sep .. '[0-9]+' .. non_meta .. meta_role,
 
-	'lfm?' .. csep .. '[0-9]*' .. csep .. meta_role .. non_meta .. meta_gs .. '.*' .. meta_raid,
-	'lfm?' .. csep .. 'all' .. non_meta .. meta_raid,
-	'need' .. csep .. 'all' .. non_meta .. meta_raid,
+	lfm .. csep .. '[0-9]*' .. csep .. meta_role .. non_meta .. meta_gs .. '.*' .. meta_raid,
+	lfm .. csep .. 'all' .. non_meta .. meta_raid,
+	'nee?d' .. csep .. 'all' .. non_meta .. meta_raid,
 	'seek' .. csep .. 'all' .. non_meta .. meta_raid,
 
-	meta_raid .. non_meta .. 'lfm?' .. csep .. 'all',
-	meta_raid .. non_meta .. 'need' .. csep .. 'all',
+	meta_raid .. non_meta .. lfm .. csep .. 'all',
+	meta_raid .. non_meta .. 'nee?d' .. csep .. 'all',
 	meta_raid .. non_meta .. meta_gs .. non_meta .. 'lf' .. csep .. 'all',
 	meta_raid .. non_meta .. meta_gs .. non_meta .. 'seek' .. csep .. 'all',
-	meta_raid .. non_meta .. meta_gs .. non_meta .. 'need' .. csep .. 'all',
+	meta_raid .. non_meta .. meta_gs .. non_meta .. 'nee?d' .. csep .. 'all',
 
 	meta_raid .. non_meta .. meta_role .. non_meta .. meta_gs,
-	meta_raid .. non_meta .. 'need' .. non_meta .. meta_role,
+	meta_raid .. non_meta .. 'nee?d' .. non_meta .. meta_role,
 	meta_raid .. non_meta .. 'seek' .. non_meta .. meta_role,
 
-	meta_raid .. non_meta .. 'lfm?' .. non_meta .. meta_role,
+	meta_raid .. non_meta .. lfm .. non_meta .. meta_role,
 	meta_raid .. non_meta .. 'looki?ng' .. csep .. 'for' .. non_meta .. meta_role,
 
-	meta_raid .. non_meta .. 'need' .. csep .. 'all',
+	meta_raid .. non_meta .. 'nee?d' .. csep .. 'all',
 
 	meta_raid .. non_meta .. meta_gs .. non_meta .. meta_role,
 
@@ -662,7 +837,7 @@ local lfm_patterns = {
 
 	meta_raid .. non_meta .. 'reserved',
 
-	'l[fm][fm]' .. non_meta .. meta_raid,
+	lfm .. non_meta .. meta_raid,
 
 	meta_raid .. non_meta .. meta_role,
 	'new' .. csep .. 'run' .. meta_raid,
@@ -680,48 +855,52 @@ local guild_patterns = {
 local lfg_patterns = {
 	'^' .. csep .. 'lfg' .. non_meta .. meta_raid,
 	'^' .. csep .. meta_gs .. non_meta .. meta_role .. non_meta .. 'looking' .. csep .. 'for' .. non_meta .. meta_raid,
-	'^' .. csep .. meta_role .. non_meta .. meta_gs .. non_meta .. 'looking' .. csep .. 'for' .. non_meta .. meta_raid,
+	meta_role .. non_meta .. meta_gs .. non_meta .. 'looking' .. csep .. 'for' .. non_meta .. meta_raid,
 
 	'^' .. csep .. meta_gs .. non_meta .. meta_role .. non_meta .. 'lf' .. non_meta .. meta_raid,
-	'^' .. csep .. meta_role .. non_meta .. meta_gs .. non_meta .. 'lf' .. non_meta .. meta_raid,
+	meta_role .. non_meta .. meta_gs .. non_meta .. 'lf' .. non_meta .. meta_raid,
 };
 
 ---@param message string
 ---@param patterns table
 ---@return boolean
 ---@nodiscard
-local function matches_any_pattern(message, patterns)
+local function matches_any_pattern(message, patterns, debug)
 	return std.algorithm.find_if(patterns, function(pattern)
-		return message:find(pattern);
+		local result = message:find(pattern)
+		if debug and result then
+			RaidBrowser:Print("Pattern matched: " .. pattern)
+		end
+		return result;
 	end) ~= nil;
 end
 
 ---@param message string
 ---@return boolean
 ---@nodiscard
-local function is_lfm_message(message)
-	return matches_any_pattern(message, lfm_patterns);
+local function is_lfm_message(message, debug)
+	return matches_any_pattern(message, lfm_patterns, debug);
 end
 
 ---@param message string
 ---@return boolean
 ---@nodiscard
-local function is_guild_recruitment(message)
-	return matches_any_pattern(message, guild_recruitment_patterns);
+local function is_guild_recruitment(message, debug)
+	return matches_any_pattern(message, guild_recruitment_patterns, debug);
 end
 
 ---@param message string
 ---@return boolean
 ---@nodiscard
-local function is_lfg_message(message)
-	return matches_any_pattern(message, lfg_patterns);
+local function is_lfg_message(message, debug)
+	return matches_any_pattern(message, lfg_patterns, debug);
 end
 
 ---@param message string
 ---@return boolean
 ---@nodiscard
-local function is_trade_message(message)
-	return matches_any_pattern(message, trade_message_patterns);
+local function is_trade_message(message, debug)
+	return matches_any_pattern(message, trade_message_patterns, debug);
 end
 
 -- Basic http pattern matching for streaming sites and etc.
@@ -757,13 +936,16 @@ end
 ---@param role "healer"|"dps"|"tank"
 ---@return table, string
 ---@nodiscard
-local function lex_roles(roles, message, role)
+local function lex_roles(roles, message, role, debug)
 	local found = false;
 
 	for _, pattern in ipairs(role_patterns[role]) do
 		local m, result = message:gsub(pattern, meta_role);
 
 		if result > 0 then
+			if debug then
+				RaidBrowser:Print('Role pattern found for '.. role .. ': ' .. pattern)
+			end
 			message = m;
 			found = true;
 		end
@@ -818,25 +1000,46 @@ end
 ---@param message string
 ---@return table?, string?, integer?
 ---@nodiscard
-function RaidBrowser.lex_raid_info(message)
+function RaidBrowser.lex_raid_info(message, debug)
 
 	local raid;
 	local num_unique_raids = 0;
+	local raid_pattern_index;
 	for _, r in ipairs(raid_list) do
+		local message_index;
 		local index = std.algorithm.find_if(r.patterns, function(pattern)
-			local m, result = message:gsub(pattern, meta_raid);
+			pattern = pattern:lower();
+			message_index = message:find(pattern);
+			
+			if message_index ~= nil then
+				local m, result = message:gsub(pattern, meta_raid);
 
-			if result > 0 then
-				message = m;
-				return true;
+				if result > 0 then
+					if debug then
+						RaidBrowser:Print("Raid found! " .. r.name .. ": " .. pattern);
+					end
+					message = m;
+					return true;
+				end
 			end
 
 			return false;
 		end);
 
 		if index then
-			num_unique_raids = num_unique_raids + 1;
-			raid = r;
+			-- only count as new unique raid, if previously found raid was a different zone
+			if not raid or (RaidBrowser.get_short_raid_name(r.name) ~= RaidBrowser.get_short_raid_name(raid.name)) then
+				num_unique_raids = num_unique_raids + 1;
+				if debug and raid then
+					RaidBrowser:Print("Mutliple raids found! " .. r.name .. " - " .. raid.name)
+				end
+			end
+			
+			-- overwrite raid choice only if new raid is prioritized or found earlier in message (as people post hc achievements after declaring nm)
+			if (raid_pattern_index == nil or (raid and r.prioritized and not raid.prioritized) or raid_pattern_index > message_index) then
+				raid_pattern_index = message_index
+				raid = r;
+			end
 		end
 	end
 
@@ -874,7 +1077,7 @@ end
 ---@param message any
 ---@return string?, table?, table?, string?
 ---@nodiscard
-function RaidBrowser.lex_and_extract(message)
+function RaidBrowser.lex_and_extract(message, debug)
 	if not message then return end
 	message = message:lower();
 	message = remove_http_links(message);
@@ -890,7 +1093,7 @@ function RaidBrowser.lex_and_extract(message)
 	message = lex_guild_recruitments(message);
 
 	-- Get the raid_info from the message
-	local raid_info, raid_lexed_message, num_unique_raids = RaidBrowser.lex_raid_info(message);
+	local raid_info, raid_lexed_message, num_unique_raids = RaidBrowser.lex_raid_info(message, debug);
 	if not raid_info or not raid_lexed_message or not num_unique_raids then return end
 
 	if has_guild_recruitment_production(raid_lexed_message) then return end
@@ -903,10 +1106,10 @@ function RaidBrowser.lex_and_extract(message)
 	-- Get any roles that are needed
 	local roles = {};
 
-	if not raid_lexed_message:find('lfm? all ') and not raid_lexed_message:find('need all ') then
-		roles, raid_lexed_message = lex_roles(roles, raid_lexed_message, 'dps');
-		roles, raid_lexed_message = lex_roles(roles, raid_lexed_message, 'tank');
-		roles, raid_lexed_message = lex_roles(roles, raid_lexed_message, 'healer');
+	if not raid_lexed_message:find('lfm? all ') and not raid_lexed_message:find('nee?d all ') then
+		roles, raid_lexed_message = lex_roles(roles, raid_lexed_message, 'dps', debug);
+		roles, raid_lexed_message = lex_roles(roles, raid_lexed_message, 'tank', debug);
+		roles, raid_lexed_message = lex_roles(roles, raid_lexed_message, 'healer', debug);
 	end
 
 	-- If there is only an LFM message, then it is assumed that all roles are needed
@@ -924,18 +1127,22 @@ end
 ---@param message string
 ---@return table?, table?, string?
 ---@nodiscard
-function RaidBrowser.raid_info(message)
-	local lexed_message, raid_info, roles, gs = RaidBrowser.lex_and_extract(message);
+function RaidBrowser.raid_info(message, debug)
+	local lexed_message, raid_info, roles, gs = RaidBrowser.lex_and_extract(message, debug);
 
 	if not lexed_message then return end
 
 	-- Any message that is lexed out to be an lfg is excluded (unfortunately near the end).
-	if is_lfg_message(lexed_message) then return end
+	if is_lfg_message(lexed_message, debug) then return end
 
 	-- Parse symbols to determine if the message is valid
-	if not is_lfm_message(lexed_message) then return end
+	if not is_lfm_message(lexed_message, debug) then return end
 
 	return raid_info, roles, gs or ' ';
+end
+
+function RaidBrowser.get_short_raid_name(raid_name)
+	return string.gsub(raid_name, '[1|2][0|5](%w*)', '');
 end
 
 --[[ Event handlers and listeners ]] --
