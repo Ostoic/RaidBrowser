@@ -120,7 +120,7 @@ local menu = {
 
 -- Get the menu option text
 local function get_option_active(option)
-    local spec, gs = RaidBrowser.stats.active_spec(), GearScore_GetScore(UnitName('player'), 'player');
+    local spec, gs = RaidBrowser.stats.get_active_raidset()
     return (option .. ': ' .. gs .. ' ' .. spec)
 end
 

@@ -277,8 +277,11 @@ end
 
 function RaidBrowser.stats.active_spec()
 	local active_tab = RaidBrowser.stats.active_spec_index()
-	local tab_name = GetTalentTabInfo(active_tab);
-	local _,class = UnitClass("player");
+	local _, _, _, spec_name = GetTalentTabInfo(active_tab);
+	local _, class = UnitClass("player");
+
+	-- TODO: make config to toggle using full or short spec names
+	local readable_spec_name = spec_names["full"][spec_name] or spec_name;
 	
 	-- If we're a feral druid, then we need to distinguish between tank and cat feral.
 	if spec_name == 'DruidFeralCombat' then
@@ -286,9 +289,9 @@ function RaidBrowser.stats.active_spec()
 		local thick_hide_talent = 5;
 		local _, _, _, _, points = GetTalentInfo(active_tab, thick_hide_talent)
 		if points > 1 then
-			return 'Feral (Tank)'
+			return readable_spec_name .. ' (Tank)'
 		else
-			return 'Feral (DPS)'
+			return readable_spec_name .. ' (DPS)'
 		end
 	end
 	
@@ -299,14 +302,13 @@ function RaidBrowser.stats.active_spec()
 		local _, _, _, _, points = GetTalentInfo(2, toughness_talent)
 		local _, _, _, _, points2 = GetTalentInfo(1, 3)
 		if points > 3 and points2 > 3 then
-			return tab_name .. ' (Tank)'
+			return readable_spec_name .. ' (Tank)'
 		else
-			return tab_name .. ' (DPS)'
+			return readable_spec_name .. ' (DPS)'
 		end
 	end
 
-	-- TODO: make config to toggle using full or short spec names
-	return spec_names["full"][spec_name] or spec_name;
+	return readable_spec_name
 end
 
 ---Return if the given raid is locked, and if so its reset time left (in seconds)
@@ -366,8 +368,8 @@ function RaidBrowser.stats.get_raidset(set)
 end
 
 function RaidBrowser.stats.get_raidsets()
-	local raidset1 = RaidBrowser_character_raidsets['Primary'] or nil;
-	local raidset2 = RaidBrowser_character_raidsets['Secondary'] or nil;
+	local raidset1 = RaidBrowserCharacterRaidsets['Primary'] or nil;
+	local raidset2 = RaidBrowserCharacterRaidsets['Secondary'] or nil;
 	if not (raidset1 or raidset2) then
 		return
 	elseif (raidset1 and raidset2) then
@@ -380,9 +382,9 @@ function RaidBrowser.stats.get_raidsets()
 end
 
 function RaidBrowser.stats.current_raidset()
-	if RaidBrowser_character_current_raidset == 'Active' then
+	if RaidBrowserCharacterCurrentRaidset == 'Active' then
 		return RaidBrowser.stats.get_active_raidset();
-	elseif RaidBrowser_character_current_raidset == 'Both' then
+	elseif RaidBrowserCharacterCurrentRaidset == 'Both' then
 		return RaidBrowser.stats.get_raidsets();
 	end
 
@@ -405,8 +407,12 @@ function RaidBrowser.stats.save_secondary_raidset()
 	RaidBrowserCharacterRaidsets['Secondary'] = { spec = spec, gs = gs };
 end
 
-function RaidBrowser.stats.build_inv_string(raid_name)
-	local message = 'inv ';
+---Returns join message string
+---@param raid_name string
+---@return string
+---@nodiscard
+function RaidBrowser.stats.build_join_message(raid_name)
+	local message = 'inv for ' .. raid_name .. " - ";
 	local class = UnitClass("player");
 	
 	local spec1, gs1, spec2, gs2 = RaidBrowser.stats.current_raidset();
@@ -419,11 +425,10 @@ function RaidBrowser.stats.build_inv_string(raid_name)
 	if spec2 and gs2 then
 		message = message .. gs2 .. 'gs ' .. spec2
 	end
-	message = message .. ' ' .. class;
-	
+
 	-- Remove difficulty and raid_name size from the string
-	raid_name = string.gsub(raid_name, '[1|2][0|5](%w*)', '');
-	
+	raid_name = RaidBrowser.get_short_raid_name(raid_name)
+
 	-- Find the best possible achievement for the given raid_name.
 	local achieve_id = find_best_achievement(raid_name);
 	if achieve_id then
